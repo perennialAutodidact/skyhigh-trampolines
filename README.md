@@ -77,7 +77,7 @@ Web-based, SaaS eCommerce app for managing a trampoline park online!
 
 ## Team Members Roll Call
 
-- [ ] Abdul
-- [ ] Ranjeet
-- [ ] Ian
-- [ ] Mahdi
+- [ ] Monique
+- [ ] Susie
+- [ ] Waldo
+- [ ] Jin
