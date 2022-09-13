@@ -1,0 +1,19 @@
+@import './team-sapphire-variables';
+
+// customize bootstrap variables in here
+
+
+// override theme colors and define custom color variables
+$theme-colors: (
+    "primary":    $custom-primary,
+    "secondary":  $custom-secondary, 
+    // "success":    $custom-success,
+    "info":       $custom-info,
+    // "warning":    $custom-warning,
+    // "danger":     $custom-danger,
+    // "light":      $custom-light,
+    // "dark":       $custom-dark,
+
+    // add custom color class to Bootstrap
+    // "custom":     $custom-color,
+)
