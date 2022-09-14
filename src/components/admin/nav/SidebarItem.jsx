@@ -1,14 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "./SidebarItem.module.scss";
 
 const SidebarItem = (props) => {
-  const { item, setShowSidebar, subNav, setSubNav } = props;
+  const [subNav, setSubNav] = useState(false);
+  const { item, showSidebar, setShowSidebar } = props;
 
   // toggle icon and subnav and open sidebar
   const showSubNav = () => {
     setSubNav((state) => !state);
     setShowSidebar(true);
   };
+
+  useEffect(() => {
+    // when sidebar is closed, close subnav
+    if (!showSidebar) setSubNav(false);
+
+    // when sidebar is open, open subnav
+    // if (showSidebar) setShowSidebar(true);
+  }, [showSidebar, setShowSidebar]);
 
   return (
     <>

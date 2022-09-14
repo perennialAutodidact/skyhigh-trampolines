@@ -2,7 +2,7 @@
 
 .item {
   @include m.flex;
-  padding: 1rem;
+  padding: 0.6rem 1rem;
   cursor: pointer;
 
   &:hover {
@@ -14,7 +14,7 @@
     margin: 0;
     display: flex;
     align-items: center;
-    gap: 1.2rem;
+    gap: 1.5rem;
 
     span {
       padding: 0;
@@ -26,7 +26,7 @@
 }
 
 .link {
-  padding: 1rem 0 1rem 3.2rem;
+  padding: 0.6rem 0 0.6rem 3.8rem;
   cursor: pointer;
 
   &:hover {

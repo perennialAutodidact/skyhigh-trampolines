@@ -4,17 +4,10 @@ import { sidebarData } from "./sidebarData";
 import SidebarItem from "./SidebarItem";
 import { VscThreeBars } from "react-icons/vsc";
 import { IoCloseSharp } from "react-icons/io5";
-import { useEffect } from "react";
 
 const Sidebar = () => {
-  const [subNav, setSubNav] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
   const handleSidebar = () => setShowSidebar((state) => !state);
-
-  //when sidebar is closed, close subnav
-  useEffect(() => {
-    if (!showSidebar) setSubNav(false);
-  }, [showSidebar]);
 
   // map through sidebarData and render SidebarItem
   const data = sidebarData.map((item, index) => {
@@ -22,14 +15,16 @@ const Sidebar = () => {
       <SidebarItem
         key={index}
         item={item}
+        showSidebar={showSidebar}
         setShowSidebar={setShowSidebar}
-        subNav={subNav}
-        setSubNav={setSubNav}
       />
     );
   });
 
+  // apply styles to sidebar based on showSidebar state
   const size = showSidebar ? "sidebar__show" : "sidebar__hide";
+
+  // show icon based on showSidebar state
   const icon = showSidebar ? (
     <IoCloseSharp size={25} />
   ) : (
