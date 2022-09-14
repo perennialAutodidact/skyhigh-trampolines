@@ -89,7 +89,7 @@ const ProductForm = ({ rooms, productTypes, durations, onSubmit }) => {
     >
       {/* PRODUCT NAME */}
       <div className="row mb-3">
-        <label htmlFor="name" className="form-label">
+        <label htmlFor="name" className="form-label p-0">
           Name <span className="text-danger">*</span>
         </label>
         <input
@@ -102,7 +102,7 @@ const ProductForm = ({ rooms, productTypes, durations, onSubmit }) => {
 
       {/* PRODUCT DESCRIPTION */}
       <div className="row mb-3">
-        <label htmlFor="description" className="form-label">
+        <label htmlFor="description" className="form-label p-0">
           Description <span className="text-danger">*</span>
         </label>
         <input
@@ -117,7 +117,7 @@ const ProductForm = ({ rooms, productTypes, durations, onSubmit }) => {
 
       {/* PRODUCT PRICE */}
       <div className="row mb-3">
-        <label htmlFor="price" className="form-label">
+        <label htmlFor="price" className="form-label p-0">
           Price <span className="text-danger">*</span>
         </label>
         <div className="input-group p-0">
@@ -134,7 +134,7 @@ const ProductForm = ({ rooms, productTypes, durations, onSubmit }) => {
 
       {/* PRODUCT TYPE */}
       <div className="row mb-3">
-        <label htmlFor="productType" className="form-label text-start">
+        <label htmlFor="productType" className="form-label text-start p-0">
           Product Type <span className="text-danger">*</span>
         </label>
         <select
@@ -156,7 +156,7 @@ const ProductForm = ({ rooms, productTypes, durations, onSubmit }) => {
 
       {/* PRODUCT ROOM */}
       <div className="row mb-3">
-        <label htmlFor="room-id" className="form-label text-start">
+        <label htmlFor="room-id" className="form-label text-start p-0">
           Room <span className="text-danger">*</span>
         </label>
         <select
@@ -176,7 +176,7 @@ const ProductForm = ({ rooms, productTypes, durations, onSubmit }) => {
 
       {/* PRODUCT DURATION */}
       <div className="row mb-3">
-        <label htmlFor="duration-id" className="form-label text-start">
+        <label htmlFor="duration-id" className="form-label text-start p-0">
           Duration <span className="text-danger">*</span>
         </label>
         <select
@@ -197,7 +197,7 @@ const ProductForm = ({ rooms, productTypes, durations, onSubmit }) => {
       </div>
 
       <div className="row mb-4">
-        <label htmlFor="photo-url" className="form-label text-start">
+        <label htmlFor="photo-url" className="form-label text-start p-0">
           Photo <span className="text-danger">*</span>
         </label>
         <input
