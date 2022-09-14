@@ -213,7 +213,7 @@ const ProductForm = ({ rooms, productTypes, durations, onSubmit }) => {
       </div>
 
       <div className="row mb-3">
-        <div className="col col-2 p-0">
+        <div className="col col-4 col-lg-2 p-0">
           <button type="submit" className="btn btn-success w-100">
             Submit
           </button>
