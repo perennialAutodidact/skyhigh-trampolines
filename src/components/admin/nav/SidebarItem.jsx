@@ -11,12 +11,9 @@ const SidebarItem = (props) => {
     setShowSidebar(true);
   };
 
+  // when sidebar is closed, close subnav
   useEffect(() => {
-    // when sidebar is closed, close subnav
     if (!showSidebar) setSubNav(false);
-
-    // when sidebar is open, open subnav
-    // if (showSidebar) setShowSidebar(true);
   }, [showSidebar, setShowSidebar]);
 
   return (

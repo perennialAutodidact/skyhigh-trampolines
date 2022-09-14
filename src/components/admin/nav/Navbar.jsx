@@ -7,7 +7,9 @@ import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 const Navbar = () => {
   const [showLogout, setShowLogout] = useState(false);
 
+  // toggle logout button
   const handleLogout = () => setShowLogout((state) => !state);
+
   return (
     <div className={styled.nav__container}>
       <Container>

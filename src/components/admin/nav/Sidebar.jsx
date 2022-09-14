@@ -7,6 +7,8 @@ import { IoCloseSharp } from "react-icons/io5";
 
 const Sidebar = () => {
   const [showSidebar, setShowSidebar] = useState(false);
+
+  // toggle sidebar
   const handleSidebar = () => setShowSidebar((state) => !state);
 
   // map through sidebarData and render SidebarItem
