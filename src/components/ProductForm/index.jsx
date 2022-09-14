@@ -190,7 +190,7 @@ const ProductForm = ({ headerText, rooms, productTypes, durations, onSubmit }) =
           >
             <option value="">Select a duration</option>
             {durations.map((duration) => (
-              <option value={duration.id} key={duration.id}>
+              <option value={duration.value} key={duration.name}>
                 {duration.name}
               </option>
             ))}
