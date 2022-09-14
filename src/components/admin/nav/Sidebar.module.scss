@@ -1,0 +1,21 @@
+.sidebar {
+  height: 90vh;
+  border-right: 1px solid #ccc;
+  overflow: hidden;
+  // transition: max-width 0.2s ease-in-out;
+
+  &__icon {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+  }
+
+  &__show {
+    max-width: 200px;
+    transition: max-width 0.2s ease-in-out;
+  }
+
+  &__hide {
+    max-width: 50px;
+    transition: max-width 0.2s ease-in-out;
+  }
+}

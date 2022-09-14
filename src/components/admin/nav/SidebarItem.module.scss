@@ -1,0 +1,40 @@
+@use "../../../styles/mixins" as m;
+
+.item {
+  @include m.flex;
+  padding: 1rem;
+  cursor: pointer;
+
+  &:hover {
+    background: #ccc;
+  }
+
+  &__title {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+
+    span {
+      padding: 0;
+      margin: 0;
+      display: flex;
+      align-items: center;
+    }
+  }
+}
+
+.link {
+  padding: 1rem 0 1rem 3.2rem;
+  cursor: pointer;
+
+  &:hover {
+    background: #ccc;
+  }
+
+  p {
+    padding: 0;
+    margin: 0;
+  }
+}
