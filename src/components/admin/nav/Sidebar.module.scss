@@ -1,6 +1,5 @@
 .sidebar {
-  height: 92vh;
-  border-right: 1px solid #ccc;
+  height: 91.5vh;
   overflow: hidden;
 
   &__icon {
@@ -9,12 +8,25 @@
   }
 
   &__show {
-    max-width: 200px;
-    transition: max-width 0.2s ease-in-out;
+    width: 250px;
+    position: absolute;
+    top: 8.2vh;
+    left: 0;
+    z-index: 1;
   }
 
   &__hide {
-    max-width: 60px;
-    transition: max-width 0.2s ease-in-out;
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .sidebar {
+    width: 250px;
+    position: relative;
+    top: 0;
+    left: 0;
+    display: block;
+    z-index: 0;
   }
 }

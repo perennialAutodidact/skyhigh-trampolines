@@ -1,46 +1,29 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "./Sidebar.module.scss";
 import { sidebarData } from "./sidebarData";
 import SidebarItem from "./SidebarItem";
-import { VscThreeBars } from "react-icons/vsc";
-import { IoCloseSharp } from "react-icons/io5";
 
-const Sidebar = () => {
-  const [showSidebar, setShowSidebar] = useState(false);
-
-  // toggle sidebar
-  const handleSidebar = () => setShowSidebar((state) => !state);
+const Sidebar = (props) => {
+  const { toggleSidebar } = props;
 
   // map through sidebarData and render SidebarItem
   const data = sidebarData.map((item, index) => {
     return (
-      <SidebarItem
-        key={index}
-        item={item}
-        showSidebar={showSidebar}
-        setShowSidebar={setShowSidebar}
-      />
+      <SidebarItem key={index} item={item} toggleSidebar={toggleSidebar} />
     );
   });
 
   // apply styles to sidebar based on showSidebar state
-  const size = showSidebar ? "sidebar__show" : "sidebar__hide";
-
-  // show icon based on showSidebar state
-  const icon = showSidebar ? (
-    <IoCloseSharp size={25} />
-  ) : (
-    <VscThreeBars size={22} />
-  );
+  const visibility = toggleSidebar ? "sidebar__show" : "sidebar__hide";
 
   return (
-    <aside className={`${styled.sidebar} ${styled[size]}`}>
-      <div className={styled.sidebar__icon} onClick={handleSidebar}>
-        {icon}
-      </div>
-
-      <>{data}</>
-    </aside>
+    <>
+      <aside
+        className={`${styled.sidebar} border-end bg-white ${styled[visibility]} `}
+      >
+        <>{data}</>
+      </aside>
+    </>
   );
 };
 

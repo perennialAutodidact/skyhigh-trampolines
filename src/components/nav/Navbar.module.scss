@@ -1,0 +1,25 @@
+@use '../../styles/bootstrap-setup'as *;
+
+nav {
+  height: 8vh;
+  position: relative;
+
+  .logout,
+  .icon {
+    cursor: pointer;
+  }
+
+  button {
+    position: absolute;
+    top: 3.5rem;
+    right: 0.5rem;
+    padding: 0.4rem 1rem;
+    border: none;
+  }
+
+  h3 {
+    font-family: $headings-font-family;
+    font-weight: 700;
+    font-size: 1.2rem;
+  }
+}

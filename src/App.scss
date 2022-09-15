@@ -1,8 +1,8 @@
-@use "./styles/team-sapphire-variables" as v;
+@use './styles/bootstrap-setup'as *;
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: v.$text;
+  font-family: $font-family-base;
 }

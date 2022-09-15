@@ -1,13 +1,20 @@
 import React from "react";
-import Navbar from "./nav/Navbar";
+
 import Sidebar from "./nav/Sidebar";
 
-const Admin = () => {
+const Admin = (props) => {
+  const { toggleSidebar } = props;
+
   return (
-    <div>
-      <Navbar />
-      <Sidebar />
-    </div>
+    <main className="d-flex">
+      <div>
+        <Sidebar toggleSidebar={toggleSidebar} />
+      </div>
+
+      <div>
+        <p className="p-2">Admin</p>
+      </div>
+    </main>
   );
 };
 
