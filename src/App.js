@@ -1,19 +1,21 @@
-import Counter from './components/Counter'
-import logo from './logo.svg'
-import './App.scss'
+import { useState } from "react";
+import "./App.scss";
+import Admin from "./components/admin/Admin";
+import Navbar from "./components/nav/Navbar";
 
 function App() {
+  // state to toggle sidebar in admin
+  const [toggleSidebar, setToggleSidebar] = useState(false);
+
   return (
-    <div className='App'>
-      <header className='App-header'>
-        <img src={logo} className='App-logo' alt='logo' />
-        <p className="bg-primary text-secondary">
-          Edit <code className='text-info'>src/App.js</code> and save to reload.
-        </p>
-        <Counter />
-      </header>
+    <div>
+      <Navbar setToggleSidebar={setToggleSidebar} />
+      <Admin
+        setToggleSidebar={setToggleSidebar}
+        toggleSidebar={toggleSidebar}
+      />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

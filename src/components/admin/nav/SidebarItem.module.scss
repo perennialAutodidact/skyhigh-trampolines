@@ -1,0 +1,9 @@
+.link,
+.item {
+  cursor: pointer;
+
+  &:hover {
+    background: #ccc;
+  }
+
+}
