@@ -3,7 +3,12 @@ import { useForm, useController } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { roomSchema } from "./roomSchema";
 
+import {createRoom} from '../../redux/roomsSlice'
+import { useDispatch } from "react-redux";
+
 const RoomForm = ({ headerText, onSubmit }) => {
+  const dispatch = useDispatch();
+
   const defaultValues = {
     name: "",
     capacity: 0,
@@ -27,7 +32,10 @@ const RoomForm = ({ headerText, onSubmit }) => {
   };
 
   onSubmit = (formData) => {
-    console.log(formData);
+    dispatch(createRoom(formData))
+      .unwrap()
+      .then(res=>console.log('res',res))
+      .catch(err=>console.log('createRoomError', err))
   };
 
   return (
