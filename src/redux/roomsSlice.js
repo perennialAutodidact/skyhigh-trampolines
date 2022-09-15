@@ -9,9 +9,9 @@ export const createRoom = createAsyncThunk(
     try {
       const roomsRef = ref(storage, 'rooms/' + formData.photo.name);
 
-      const snapshot = await uploadBytes(roomsRef, formData.photo);
       const { name, capacity, photo } = formData;
 
+      const snapshot = await uploadBytes(roomsRef, photo);
       const photoLink = await getDownloadURL(snapshot.ref)
 
       return await addDoc(collection(db, "rooms"), { name, capacity, photo: photoLink });
