@@ -76,14 +76,14 @@ Web-based, SaaS eCommerce app for managing a trampoline park online!
 [Replace me with the link to your app's URL](https://www.google.com/)
 
 ### Notes on Bootstrap
+
 - Bootstrap 5 [docs](https://getbootstrap.com/docs/5.0/getting-started/introduction/)
 - Bootstrap variables added in `_bootstrap_setup.scss` will override Bootstrap's internal variables when Bootstrap is loaded in `index.scss`
 - Files beginning with and underscore `_` are partials. They should be used when importing `.scss` files into one another to avoid creating corresponding `.css` files when Sass is compiled.
 
 ## Team Members Roll Call
 
-
 - [x] Monique
 - [x] Keegan
 - [ ] Waldo
-- [ ] Jin
+- [x] Jin
