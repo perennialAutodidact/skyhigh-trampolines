@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { doc, addDoc, collection } from "firebase/firestore";
+import { addDoc, collection } from "firebase/firestore";
 import { db, storage } from "../firebase/client";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
