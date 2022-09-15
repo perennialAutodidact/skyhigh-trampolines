@@ -2,16 +2,19 @@
 
 // customize bootstrap variables in here
 
+$font-family-base: $text;
+$headings-font-family: $heading;
+
+
 
 // override theme colors and define custom color variables
-$theme-colors: (
-    "primary":    $custom-primary,
-    "secondary":  $custom-secondary, 
+$theme-colors: ("primary": $custom-primary,
+    "secondary": $custom-secondary,
     // "success":    $custom-success,
-    "info":       $custom-info,
+    "info": $custom-info,
     // "warning":    $custom-warning,
     // "danger":     $custom-danger,
-    // "light":      $custom-light,
+    "light": $custom-light,
     // "dark":       $custom-dark,
 
     // add custom color class to Bootstrap
