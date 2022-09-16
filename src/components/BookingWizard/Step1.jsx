@@ -1,29 +1,41 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { BookingWizardContext } from "./context";
+import { updateForm, setProgressBarStep } from "./context/actions";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { step1Schema } from "./schema";
 
 const Step1 = () => {
+  const navigate = useNavigate();
   const [state, dispatch] = useContext(BookingWizardContext);
 
   const initialValues = {
-    date: new Date().toString(),
+    ...state.formData,
   };
   const {
     handleSubmit,
     register,
+    setValue,
     formState: { errors },
   } = useForm({
     initialValues,
     resolver: yupResolver(step1Schema),
   });
 
-  const onSubmit = (formData) => {};
+  const onSubmit = (formData) => {
+    dispatch(updateForm(formData));
+    dispatch(setProgressBarStep(2))
+    navigate('/booking/step-2')
+  };
+
+
+  useEffect(()=>{
+    setValue('date', state.formData.date)
+  }, [setValue, state])
 
   return (
     <div className="container pt-3">
-      {/* <h1>Select Date</h1> */}
 
       <form onSubmit={handleSubmit(onSubmit)} className="container text-start">
         {/* DATE */}
@@ -36,7 +48,6 @@ const Step1 = () => {
               {...register("date")}
               id="date"
               type="date"
-              value={new Date()}
               className={`form-control ${errors.date && "is-invalid"}`}
             />
             {errors.date && (
@@ -53,6 +64,7 @@ const Step1 = () => {
           </div>
         </div>
       </form>
+  
     </div>
   );
 };
