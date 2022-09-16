@@ -1,9 +1,14 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { BookingWizardContext } from "./context";
+import { setProgressBarStep } from "./context/actions";
 
 const ProgressBar = () => {
-  const [state] = useContext(BookingWizardContext);
+  const [state, dispatch] = useContext(BookingWizardContext);
   const { percentComplete, currentStep, totalSteps } = state;
+
+  useEffect(() => {
+    dispatch(setProgressBarStep(1));
+  }, [dispatch]);
 
   return (
     <div className="container p-0">
