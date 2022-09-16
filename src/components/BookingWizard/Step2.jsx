@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { BookingWizardContext } from "./context";
 import { updateForm, setProgressBarStep } from "./context/actions";
 import { useForm } from "react-hook-form";
@@ -24,10 +24,11 @@ const Step2 = () => {
 
   const onSubmit = (formData) => {
     dispatch(updateForm(formData));
-    dispatch(setProgressBarStep(3))
+    dispatch(setProgressBarStep(3));
     navigate("/booking/step-3");
   };
 
+  const goBack = () => dispatch(setProgressBarStep(1))
 
   const ARRIVAL_TIMES = ["9:00AM", "9:30AM", "10:00AM"];
 
@@ -54,12 +55,23 @@ const Step2 = () => {
         </div>
         <div className="d-flex gap-2">
           {ARRIVAL_TIMES.map((time) => (
-            <div className="border border-grey p-2" key={time}>{time}</div>
+            <div className="border border-grey p-2" key={time}>
+              {time}
+            </div>
           ))}
         </div>
 
-        <div className="row mb-3">
-          <div className="col col-4 offset-8 col-lg-2 offset-lg-10 p-0">
+        <div className="row my-3 align-items-end">
+          <div className="col-12 col-lg-2 p-0">
+            <Link
+              to="/booking"
+              onClick={goBack}
+              className="link-dark text-decoration-none"
+            >
+              Back
+            </Link>
+          </div>
+          <div className="col col-12 col-lg-4 offset-lg-6 p-0">
             <button type="submit" className="btn btn-success w-100">
               Next
             </button>

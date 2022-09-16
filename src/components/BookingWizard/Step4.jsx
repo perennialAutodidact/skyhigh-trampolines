@@ -28,12 +28,22 @@ const Step4 = () => {
     navigate("/booking/step-5");
   };
 
+  const goBack = () => dispatch(setProgressBarStep(3))
 
   return (
     <div className="container pt-3">
       <form onSubmit={handleSubmit(onSubmit)} className="container text-start">
-        <div className="row mb-3">
-          <div className="col col-4 offset-8 col-lg-2 offset-lg-10 p-0">
+      <div className="row my-3 align-items-end">
+          <div className="col-12 col-lg-2 p-0">
+            <Link
+              to="/booking/step-3"
+              onClick={goBack}
+              className="link-dark text-decoration-none"
+            >
+              Back
+            </Link>
+          </div>
+          <div className="col col-12 col-lg-4 offset-lg-6 p-0">
             <button type="submit" className="btn btn-success w-100">
               Next
             </button>
