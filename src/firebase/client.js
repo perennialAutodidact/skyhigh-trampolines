@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app'
 import { getFirestore, collection, getDocs, addDoc } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
+import { getStorage } from 'firebase/storage'
 import '@firebase/auth'
 import '@firebase/storage'
 import 'firebase/firestore'
@@ -20,6 +21,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 const db = getFirestore(app)
 const auth = getAuth(app)
+const storage = getStorage(app)
 const colRef = collection(db, 'Product Form')
 
 getDocs(colRef)
@@ -34,4 +36,4 @@ getDocs(colRef)
     console.log(err.message)
   })
 
-export { db, auth }
+export { db, auth, storage }
