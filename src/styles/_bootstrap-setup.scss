@@ -1,20 +1,59 @@
 
+// @import './team-sapphire-variables';
+
+// $font-family-base: $text;
+// $headings-font-family: $heading;
+
+
+// // override theme colors and define custom color variables
+// $theme-colors: ("primary": $custom-primary,
+//     "secondary": $custom-secondary,
+//     // "success":    $custom-success,
+//     "info": $custom-info,
+//     // "warning":    $custom-warning,
+//     // "danger":     $custom-danger,
+//     "light": $custom-light,
+//     // "dark":       $custom-dark,
+
+//     // add custom color class to Bootstrap
+//     // "custom":     $custom-color,
+// )
+
+@use 'sass:map';
 @import './team-sapphire-variables';
 
+// 1. Include Bootstrap functions first (so you can manipulate colors, SVGs, calc, etc)
+@import "~bootstrap/scss/functions";
+
+// 2. Include any default variable overrides here
+$primary: $custom-primary;
+$secondary: $custom-secondary;
+$info: $custom-info;
+// $warning: $custom-warning;
+// $danger: $custom-danger;
+// $success: $custom-success;
+$light: $custom-light;
+// $dark: $custom-dark;
+
+// override default fonts
 $font-family-base: $text;
 $headings-font-family: $heading;
 
+// 3. Include remainder of required Bootstrap stylesheets
+@import "../../node_modules/bootstrap/scss/variables";
+@import "../../node_modules/bootstrap/scss/mixins";
 
-// override theme colors and define custom color variables
-$theme-colors: ("primary": $custom-primary,
-    "secondary": $custom-secondary,
-    // "success":    $custom-success,
-    "info": $custom-info,
-    // "warning":    $custom-warning,
-    // "danger":     $custom-danger,
-    "light": $custom-light,
-    // "dark":       $custom-dark,
+// 4. Include any optional Bootstrap components as you like
+@import "../../node_modules//bootstrap/scss/maps";
+@import "../../node_modules/bootstrap/scss/grid";
+@import "../../node_modules/bootstrap/scss/root";
+@import "../../node_modules/bootstrap/scss/reboot";
+@import "../../node_modules/bootstrap/scss/type";
+@import "../../node_modules/bootstrap/scss/images";
+@import "../../node_modules/bootstrap/scss/containers";
 
-    // add custom color class to Bootstrap
-    // "custom":     $custom-color,
-)
+// 5. Add additional custom code here
+
+// add in custom colors from team-sapphire-variables.scss
+$theme-colors: map-merge($theme-colors, $custom-colors);
+$theme-colors-rgb: map-loop($theme-colors, to-rgb, "$value");
