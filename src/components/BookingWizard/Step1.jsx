@@ -3,7 +3,10 @@ import React from 'react'
 
 const Step1 = () => {
   return (
-    <div>Step1</div>
+    <div className='container'>
+      <h1>Select Date</h1>
+            
+    </div>
   )
 }
 
