@@ -1,65 +1,71 @@
-import React from "react";
-import { productSchema } from "./schema";
-import { useForm, useController } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import React from 'react'
+import { productSchema } from './schema'
+import { useForm, useController } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useDispatch } from 'react-redux'
+import { createProduct } from '../../redux/productsSlice'
+//import { useEffect } from 'react'
+//import { doc, addDoc, collection } from 'firebase/firestore'
+//import { db } from '../../firebase/client'
 
-const ProductForm = ({ headerText, rooms, productTypes, durations, onSubmit }) => {
+//import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+const ProductForm = ({ headerText, rooms, productTypes, durations }) => {
   // this data will come from props
   rooms = [
     {
-      name: "Room 1",
-      id: "000001",
+      name: 'Room 1',
+      id: '000001',
     },
     {
-      name: "Room 2",
-      id: "000002",
+      name: 'Room 2',
+      id: '000002',
     },
     {
-      name: "Room 3",
-      id: "000003",
+      name: 'Room 3',
+      id: '000003',
     },
-  ];
+  ]
 
   // this data will come from props
   productTypes = [
     {
-      name: "First Product Type",
-      id: "000001",
+      name: 'First Product Type',
+      id: '000001',
     },
     {
-      name: "Second Product Type",
-      id: "000002",
+      name: 'Second Product Type',
+      id: '000002',
     },
-  ];
+  ]
 
   // this data will come from props
   durations = [
     {
-      name: "60 minutes",
-      value: "60",
+      name: '60 minutes',
+      value: '60',
     },
     {
-      name: "90 minutes",
-      value: "90",
+      name: '90 minutes',
+      value: '90',
     },
     {
-      name: "120 minutes",
-      value: "120",
+      name: '120 minutes',
+      value: '120',
     },
     {
-      name: "All Day",
-      value: "day",
+      name: 'All Day',
+      value: 'day',
     },
-  ];
+  ]
 
   const defaultValues = {
-    name: "",
-    description: "",
-    productType: "",
-    room: "",
-    duration: "",
-    price: "",
-  };
+    name: '',
+    description: '',
+    productType: '',
+    room: '',
+    duration: '',
+    price: '',
+  }
 
   const {
     register, // provides onChange, onBlur, name and ref
@@ -70,17 +76,41 @@ const ProductForm = ({ headerText, rooms, productTypes, durations, onSubmit }) =
   } = useForm({
     defaultValues,
     resolver: yupResolver(productSchema), // handles form validation
-  });
+  })
 
-  const imageField = useController({ control, name: "photo" });
+  const imageField = useController({ control, name: 'photo' })
 
   const imageFieldOnChange = (e) => {
-    setValue("photo", e.target.files[0]);
-  };
+    setValue('photo', e.target.files[0])
+  }
 
-  onSubmit = (formData) => {
-    console.log(formData);
-  };
+  const dispatch = useDispatch()
+  const onSubmit = (formData) => dispatch(createProduct(formData))
+
+  // onSubmit = async (formData) => {
+  //   console.log('onSubmit')
+  //   console.log(formData)
+  //   // save data to firebase
+  //   const { photo, ...data } = formData
+  //   try {
+  //     const storage = getStorage()
+  //     const storageRef = ref(storage, photo.name)
+  //     const snapshot = await uploadBytes(storageRef, photo)
+  //     console.log(snapshot)
+
+  //     const photoLink = await getDownloadURL(snapshot.ref)
+  //     console.log(photoLink)
+
+  //     await addDoc(
+  //       collection(db, 'Product Form'),
+  //       Object.assign(data, { photo: photo.name }),
+  //     )
+  //   } catch (error) {
+  //     console.log('error', error)
+  //   }
+  // }
+
+  // useEffect(() => {}, [])
 
   return (
     <div className="container text-start">
@@ -95,9 +125,9 @@ const ProductForm = ({ headerText, rooms, productTypes, durations, onSubmit }) =
             Name <span className="text-danger">*</span>
           </label>
           <input
-            {...register("name")}
+            {...register('name')}
             id="name"
-            className={`form-control ${errors.name && "is-invalid"}`}
+            className={`form-control ${errors.name && 'is-invalid'}`}
           />
           {errors.name && <p className="text-danger">{errors.name.message}</p>}
         </div>
@@ -108,9 +138,9 @@ const ProductForm = ({ headerText, rooms, productTypes, durations, onSubmit }) =
             Description <span className="text-danger">*</span>
           </label>
           <input
-            {...register("description")}
+            {...register('description')}
             id="description"
-            className={`form-control ${errors.description && "is-invalid"}`}
+            className={`form-control ${errors.description && 'is-invalid'}`}
           />
           {errors.description && (
             <p className="text-danger">{errors.description.message}</p>
@@ -125,9 +155,9 @@ const ProductForm = ({ headerText, rooms, productTypes, durations, onSubmit }) =
           <div className="input-group p-0">
             <div className="input-group-text">$</div>
             <input
-              {...register("price")}
+              {...register('price')}
               id="price"
-              className={`form-control ${errors.price && "is-invalid"}`}
+              className={`form-control ${errors.price && 'is-invalid'}`}
               placeholder="e.g. 12.99"
             />
           </div>
@@ -142,9 +172,9 @@ const ProductForm = ({ headerText, rooms, productTypes, durations, onSubmit }) =
             Product Type <span className="text-danger">*</span>
           </label>
           <select
-            {...register("productType")}
+            {...register('productType')}
             id="productType"
-            className={`form-select  ${errors.productType && "is-invalid"}`}
+            className={`form-select  ${errors.productType && 'is-invalid'}`}
           >
             <option value="">Select a product type</option>
             {productTypes.map((productType) => (
@@ -164,9 +194,9 @@ const ProductForm = ({ headerText, rooms, productTypes, durations, onSubmit }) =
             Room <span className="text-danger">*</span>
           </label>
           <select
-            {...register("room")}
+            {...register('room')}
             id="room-id"
-            className={`form-select ${errors.room && "is-invalid"}`}
+            className={`form-select ${errors.room && 'is-invalid'}`}
           >
             <option value="">Select a room</option>
             {rooms.map((room) => (
@@ -184,9 +214,9 @@ const ProductForm = ({ headerText, rooms, productTypes, durations, onSubmit }) =
             Duration <span className="text-danger">*</span>
           </label>
           <select
-            {...register("duration")}
+            {...register('duration')}
             id="duration-id"
-            className={`form-select ${errors.duration && "is-invalid"}`}
+            className={`form-select ${errors.duration && 'is-invalid'}`}
           >
             <option value="">Select a duration</option>
             {durations.map((duration) => (
@@ -207,11 +237,11 @@ const ProductForm = ({ headerText, rooms, productTypes, durations, onSubmit }) =
           <input
             type="file"
             multiple
-            name={"photo"}
+            name={'photo'}
             ref={imageField.ref}
             onChange={imageFieldOnChange}
             id="photo"
-            className={`form-control ${errors.photo && "is-invalid"}`}
+            className={`form-control ${errors.photo && 'is-invalid'}`}
           />
           {errors.photo && (
             <p className="text-danger">{errors.photo.message}</p>
@@ -227,7 +257,7 @@ const ProductForm = ({ headerText, rooms, productTypes, durations, onSubmit }) =
         </div>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default ProductForm;
+export default ProductForm
