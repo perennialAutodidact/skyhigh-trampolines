@@ -4,16 +4,24 @@ import { addDoc, collection } from 'firebase/firestore'
 import { db, storage } from '../firebase/client'
 import { getStorage, ref } from 'firebase/storage'
 
-export const createAddOnsSlice = createAsyncThunk(
-  'products/createProduct',
+export const createAddOns = createAsyncThunk(
+  'addOns/create',
   async (formData, { rejectWithValue }) => {
     console.log('onSubmit')
     console.log(formData)
     // save data to firebase
     const colRef = collection(db, 'add on')
 
-    addDoc(colRef)
+    // try {
+    //   return await addDoc(colRef, formData).then(
+    //     (result) => result.someValueFromTheResult,
+    //   )
+    // } catch (error) {
+    //   return rejectWithValue(error)
+    // }
+    return addDoc(colRef, formData)
       .then((snapshot) => {
+        console.log('snap', snapshot)
         let addOnForm = []
         snapshot.forEach((doc) => {
           addOnForm.push({ ...doc.data(), id: doc.id })
@@ -21,7 +29,7 @@ export const createAddOnsSlice = createAsyncThunk(
         console.log(addOnForm)
       })
       .catch((err) => {
-        return rejectWithValue(err)
+        console.log('err', err)
       })
   },
 )
@@ -34,13 +42,13 @@ const addOnsSlice = createSlice({
   },
   //reducers: {},
   extraReducers: {
-    [createAddOnsSlice.pending]: (state, action) => {
+    [createAddOns.pending]: (state, action) => {
       state.loading = 'pending'
     },
-    [createAddOnsSlice.fulfilled]: (state, action) => {
+    [createAddOns.fulfilled]: (state, action) => {
       state.loading = 'fulfilled'
     },
-    [createAddOnsSlice.rejected]: (state, action) => {
+    [createAddOns.rejected]: (state, action) => {
       state.loading = 'rejected'
     },
   },
