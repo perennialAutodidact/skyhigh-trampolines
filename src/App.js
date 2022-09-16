@@ -1,40 +1,21 @@
-import Counter from './components/Counter'
-import './App.scss'
-import AddOnForm from './components/AddOnForm'
-import ProductForm from './components/ProductForm'
-import { createBrowserRouter, RouterProvider, Link } from 'react-router-dom'
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: (
-      <div>
-        Home page
-        <Link to="addon">Add on Page</Link>
-        <Link to="productForm">Product Form</Link>
-      </div>
-    ),
-  },
-  {
-    path: '/addon',
-    element: <AddOnForm headerText="Add on" />,
-  },
-  {
-    path: '/productForm',
-    element: <ProductForm headerText="Product Form" />,
-  },
-])
+import { useState } from "react";
+import "./App.scss";
+import Admin from "./components/admin/Admin";
+import Navbar from "./components/nav/Navbar";
 
 function App() {
+  // state to toggle sidebar in admin
+  const [toggleSidebar, setToggleSidebar] = useState(false);
   return (
-    <div className="App">
-      <header className="App-header">
-        {/* <Counter /> */}
-        {/* <ProductForm /> */}
-      </header>
-      <RouterProvider router={router} />
+    <div>
+      <Navbar setToggleSidebar={setToggleSidebar} />
+      <Admin
+        setToggleSidebar={setToggleSidebar}
+        toggleSidebar={toggleSidebar}
+      />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

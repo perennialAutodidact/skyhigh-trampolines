@@ -47,5 +47,12 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "css-loader": "^6.7.1",
+    "install": "^0.13.0",
+    "npm": "^8.19.2",
+    "react-icons": "^4.4.0",
+    "style-loader": "^3.3.1"
   }
 }
