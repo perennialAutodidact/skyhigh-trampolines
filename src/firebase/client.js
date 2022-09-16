@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app'
-import { getFirestore } from 'firebase/firestore'
+import { getFirestore, collection, getDocs, addDoc } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
 import '@firebase/auth'
 import '@firebase/storage'
@@ -20,5 +20,18 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 const db = getFirestore(app)
 const auth = getAuth(app)
+const colRef = collection(db, 'Product Form')
+
+getDocs(colRef)
+  .then((snapshot) => {
+    let productForm = []
+    snapshot.forEach((doc) => {
+      productForm.push({ ...doc.data(), id: doc.id })
+    })
+    console.log(productForm)
+  })
+  .catch((err) => {
+    console.log(err.message)
+  })
 
 export { db, auth }
