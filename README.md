@@ -85,5 +85,5 @@ Web-based, SaaS eCommerce app for managing a trampoline park online!
 
 - [x] Monique
 - [x] Keegan
-- [ ] Waldo
+- [x] Waldo
 - [x] Jin
