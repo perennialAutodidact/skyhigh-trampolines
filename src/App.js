@@ -31,6 +31,7 @@ function App() {
           />
           <Route path="/" element={<Customer />} />
           <Route path="/login" element={<Login />} />
+          {/* <Route path="/booking/*" element={<BookingWizard />} /> */}
         </Routes>
       </BrowserRouter>
     </React.StrictMode>
