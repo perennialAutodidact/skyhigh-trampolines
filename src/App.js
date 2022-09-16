@@ -6,7 +6,7 @@ import { Admin } from "./components/Admin";
 import { Customer } from "./components/Customer";
 import Login from "./components/login/Login";
 import { ProtectedRoute } from "./components/ProtectedRoute";
-import React from "react";
+import React, {useState} from "react";
 import { auth } from "./firebase/client";
 import { useAuthState } from "react-firebase-hooks/auth";
 
@@ -14,7 +14,8 @@ import { useAuthState } from "react-firebase-hooks/auth";
 
 function App() {
   const [user, loading] = useAuthState(auth);
-
+  // state to toggle sidebar in admin
+  const [toggleSidebar, setToggleSidebar] = useState(false);
   //
   return (
     <React.StrictMode>
