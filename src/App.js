@@ -4,14 +4,14 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./firebase/client";
+import "./App.scss";
 
 import Admin from "./components/admin/Admin";
 import Login from "./components/login/Login";
 import Navbar from "./components/nav/Navbar";
-import Sidebar from "./components/admin/nav/Sidebar";
 import Homepage from "./components/customer/Homepage";
+import BookingWizard from './components/BookingWizard'
 
-import "./App.scss";
 
 function App() {
   const [user, loading] = useAuthState(auth);
@@ -30,13 +30,13 @@ function App() {
           path="/admin"
           element={
             <ProtectedRoute isAllowed={!!user} loading={loading}>
-              <Admin />
+              <Admin toggleSidebar={toggleSidebar}/>
             </ProtectedRoute>
           }
           />
         <Route path="/" element={<Homepage />} />
         <Route path="/login" element={<Login />} />
-        {/* <Route path="/booking/*" element={<BookingWizard />} /> */}
+        <Route path="/booking/*" element={<BookingWizard />} />
       </Routes>
           </div>
           </div>
