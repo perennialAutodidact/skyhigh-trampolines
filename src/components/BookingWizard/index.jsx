@@ -1,5 +1,8 @@
 import React, { useReducer } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  Routes,
+  Route,
+} from "react-router-dom";
 import { BookingWizardContext, initialState } from "./context";
 import { wizardReducer } from "./context/reducer";
 import Step1 from "./Step1";
@@ -19,7 +22,7 @@ const BookingWizard = () => {
     <BookingWizardContext.Provider value={[state, dispatch]}>
       <div className="container">
         <h1 className="text-center">Booking</h1>
-            <ProgressBar />
+        <ProgressBar />
         <div className="row">
           <div className="col-12 col-lg-6 offset-lg-1">
             <div className="border border-grey rounded mt-3">
