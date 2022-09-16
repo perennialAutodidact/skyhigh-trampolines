@@ -14,4 +14,5 @@ export const store = configureStore({
     products: productsReducer,
     addOns: addOnsReducer,
   },
+  devTools: true,
 });
