@@ -1,4 +1,4 @@
-const formatPercent = (x, y) => Math.round(x / y) * 100;
+const formatPercent = (x, y) => Math.round((x / y)*100);
 
 export const wizardReducer = (state, action) => {
   switch (action.type) {
