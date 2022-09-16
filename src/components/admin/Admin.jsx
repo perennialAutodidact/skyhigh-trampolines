@@ -16,35 +16,28 @@ const Admin = (props) => {
     dispatch(logout());
   };
   return (
-    <main className="d-flex">
-      <div className="container">
-        <div className="row">
-          {loading ? (
-            <div className="col">
-              <p>Loading...please wait</p>
-            </div>
-          ) : (
-            <div className="container">
-              <div className="row">
-                <div className="col-lg-2">
-                  <Sidebar toggleSidebar={toggleSidebar} />
-                </div>
-                <div className="col">
-                  <p>Hello Admin: {user?.displayName}</p>
-                </div>
-
-                <div className="col">
-                  <button onClick={logoutHandler} className="btn btn-secondary">
-                    Sign Out
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
+    <div className="row">
+      {loading ? (
+        <div className="col">
+          <p>Loading...please wait</p>
         </div>
-        ;
-      </div>
-    </main>
+      ) : (
+        <>
+          <div className="col-lg-2">
+            <Sidebar toggleSidebar={toggleSidebar} />
+          </div>
+          <div className="col-lg-10">
+            <div className="container text-center">
+              <p>Hello Admin: {user?.displayName}</p>
+
+              <button onClick={logoutHandler} className="btn btn-secondary">
+                Sign Out
+              </button>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
   );
 };
 
