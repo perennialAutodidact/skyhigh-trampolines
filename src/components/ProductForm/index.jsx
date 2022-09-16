@@ -87,31 +87,6 @@ const ProductForm = ({ headerText, rooms, productTypes, durations }) => {
   const dispatch = useDispatch()
   const onSubmit = (formData) => dispatch(createProduct(formData))
 
-  // onSubmit = async (formData) => {
-  //   console.log('onSubmit')
-  //   console.log(formData)
-  //   // save data to firebase
-  //   const { photo, ...data } = formData
-  //   try {
-  //     const storage = getStorage()
-  //     const storageRef = ref(storage, photo.name)
-  //     const snapshot = await uploadBytes(storageRef, photo)
-  //     console.log(snapshot)
-
-  //     const photoLink = await getDownloadURL(snapshot.ref)
-  //     console.log(photoLink)
-
-  //     await addDoc(
-  //       collection(db, 'Product Form'),
-  //       Object.assign(data, { photo: photo.name }),
-  //     )
-  //   } catch (error) {
-  //     console.log('error', error)
-  //   }
-  // }
-
-  // useEffect(() => {}, [])
-
   return (
     <div className="container text-start">
       <h1>{headerText}</h1>
