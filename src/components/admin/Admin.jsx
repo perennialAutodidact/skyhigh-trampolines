@@ -1,18 +1,48 @@
 import React from "react";
-
+import { auth } from "../../firebase/client";
+import { logout } from "../../redux/authSlice";
+import { signOut } from "firebase/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useDispatch } from "react-redux";
 import Sidebar from "./nav/Sidebar";
 
 const Admin = (props) => {
   const { toggleSidebar } = props;
+  const [user, loading] = useAuthState(auth);
+  const dispatch = useDispatch();
 
+  const logoutHandler = () => {
+    signOut(auth);
+    dispatch(logout());
+  };
   return (
     <main className="d-flex">
-      <div>
-        <Sidebar toggleSidebar={toggleSidebar} />
-      </div>
+      <div className="container">
+        <div className="row">
+          {loading ? (
+            <div className="col">
+              <p>Loading...please wait</p>
+            </div>
+          ) : (
+            <div className="container">
+              <div className="row">
+                <div className="col-lg-2">
+                  <Sidebar toggleSidebar={toggleSidebar} />
+                </div>
+                <div className="col">
+                  <p>Hello Admin: {user?.displayName}</p>
+                </div>
 
-      <div>
-        <p className="p-2">Admin</p>
+                <div className="col">
+                  <button onClick={logoutHandler} className="btn btn-secondary">
+                    Sign Out
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+        ;
       </div>
     </main>
   );

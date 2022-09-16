@@ -19,7 +19,7 @@ const Sidebar = (props) => {
   return (
     <>
       <aside
-        className={`${styled.sidebar} border-end bg-white ${styled[visibility]} `}
+        className={`${styled.sidebar} border-end bg-white ${styled[visibility]}`}
       >
         <>{data}</>
       </aside>

@@ -13,27 +13,28 @@ export const Admin = () => {
     dispatch(logout());
   };
 
-  return loading ? (
+  return (
     <div className="container">
       <div className="row">
-        <div className="col">
-          <p>Loading...please wait</p>
-        </div>
-      </div>
-    </div>
-  ) : (
-    <div className="container">
-      <div className="row">
-        <div className="col">
-          <p>Hello Admin: {user?.displayName}</p>
-        </div>
+        {loading ? (
+          <div className="col">
+            <p>Loading...please wait</p>
+          </div>
+        ) : (
+          <>
+            <div className="col">
+              <p>Hello Admin: {user?.displayName}</p>
+            </div>
 
-        <div className="col">
-          <button onClick={logoutHandler} className="btn btn-secondary">
-            Sign Out
-          </button>
-        </div>
+            <div className="col">
+              <button onClick={logoutHandler} className="btn btn-secondary">
+                Sign Out
+              </button>
+            </div>
+          </>
+        )}
       </div>
+      ;
     </div>
   );
 };
