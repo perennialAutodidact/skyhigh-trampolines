@@ -1,10 +1,13 @@
 import { object, string } from "yup";
 
 export const bookingSchema = object().shape({
-  date: string().required('Please select a date.')
+  date: string().required("Please select a date."),
 });
 
-export const step1Schema = object().shape({});
+export const step1Schema = object().shape({
+  date: string().required("Please select a date."),
+});
+
 export const step2Schema = object().shape({});
 export const step3Schema = object().shape({});
 export const step4Schema = object().shape({});
