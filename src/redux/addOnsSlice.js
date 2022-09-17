@@ -35,7 +35,7 @@ export const createAddOns = createAsyncThunk(
 )
 
 const addOnsSlice = createSlice({
-  name: 'products',
+  name: 'addOns',
   initialState: {
     products: [],
     loading: 'idle',
