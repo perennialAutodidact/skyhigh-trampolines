@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -14,11 +14,12 @@ import BookingWizard from './components/BookingWizard'
 
 
 function App() {
-  const [user, loading] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth)
   // state to toggle sidebar in admin
 
   const [toggleSidebar, setToggleSidebar] = useState(false);
   //
+
   return (
     <div className="container-fluid p-0">
       <Navbar setToggleSidebar={setToggleSidebar} />
@@ -44,4 +45,4 @@ function App() {
   );
 }
 
-export default App;
+export default App
