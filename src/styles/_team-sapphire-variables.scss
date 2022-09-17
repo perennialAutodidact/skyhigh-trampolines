@@ -5,6 +5,7 @@ $custom-primary: #ff512a;
 $custom-secondary: #003049;
 $custom-info: #2ad8ff;
 $custom-light: #f2f2f2;
+$custom-overlay: #000000;
 
 // Fonts
 $text: "Didact Gothic", sans-serif;
@@ -13,4 +14,5 @@ $heading: "Roboto", sans-serif;
 $custom-colors: (
     // add custom colors here
     // e.g. $purple: #800080;
+    "overlay": $custom-overlay,
 );

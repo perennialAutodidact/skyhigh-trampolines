@@ -1,55 +1,48 @@
-import './App.scss'
+import React, { useState } from "react";
+import { Route, Routes } from "react-router-dom";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "./firebase/client";
+import "./App.scss";
 
-import { Admin } from './components/Admin'
-import { Customer } from './components/Customer'
-import Login from './components/login/Login'
-import { ProtectedRoute } from './components/ProtectedRoute'
-import React, { useState } from 'react'
-import { auth } from './firebase/client'
-import { useAuthState } from 'react-firebase-hooks/auth'
-import AddOnForm from './components/AddOnForm'
-import { useDispatch } from 'react-redux'
-//
-import { createAddOns } from './redux/addOnsSlice'
+import Admin from "./components/admin/Admin";
+import Login from "./components/login/Login";
+import Navbar from "./components/nav/Navbar";
+import Homepage from "./components/customer/Homepage";
+import BookingWizard from './components/BookingWizard'
+
+
 function App() {
   const [user, loading] = useAuthState(auth)
   // state to toggle sidebar in admin
-  const [toggleSidebar, setToggleSidebar] = useState(false)
+
+  const [toggleSidebar, setToggleSidebar] = useState(false);
   //
 
-  const dispatch = useDispatch()
   return (
-    <React.StrictMode>
-      <BrowserRouter>
-        <Routes>
-          <Route
-            path="/admin"
-            element={
-              <ProtectedRoute isAllowed={!!user} loading={loading}>
-                <Admin />
-              </ProtectedRoute>
-            }
+    <div className="container-fluid p-0">
+      <Navbar setToggleSidebar={setToggleSidebar} />
+      <div className="row">
+      <div className="col-12">
+
+      <Routes>
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute isAllowed={!!user} loading={loading}>
+              <Admin toggleSidebar={toggleSidebar}/>
+            </ProtectedRoute>
+          }
           />
-          <Route
-            path="/addon"
-            element={
-              <AddOnForm
-                headerText={'Add On'}
-                onSubmit={(e) => {
-                  console.log(e)
-                  dispatch(createAddOns(e))
-                }}
-              />
-            }
-          />
-          <Route path="/" element={<Customer />} />
-          <Route path="/login" element={<Login />} />
-        </Routes>
-      </BrowserRouter>
-    </React.StrictMode>
-  )
+        <Route path="/" element={<Homepage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/booking/*" element={<BookingWizard />} />
+      </Routes>
+          </div>
+          </div>
+    </div>
+  );
 }
 
 export default App

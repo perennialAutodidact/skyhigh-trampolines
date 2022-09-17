@@ -1,0 +1,15 @@
+.homepage {
+    height: 92vh;
+
+    figure {
+        img {
+            object-fit: cover;
+        }
+    }
+
+    .overlay {
+        background: rgba(0, 0, 0, 0.5);
+        top: 0;
+        height: 92vh;
+    }
+}
