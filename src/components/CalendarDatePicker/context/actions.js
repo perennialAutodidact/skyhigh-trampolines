@@ -1,5 +1,5 @@
-export const setPageDate = (date) => ({
-  type: "SET_CURRENT_DATE",
+export const setCurrentPageDate = (date) => ({
+  type: "SET_CURRENT_PAGE_DATE",
   payload: { date },
 });
 
