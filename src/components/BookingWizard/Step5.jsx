@@ -4,12 +4,13 @@ import { BookingWizardContext } from "./context";
 import { updateForm, setProgressBarStep } from "./context/actions";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-
+import SignatureCanvas from "react-signature-canvas";
 import { step5Schema } from "./schema";
+import styles from "./BookingWizard.module.scss";
 
 const Step5 = () => {
   const navigate = useNavigate();
-
+  const canvasRef = useRef(null);
   const [state, dispatch] = useContext(BookingWizardContext);
 
   const initialValues = {
@@ -83,6 +84,17 @@ const Step5 = () => {
             ex necessitatibus accusamus provident consequuntur dolor ut
             obcaecati quidem cum.
           </p>
+          <div className="row">
+            <div className="col-12">
+              Sign Below
+              <SignatureCanvas
+                canvasProps={{
+                  className: `${styles.signaturePad} border border-2 bg-light`,
+                }}
+                ref={canvasRef}
+              />
+            </div>
+          </div>
 
           {errors.waiverSigned && (
             <p className="text-danger">{errors.waiverSigned.message}</p>
