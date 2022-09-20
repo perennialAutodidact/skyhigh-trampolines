@@ -1,0 +1,19 @@
+@import '../../../styles/team-sapphire-variables';
+
+.calendarDateNumber {
+    height: 30px;
+    width: 30px;
+}
+
+.calendarDateNumber:hover {
+    cursor: pointer;
+    background-color: $custom-light;
+}
+
+.calendarDateNumber__active {
+    background-color: $custom-info;
+}
+
+.calendarDateNumber__active:hover {
+    background-color: $custom-info;
+}
