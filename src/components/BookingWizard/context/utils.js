@@ -1,15 +1,15 @@
 import _ from "lodash";
 
-export const getPageRowData = (currentPageDate) => {
+export const getPageRowData = (calendarPage) => {
   const calendarRows = 6;
   const calendarCols = 7;
   const totalCells = calendarRows * calendarCols;
 
-  const firstDayOfMonth = currentPageDate.startOf("month");
+  const firstDayOfMonth = calendarPage.startOf("month");
   const firstDayOfMonthIndex = firstDayOfMonth.day(); // SUN - SAT (0-6)
 
   // find the date in the upper left cell
-  const calendarPageStartDate = currentPageDate
+  const calendarPageStartDate = calendarPage
     .startOf("month")
     .subtract(firstDayOfMonthIndex, "days");
 
