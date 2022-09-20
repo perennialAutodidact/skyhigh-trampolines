@@ -11,12 +11,12 @@ import { useEffect } from "react";
 
 const Step5 = () => {
   const navigate = useNavigate();
-  const canvasRef = useRef(null);
+  const signaturePadRef = useRef(null);
   const [state, dispatch] = useContext(BookingWizardContext);
 
   const initialValues = {
     waiverAgreed: false,
-    waiverSigned: false,
+    signatureImageData: "",
   };
   const {
     handleSubmit,
@@ -30,30 +30,20 @@ const Step5 = () => {
 
   const onSubmit = (formData) => {
     console.log(formData);
-    // dispatch(updateForm(formData));
-    // dispatch(setProgressBarStep(6));
-    // navigate("/booking/checkout");
+    dispatch(updateForm(formData));
+    dispatch(setProgressBarStep(6));
+    navigate("/booking/checkout");
   };
 
   const goBack = () => dispatch(setProgressBarStep(4));
 
   const clearSignature = () => {
-    canvasRef.current && canvasRef.current.clear();
-    setValue("waiverSigned", false);
+    signaturePadRef.current && signaturePadRef.current.clear();
+    setValue("signatureImageData", "");
   };
 
-  useEffect(() => {
-    const handleStroke = (e) => console.log("blah");
-
-    //   console.log("drawing done", e) && setValue("waiverSigned", true);
-    // canvasRef.current &&
-    //   canvasRef.current._canvas.addEventListener("endStroke", handleStroke);
-
-    return (
-      canvasRef.current && console.log(canvasRef.current.getSignaturePad())
-      //   canvasRef.current._canvas.removeEventListener("endStroke", handleStroke)
-    );
-  }, [setValue]);
+  const handleStrokeEnd = () =>
+    setValue("signatureImageData", signaturePadRef.current.toDataURL());
 
   return (
     <div className="container pt-3">
@@ -119,22 +109,27 @@ const Step5 = () => {
                   Clear
                 </div>
               </div>
-              <input
-                type="checkbox"
-                {...register("waiverSigned")}
-                className="d-none"
-              />
               <SignatureCanvas
                 canvasProps={{
-                  className: `${styles.signaturePad} border border-2 bg-light`,
+                  className: `
+                    ${styles.signaturePad}
+                    ${
+                      errors.signatureImageData
+                        ? "border-danger"
+                        : "border-light"
+                    } 
+                    bg-light
+                    border border-2 
+                  `,
                 }}
-                ref={canvasRef}
+                onEnd={handleStrokeEnd}
+                ref={signaturePadRef}
               />
             </div>
           </div>
 
-          {errors.waiverSigned && (
-            <p className="text-danger">{errors.waiverSigned.message}</p>
+          {errors.signatureImageData && (
+            <p className="text-danger">{errors.signatureImageData.message}</p>
           )}
 
           <div className="row my-3 align-items">
