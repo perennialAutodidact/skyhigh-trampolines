@@ -5,6 +5,7 @@ import { updateForm, setProgressBarStep } from "./context/actions";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { step1Schema } from "./schema";
+import CalendarDatePicker from "./CalendarDatePicker";
 
 const Step1 = () => {
   const navigate = useNavigate();
@@ -40,16 +41,11 @@ const Step1 = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="container text-start">
         {/* DATE */}
         <div className="row mb-3">
-          <div className="col-12 col-lg-6 p-0">
+          <div className="col-12 p-0">
             <label htmlFor="date" className="form-label p-0 d-flex gap-1">
               <h3>Select Date</h3> <span className="text-danger">*</span>
             </label>
-            <input
-              {...register("date")}
-              id="date"
-              type="date"
-              className={`form-control ${errors.date && "is-invalid"}`}
-            />
+            <CalendarDatePicker />
             {errors.date && (
               <p className="text-danger">{errors.date.message}</p>
             )}
