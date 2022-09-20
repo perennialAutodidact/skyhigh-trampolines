@@ -1,11 +1,17 @@
-import React, { useReducer } from "react";
+import React, { useEffect, useReducer } from "react";
 import { CalendarDatePickerContext, initialState } from "./context";
 import { calendarDatePickerReducer } from "./context/reducer";
 import MonthYearDisplay from "./MonthYearDisplay";
 import WeekdayLabels from "./WeekdayLabels";
+import CalendarPage from "./CalendarPage";
 
-const CalenderDatePicker = () => {
+const CalenderDatePicker = ({setFormValue}) => {
   const [state, dispatch] = useReducer(calendarDatePickerReducer, initialState);
+  const { selectedDate } = state;
+
+  useEffect(()=>{
+    setFormValue('date', selectedDate.format('YYYY-MM-DD'))
+  },[selectedDate, setFormValue])
 
   return (
     <CalendarDatePickerContext.Provider value={[state, dispatch]}>
@@ -17,7 +23,9 @@ const CalenderDatePicker = () => {
               <thead>
                 <WeekdayLabels />
               </thead>
-              <tbody></tbody>
+              <tbody>
+                <CalendarPage />
+              </tbody>
             </table>
           </div>
         </div>
