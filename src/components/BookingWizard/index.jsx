@@ -33,7 +33,7 @@ const BookingWizard = () => {
               </Routes>
             </div>
           </div>
-          <div className="d-none d-lg-flex col-lg-3">
+          <div className="d-none d-lg-flex align-items-start col-lg-4">
             <CartPreview />
           </div>
         </div>
