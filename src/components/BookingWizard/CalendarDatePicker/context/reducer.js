@@ -8,8 +8,14 @@ export const calendarDatePickerReducer = (state, action) => {
         ...state,
         currentPage: {
           date,
-          rowData: getPageRowData(date),
+          rows: getPageRowData(date),
         },
+      };
+
+    case "SET_SELECTED_DATE":
+      return {
+        ...state,
+        selectedDate: action.payload.date,
       };
 
     default:
