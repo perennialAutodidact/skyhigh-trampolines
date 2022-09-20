@@ -45,7 +45,7 @@ const Step1 = () => {
             <label htmlFor="date" className="form-label p-0 d-flex gap-1">
               <h3>Select Date</h3> <span className="text-danger">*</span>
             </label>
-            <CalendarDatePicker />
+            <CalendarDatePicker setFormValue={setValue}/>
             {errors.date && (
               <p className="text-danger">{errors.date.message}</p>
             )}
