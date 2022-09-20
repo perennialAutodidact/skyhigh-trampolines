@@ -22,7 +22,7 @@ export const getPageRowData = (calendarPage) => {
   }
 
   // split dates into rows
-  pageDates = _.chunk(pageDates, calendarCols);
+  const pageRowData = _.chunk(pageDates, calendarCols);
 
-  return pageDates;
+  return pageRowData;
 };
