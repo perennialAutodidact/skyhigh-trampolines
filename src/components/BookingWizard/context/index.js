@@ -6,7 +6,12 @@ export const initialState = {
   totalSteps: 6,
   formData: {
     date: '',
-    time: ''
+    time: '',
+    waiverAgreed: false,
+    signatureImageData: '',
+    products: [],
+    addOns: [],
+    customerData: {}
   }
 }
 
