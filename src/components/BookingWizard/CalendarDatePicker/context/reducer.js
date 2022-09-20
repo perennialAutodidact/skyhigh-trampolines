@@ -1,14 +1,16 @@
-import { getPageRowData } from "../../context/utils";
+import { getPageRowData } from "../utils";
 
 export const calendarDatePickerReducer = (state, action) => {
   switch (action.type) {
-    case "UPDATE_CALENDAR_PAGE":
-      const {date} = action.payload
+    case "UPDATE_CURRENT_PAGE":
+      const { date } = action.payload;
       return {
         ...state,
-        calendarPage: date,
-        pageRowData: getPageRowData(date)
-      }
+        currentPage: {
+          date,
+          rowData: getPageRowData(date),
+        },
+      };
 
     default:
       return state;

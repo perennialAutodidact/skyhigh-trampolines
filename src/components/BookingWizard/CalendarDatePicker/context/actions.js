@@ -1,5 +1,5 @@
-export const updateCalendarPage = (date) => ({
-  type: "UPDATE_CALENDAR_PAGE",
+export const updateCurrentPage = (date) => ({
+  type: "UPDATE_CURRENT_PAGE",
   payload: { date },
 });
 
