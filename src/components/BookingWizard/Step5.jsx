@@ -7,6 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import SignatureCanvas from "react-signature-canvas";
 import { step5Schema } from "./schema";
 import styles from "./BookingWizard.module.scss";
+import { useEffect } from "react";
 
 const Step5 = () => {
   const navigate = useNavigate();
@@ -14,11 +15,13 @@ const Step5 = () => {
   const [state, dispatch] = useContext(BookingWizardContext);
 
   const initialValues = {
+    waiverAgreed: false,
     waiverSigned: false,
   };
   const {
     handleSubmit,
     register,
+    setValue,
     formState: { errors },
   } = useForm({
     initialValues,
@@ -33,6 +36,24 @@ const Step5 = () => {
   };
 
   const goBack = () => dispatch(setProgressBarStep(4));
+
+  const clearSignature = () => {
+    canvasRef.current && canvasRef.current.clear();
+    setValue("waiverSigned", false);
+  };
+
+  useEffect(() => {
+    const handleStroke = (e) => console.log("blah");
+
+    //   console.log("drawing done", e) && setValue("waiverSigned", true);
+    // canvasRef.current &&
+    //   canvasRef.current._canvas.addEventListener("endStroke", handleStroke);
+
+    return (
+      canvasRef.current && console.log(canvasRef.current.getSignaturePad())
+      //   canvasRef.current._canvas.removeEventListener("endStroke", handleStroke)
+    );
+  }, [setValue]);
 
   return (
     <div className="container pt-3">
@@ -57,15 +78,18 @@ const Step5 = () => {
               Beatae cumque autem inventore sequi deleniti aliquam provident
               numquam, eum vel?
             </p>
+            {errors.waiverAgreed && (
+              <p className="text-danger">{errors.waiverAgreed.message}</p>
+            )}
           </div>
           <div className="row">
             <div className="col-1">
               <input
                 type="checkbox"
-                {...register("waiverSigned")}
+                {...register("waiverAgreed")}
                 className={`
                     form-check-input
-                    ${errors.waiverSigned && "is-invalid"}
+                    ${errors.waiverAgreed && "is-invalid"}
                 `}
               />
             </div>
@@ -86,7 +110,20 @@ const Step5 = () => {
           </p>
           <div className="row">
             <div className="col-12">
-              Sign Below
+              <div className="d-flex justify-content-between">
+                <div>Sign Below</div>{" "}
+                <div
+                  onClick={clearSignature}
+                  className={`${styles.clearSignatureButton}`}
+                >
+                  Clear
+                </div>
+              </div>
+              <input
+                type="checkbox"
+                {...register("waiverSigned")}
+                className="d-none"
+              />
               <SignatureCanvas
                 canvasProps={{
                   className: `${styles.signaturePad} border border-2 bg-light`,

@@ -12,8 +12,7 @@ export const step2Schema = object().shape({});
 export const step3Schema = object().shape({});
 export const step4Schema = object().shape({});
 export const step5Schema = object().shape({
-  waiverSigned: boolean()
-    .oneOf([true], "Waiver must be completed to continue.")
-    .required(),
+  waiverAgreed: boolean().oneOf([true], "Waiver must be agreed to.").required(),
+  waiverSigned: boolean().oneOf([true], "Waiver must be signed."),
 });
 export const step6Schema = object().shape({});
