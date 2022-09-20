@@ -1,7 +1,7 @@
 import _ from "lodash";
 import dayjs from "dayjs";
-import isBetween from 'dayjs/plugin/isBetween'
-dayjs.extend(isBetween)
+import isBetween from "dayjs/plugin/isBetween";
+dayjs.extend(isBetween);
 
 /**
  * Returns an array containing DayJS date objects for all dates that should be rendered on the current calendarPage
@@ -38,25 +38,30 @@ export const getPageRowData = (calendarPage) => {
 
 /**
  * Returns a boolean indicating whether or not a calendar date is selectable.
- * 
+ *
  * Returns false if:
- * 
+ *
  *     * "the current calendar page is before the current month"
  *     * "the dateToCheck is before today's date"
  *     * "the dateToCheck is on the current page, but isn't in the calendarPageDate's month"
- * 
+ *
  * @param {dayjs.DayJS} calendarPageDate -  the current calendar page
  * @param {dayjs.DayJS} selectedDate -  the currently selected date
  * @param {dayjs.DayJS} dateToCheck - the date to be checked for selectability
  * @returns boolean
  */
-export const dateIsSelectable = (calendarPageDate, selectedDate, dateToCheck) => {
+export const dateIsSelectable = (
+  calendarPageDate,
+  selectedDate,
+  dateToCheck
+) => {
   let startDate;
   let endDate;
 
   if (
     (calendarPageDate.month() === dayjs().month() &&
-      calendarPageDate.year() === dayjs().year()) ||
+      calendarPageDate.year() === dayjs().year() &&
+      calendarPageDate.month() === selectedDate.month()) ||
     dateToCheck.isBefore(dayjs())
   ) {
     startDate = dayjs().subtract(1, "day");
@@ -71,13 +76,15 @@ export const dateIsSelectable = (calendarPageDate, selectedDate, dateToCheck) =>
 
 /**
  * Returns a boolean indicating if the selectedDate's month and day equal those of the dateToCheck
+ * @param {dayjs.DayJS} calendarPageDate -  the current calendar page
  * @param {dayjs.DayJS} selectedDate -  the currently selected date
  * @param {dayjs.DayJS} dateToCheck - the date to check if is selected
- * @returns boolean 
+ * @returns boolean
  */
-export const dateIsSelected = (selectedDate, dateToCheck) => {
-    return (
-      dateToCheck.month() === selectedDate.month() &&
-      dateToCheck.date() === selectedDate.date()
+export const dateIsSelected = (calendarPageDate, selectedDate, dateToCheck) => {
+  return (
+    dateToCheck.month() === selectedDate.month() &&
+    dateToCheck.date() === selectedDate.date() && 
+    calendarPageDate.month() === selectedDate.month()
     );
-  };
+};
