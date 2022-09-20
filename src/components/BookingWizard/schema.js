@@ -5,7 +5,7 @@ export const bookingSchema = object().shape({
 });
 
 export const step1Schema = object().shape({
-  date: string().optional(), //.required("Please select a date."),
+  date: string().required("Please select a date."),
 });
 
 export const step2Schema = object().shape({});
@@ -13,6 +13,6 @@ export const step3Schema = object().shape({});
 export const step4Schema = object().shape({});
 export const step5Schema = object().shape({
   waiverAgreed: boolean().oneOf([true], "Waiver must be agreed to.").required(),
-  waiverSigned: boolean().oneOf([true], "Waiver must be signed."),
+  signatureImageData: string().required("Waiver must be signed.")
 });
 export const step6Schema = object().shape({});
