@@ -1,20 +1,20 @@
 import { useContext } from "react";
 import { GoArrowLeft, GoArrowRight } from "react-icons/go";
 import { CalendarDatePickerContext } from "./context";
-import { updateCalendarPage } from "./context/actions";
+import { updateCurrentPage } from "./context/actions";
 
 const MonthYearDisplay = () => {
   const [state, dispatch] = useContext(CalendarDatePickerContext);
-  const { calendarPage } = state;
+  const { currentPage } = state;
 
-  const changeCalendarPage = (date) => dispatch(updateCalendarPage(date));
+  const changeCalendarPage = (date) => dispatch(updateCurrentPage(date));
 
-  const goToNextMonth = () => changeCalendarPage(calendarPage.add(1, "month"));
+  const goToNextMonth = () => changeCalendarPage(currentPage.date.add(1, "month"));
   const goToPrevMonth = () =>
-    changeCalendarPage(calendarPage.subtract(1, "month"));
+    changeCalendarPage(currentPage.date.subtract(1, "month"));
 
-  const month = calendarPage.format("MMMM");
-  const year = calendarPage.format("YYYY");
+  const month = currentPage.date.format("MMMM");
+  const year = currentPage.date.format("YYYY");
 
   return (
     <div className="col-4 offset-4 my-3 d-flex justify-content-between align-items-center gap-3">
