@@ -1,0 +1,11 @@
+.content {
+    margin-top: 8vh;
+    z-index: -1;
+}
+
+
+@media (min-width: 768px) {
+    .content {
+        margin-left: 250px;
+    }
+}

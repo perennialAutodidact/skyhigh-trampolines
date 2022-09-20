@@ -28,7 +28,10 @@ const Navbar = (props) => {
   };
 
   return (
-    <div className="border-bottom h-50">
+    <div
+      className="border-bottom position-fixed w-100  bg-white"
+      style={{ zIndex: "1" }}
+    >
       <div className="container-fluid px-3">
         <nav className="d-flex justify-content-between align-items-center ">
           <div className="d-flex gap-3 align-content-center">
