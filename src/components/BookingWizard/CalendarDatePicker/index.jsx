@@ -2,6 +2,7 @@ import React, { useReducer } from "react";
 import { CalendarDatePickerContext, initialState } from "./context";
 import { calendarDatePickerReducer } from "./context/reducer";
 import MonthYearDisplay from "./MonthYearDisplay";
+import WeekdayLabels from "./WeekdayLabels";
 
 const CalenderDatePicker = () => {
   const [state, dispatch] = useReducer(calendarDatePickerReducer, initialState);
@@ -12,6 +13,12 @@ const CalenderDatePicker = () => {
         <div className="row">
           <div className="col-12">
             <MonthYearDisplay />
+            <table className="table-responsive-sm container-fluid text-center">
+              <thead>
+                <WeekdayLabels />
+              </thead>
+              <tbody></tbody>
+            </table>
           </div>
         </div>
       </div>
