@@ -1,5 +1,7 @@
 import _ from "lodash";
 import dayjs from "dayjs";
+import isBetween from 'dayjs/plugin/isBetween'
+dayjs.extend(isBetween)
 
 /**
  * Returns an array containing DayJS date objects for all dates that should be rendered on the current calendarPage
