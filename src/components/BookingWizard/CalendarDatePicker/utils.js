@@ -66,3 +66,16 @@ export const dateIsSelectable = (calendarPageDate, selectedDate, dateToCheck) =>
   // fourth argument "[" incicates inclusion of startDate
   return dateToCheck.isBetween(startDate, endDate, null, "[");
 };
+
+/**
+ * Returns a boolean indicating if the selectedDate's month and day equal those of the dateToCheck
+ * @param {dayjs.DayJS} selectedDate -  the currently selected date
+ * @param {dayjs.DayJS} dateToCheck - the date to check if is selected
+ * @returns boolean 
+ */
+export const dateIsSelected = (selectedDate, dateToCheck) => {
+    return (
+      dateToCheck.month() === selectedDate.month() &&
+      dateToCheck.date() === selectedDate.date()
+    );
+  };
