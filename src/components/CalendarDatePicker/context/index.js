@@ -2,9 +2,9 @@ import { createContext } from "react";
 import dayjs from 'dayjs'
 
 export const initialState = {
-  currentDate: dayjs(),
+  currentPageDate: dayjs(),
   selectedDate: dayjs(),
-  calendarDates: []
+  pageCellDates: []
 }
 
 export const CalendarDatePickerContext = createContext(initialState)
