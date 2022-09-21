@@ -8,12 +8,14 @@ import { auth } from "../../firebase/client";
 import { signOut } from "firebase/auth";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/authSlice";
+import { useLocation } from "react-router-dom";
 
 const Navbar = (props) => {
   const { setToggleSidebar } = props;
   const [showLogout, setShowLogout] = useState(false);
   const [user] = useAuthState(auth);
   const dispatch = useDispatch();
+  const location = useLocation();
 
   // toggle sidebar state
   const handleSidebar = () => setToggleSidebar((state) => !state);
@@ -25,6 +27,7 @@ const Navbar = (props) => {
   const logoutHandler = () => {
     signOut(auth);
     dispatch(logout());
+    setShowLogout(false);
   };
 
   return (
@@ -43,7 +46,7 @@ const Navbar = (props) => {
             <h3 className="p-0 m-0 ">Sky High</h3>
           </div>
 
-          {user && (
+          {user && location.pathname.startsWith("/admin") && (
             <div
               className={`${styled.logout} d-flex justify-content-between align-items-center gap-1`}
             >

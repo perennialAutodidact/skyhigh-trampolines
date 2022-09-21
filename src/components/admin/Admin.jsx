@@ -7,29 +7,42 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import Sidebar from "./nav/Sidebar";
 
 import { Outlet } from "react-router-dom";
+import { useEffect } from "react";
 
 const Admin = (props) => {
   const { toggleSidebar } = props;
   const [user, loading] = useAuthState(auth);
 
-  if (loading)
-    return <p className="text-center pt-2">Loading... please wait</p>;
+  // if user is logged in and the route is /admin, redirect to /admin/all-products
+  useEffect(() => {
+    if (user?.email && window.location.pathname === "/admin") {
+      window.location.pathname = "/admin/all-products";
+    }
+  }, [user]);
 
   return (
-    <main className="d-flex">
-      <div>
-        <Sidebar toggleSidebar={toggleSidebar} />
-      </div>
-
-      <div className={`container-fluid pt-3 ${styled.content}`}>
-        <div className="row">
-          <div className="pt-1 col-lg-8 mx-auto">
-            {/* outlet to display nested routes */}
-            <Outlet />
-          </div>
+    <div>
+      {loading ? (
+        <div className="text-center pt-3">
+          <p>Loading...please wait</p>
         </div>
-      </div>
-    </main>
+      ) : (
+        <main className="d-flex">
+          <div>
+            <Sidebar toggleSidebar={toggleSidebar} />
+          </div>
+
+          <div className={`container-fluid pt-3 ${styled.content}`}>
+            <div className="row">
+              <div className="pt-1 col-lg-8 mx-auto">
+                {/* outlet to display nested routes */}
+                <Outlet />
+              </div>
+            </div>
+          </div>
+        </main>
+      )}
+    </div>
   );
 };
 

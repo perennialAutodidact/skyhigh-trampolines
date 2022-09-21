@@ -24,33 +24,35 @@ function App() {
   return (
     <div className="container-fluid p-0">
       <Navbar setToggleSidebar={setToggleSidebar} />
-      <Routes>
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute isAllowed={!!user} loading={loading}>
-              <Admin toggleSidebar={toggleSidebar} />
-            </ProtectedRoute>
-          }
-        >
-          {/* products */}
-          <Route path="all-products" element={<p>All Products</p>} />
-          <Route path="add-products" element={<ProductForm />} />
+      <div style={{ paddingTop: "8vh" }}>
+        <Routes>
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute isAllowed={!!user} loading={loading}>
+                <Admin toggleSidebar={toggleSidebar} />
+              </ProtectedRoute>
+            }
+          >
+            {/* products */}
+            <Route path="all-products" element={<p>All Products</p>} />
+            <Route path="add-products" element={<ProductForm />} />
 
-          {/* bookings */}
+            {/* bookings */}
 
-          <Route path="all-bookings" element={<p>All Bookings</p>} />
-          <Route path="daily-capacity" element={<p>Daily Capacity</p>} />
+            <Route path="all-bookings" element={<p>All Bookings</p>} />
+            <Route path="daily-capacity" element={<p>Daily Capacity</p>} />
 
-          {/* rooms */}
-          <Route path="all-rooms" element={<p>All Rooms</p>} />
-          <Route path="add-rooms" element={<RoomForm />} />
-        </Route>
+            {/* rooms */}
+            <Route path="all-rooms" element={<p>All Rooms</p>} />
+            <Route path="add-rooms" element={<RoomForm />} />
+          </Route>
 
-        <Route path="/" element={<Homepage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/booking/*" element={<BookingWizard />} />
-      </Routes>
+          <Route path="/" element={<Homepage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/booking/*" element={<BookingWizard />} />
+        </Routes>
+      </div>
     </div>
   );
 }
