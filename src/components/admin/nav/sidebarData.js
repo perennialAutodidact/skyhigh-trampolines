@@ -21,6 +21,11 @@ export const sidebarData = [
         title: "Add Products",
         path: "/add-products",
       },
+      {
+        id: 0.3,
+        title: "Add Ons",
+        path: "/add-ons",
+      },
     ],
   },
 
