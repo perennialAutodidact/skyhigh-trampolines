@@ -5,6 +5,7 @@ name: Deploy to Firebase Hosting on merge
       - main
 env:
   CI: false
+  REACT_APP_FIREBASE_AUTH_DOMAIN: ${{ secrets.REACT_APP_FIREBASE_AUTH_DOMAIN }}
 
 jobs:
   build_and_deploy:
