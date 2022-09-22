@@ -25,18 +25,16 @@ const Step1 = () => {
 
   const onSubmit = (formData) => {
     dispatch(updateForm(formData));
-    dispatch(setProgressBarStep(2))
-    navigate('/booking/step-2')
+    dispatch(setProgressBarStep(2));
+    navigate("/booking/step-2");
   };
 
-
-  useEffect(()=>{
-    setValue('date', state.formData.date)
-  }, [setValue, state])
+  useEffect(() => {
+    setValue("date", state.formData.date);
+  }, [setValue, state]);
 
   return (
     <div className="container pt-3">
-
       <form onSubmit={handleSubmit(onSubmit)} className="container text-start">
         {/* DATE */}
         <div className="row mb-3">
@@ -57,22 +55,18 @@ const Step1 = () => {
         </div>
 
         <div className="row my-3 align-items-end">
-          <div className="col-12 col-lg-2 p-0">
-            <Link
-              to="/"
-              className="link-dark text-decoration-none"
-            >
+          <div className="col-12 col-lg-2 p-0 mb-3 mb-lg-0 order-2 order-lg-1">
+            <Link to="/" className="link-dark text-decoration-none">
               Back
             </Link>
           </div>
-          <div className="col col-12 col-lg-4 offset-lg-6 p-0">
+          <div className="col col-12 col-lg-4 offset-lg-6 p-0 order-1 order-lg-2">
             <button type="submit" className="btn btn-success w-100">
               Next
             </button>
           </div>
         </div>
       </form>
-  
     </div>
   );
 };
