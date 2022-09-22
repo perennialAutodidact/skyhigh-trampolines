@@ -13,7 +13,7 @@ const ProgressBar = () => {
   return (
     <div className="container p-0">
       <div className="row">
-        <div className="col-12 col-lg-9 offset-lg-1">
+        <div className="col-12 col-lg-10 offset-lg-1">
           <p className="m-0">
             Step {currentStep} of {totalSteps}
           </p>

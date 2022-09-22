@@ -28,13 +28,13 @@ const Step4 = () => {
     navigate("/booking/step-5");
   };
 
-  const goBack = () => dispatch(setProgressBarStep(3))
+  const goBack = () => dispatch(setProgressBarStep(3));
 
   return (
     <div className="container pt-3">
       <form onSubmit={handleSubmit(onSubmit)} className="container text-start">
-      <div className="row my-3 align-items-end">
-          <div className="col-12 col-lg-2 p-0">
+        <div className="row my-3 align-items-end">
+          <div className="col-12 col-lg-2 p-0 mb-3 mb-lg-0 order-2 order-lg-1">
             <Link
               to="/booking/step-3"
               onClick={goBack}
@@ -43,7 +43,7 @@ const Step4 = () => {
               Back
             </Link>
           </div>
-          <div className="col col-12 col-lg-4 offset-lg-6 p-0">
+          <div className="col col-12 col-lg-4 offset-lg-6 p-0 order-1 order-lg-2">
             <button type="submit" className="btn btn-success w-100">
               Next
             </button>
