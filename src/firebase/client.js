@@ -5,6 +5,7 @@ import { getStorage } from 'firebase/storage'
 import '@firebase/auth'
 import '@firebase/storage'
 import 'firebase/firestore'
+import { getFunctions } from 'firebase/functions'
 
 const firebaseKey = process.env.REACT_APP_FIREBASE_API_KEY
 const firebaseProjectId = process.env.REACT_APP_FIREBASE_PROJECT_ID
@@ -22,7 +23,9 @@ const app = initializeApp(firebaseConfig)
 const db = getFirestore(app)
 const auth = getAuth(app)
 const storage = getStorage(app)
+const functions = getFunctions(app)
 const colRef = collection(db, 'Product Form')
+const productsRef = collection(db, 'products')
 
 getDocs(colRef)
   .then((snapshot) => {
@@ -36,4 +39,4 @@ getDocs(colRef)
     console.log(err.message)
   })
 
-export { db, auth, storage }
+export { db, auth, storage, functions, colRef, productsRef }

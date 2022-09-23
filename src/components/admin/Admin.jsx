@@ -1,41 +1,43 @@
 import React from "react";
+import styled from "./Admin.module.scss";
 import { auth } from "../../firebase/client";
-import { logout } from "../../redux/authSlice";
-import { signOut } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useDispatch } from "react-redux";
 import Sidebar from "./nav/Sidebar";
+import { Outlet } from "react-router-dom";
+import { useEffect } from "react";
 
 const Admin = (props) => {
   const { toggleSidebar } = props;
   const [user, loading] = useAuthState(auth);
-  const dispatch = useDispatch();
 
-  const logoutHandler = () => {
-    signOut(auth);
-    dispatch(logout());
-  };
+  // if user is logged in and the route is /admin, redirect to /admin/all-products
+  useEffect(() => {
+    if (user?.email && window.location.pathname === "/admin") {
+      window.location.pathname = "/admin/all-products";
+    }
+  }, [user]);
+
   return (
-    <div className="row">
+    <div>
       {loading ? (
-        <div className="col">
+        <div className="text-center pt-3">
           <p>Loading...please wait</p>
         </div>
       ) : (
-        <>
-          <div className="col-lg-2">
+        <main className="d-flex">
+          <div>
             <Sidebar toggleSidebar={toggleSidebar} />
           </div>
-          <div className="col-lg-10">
-            <div className="container text-center">
-              <p>Hello Admin: {user?.displayName}</p>
 
-              <button onClick={logoutHandler} className="btn btn-secondary">
-                Sign Out
-              </button>
+          <div className={`container-fluid pt-3 ${styled.content}`}>
+            <div className="row">
+              <div className="pt-1 col-lg-6 mx-auto">
+                {/* outlet to display nested routes */}
+                <Outlet />
+              </div>
             </div>
           </div>
-        </>
+        </main>
       )}
     </div>
   );

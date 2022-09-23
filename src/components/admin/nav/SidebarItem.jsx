@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "./SidebarItem.module.scss";
 
 const SidebarItem = (props) => {
   const [subNav, setSubNav] = useState(false);
   const { item, toggleSidebar } = props;
+  const navigate = useNavigate();
 
   // toggle icon and subnav and open sidebar
   const showSubNav = () => {
@@ -43,7 +45,11 @@ const SidebarItem = (props) => {
         item.subNav.map((menu) => {
           return (
             //todo change to link and add to routes
-            <div className={`${styled.link} ps-5 py-2`} key={menu.id}>
+            <div
+              className={`${styled.link} ps-5 py-2`}
+              key={menu.id}
+              onClick={() => navigate(`/admin${menu.path}`)}
+            >
               <p className="p-0 m-0">{menu.title}</p>
             </div>
           );
