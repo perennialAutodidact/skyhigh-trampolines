@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { step1Schema } from "./schema";
 import CalendarDatePicker from "./CalendarDatePicker";
+import FormNavButtons from "./FormNavButtons";
 
 const Step1 = () => {
   const navigate = useNavigate();
@@ -46,18 +47,7 @@ const Step1 = () => {
           </div>
         </div>
 
-        <div className="row my-3 align-items-end">
-          <div className="col-12 col-lg-2 p-0 mb-3 mb-lg-0 order-2 order-lg-1">
-            <Link to="/" className="link-dark text-decoration-none">
-              Back
-            </Link>
-          </div>
-          <div className="col col-12 col-lg-4 offset-lg-6 p-0 order-1 order-lg-2">
-            <button type="submit" className="btn btn-success w-100">
-              Next
-            </button>
-          </div>
-        </div>
+        <FormNavButtons backHref={'/'} submitButtonText={'Next'}/>
       </form>
     </div>
   );
