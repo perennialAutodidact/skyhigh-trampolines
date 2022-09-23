@@ -34,9 +34,9 @@ const Step2 = () => {
 
   return (
     <div className="container pt-3">
-      <form onSubmit={handleSubmit(onSubmit)} className="container text-start">
+      <form onSubmit={handleSubmit(onSubmit)} className="container-fluid px-0 text-start">
         {/* PRODUCT SELECT */}
-        <div className="row mb-3">
+        <div className="row g-0 mb-3">
           <div className="col-12 col-lg-6 p-0">
             <label htmlFor="date" className="form-label p-0 d-flex gap-1">
               <h3>Select Products</h3> <span className="text-danger">*</span>
@@ -48,13 +48,11 @@ const Step2 = () => {
           </div>
         </div>
 
-        <div className="accordion" id="accordionPanelsStayOpenExample">
           {TEMP_ROOM_DATA.map((roomData) => (
             <ProductSelect roomData={roomData} />
           ))}
-        </div>
 
-        <div className="row my-3 align-items-end">
+        <div className="row g-0 my-3 align-items-end">
           <div className="col-12 col-lg-2 p-0 mb-3 mb-lg-0 order-2 order-lg-1">
             <Link
               to="/booking"
@@ -82,6 +80,7 @@ const TEMP_ROOM_DATA = [
     id: "B4v0Zw7BHjXEMhsDq8K6",
     name: "Cloud Jumper",
     capacity: 25,
+    photo: "https://firebasestorage.googleapis.com/v0/b/team-sapphire.appspot.com/o/rooms%2Fclouds-pero-kalimero.jpg?alt=media&token=d93817e5-4783-4717-bff4-f6e1756675ae",
     products: [
       {
         name: "60-Minute Ticket",
@@ -135,6 +134,7 @@ const TEMP_ROOM_DATA = [
     id: "fk6dUV1ikU42lS1iMhBo",
     name: "Cosmic Leap",
     capacity: 50,
+    photo: "https://firebasestorage.googleapis.com/v0/b/team-sapphire.appspot.com/o/rooms%2Fcosmos.jpg?alt=media&token=46ede597-ef63-4409-9a70-c66b2cad34a2",
     products: [
       {
         photo:
