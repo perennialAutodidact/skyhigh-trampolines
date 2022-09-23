@@ -14,12 +14,17 @@ export const sidebarData = [
       {
         id: 0.1,
         title: "All Products",
-        path: "",
+        path: "/all-products",
       },
       {
         id: 0.2,
         title: "Add Products",
-        path: "",
+        path: "/add-products",
+      },
+      {
+        id: 0.3,
+        title: "Add Ons",
+        path: "/add-ons",
       },
     ],
   },
@@ -36,12 +41,12 @@ export const sidebarData = [
       {
         id: 1.1,
         title: "All Bookings",
-        path: "",
+        path: "/all-bookings",
       },
       {
         id: 1.2,
         title: "Daily Capacity",
-        path: "",
+        path: "/daily-capacity",
       },
     ],
   },
@@ -58,12 +63,12 @@ export const sidebarData = [
       {
         id: 2.1,
         title: "All Rooms",
-        path: "",
+        path: "/all-rooms",
       },
       {
         id: 2.2,
         title: "Add Rooms",
-        path: "",
+        path: "/add-rooms",
       },
     ],
   },
