@@ -1,6 +1,7 @@
-import React, { useContext } from "react";
-import dayjs from "dayjs";
-import { useNavigate, Link } from "react-router-dom";
+import React, { useContext, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getRoomList } from "../../redux/roomsSlice";
+import { useNavigate } from "react-router-dom";
 import { BookingWizardContext } from "./context";
 import { updateForm, setProgressBarStep } from "./context/actions";
 import { useForm } from "react-hook-form";
@@ -10,6 +11,10 @@ import ProductSelect from "./ProductSelect";
 import FormNavButtons from "./FormNavButtons";
 
 const Step2 = () => {
+  const appDispatch = useDispatch();
+  const { rooms, loading: roomsLoadingState } = useSelector(
+    (state) => state.rooms
+  );
   const navigate = useNavigate();
   const [state, dispatch] = useContext(BookingWizardContext);
 
@@ -33,6 +38,15 @@ const Step2 = () => {
 
   const goBack = () => dispatch(setProgressBarStep(1));
 
+  useEffect(() => {
+    if (!!rooms && roomsLoadingState === "idle") {
+      appDispatch(getRoomList());
+    }
+  }, [rooms, roomsLoadingState, appDispatch]);
+
+  if (roomsLoadingState === "pending") {
+    return <div className="text-center">Loading...</div>;
+  }
   return (
     <div className="container px-0 pt-3">
       <form
@@ -56,7 +70,7 @@ const Step2 = () => {
           <ProductSelect roomData={roomData} />
         ))}
 
-        <FormNavButtons backHref={"/booking"} submitButtonText={"Next"} />
+        <FormNavButtons backHref={"/booking"} submitButtonText={"Next"} goBack={goBack}/>
       </form>
     </div>
   );
