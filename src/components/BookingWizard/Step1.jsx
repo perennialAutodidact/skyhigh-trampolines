@@ -47,7 +47,7 @@ const Step1 = () => {
           </div>
         </div>
 
-        <FormNavButtons backHref={'/'} submitButtonText={'Next'}/>
+        <FormNavButtons backHref={"/"} submitButtonText={"Next"} />
       </form>
     </div>
   );
