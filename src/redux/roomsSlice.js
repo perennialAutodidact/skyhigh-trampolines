@@ -7,18 +7,27 @@ export const createRoom = createAsyncThunk(
   "rooms/create",
   async (formData, { rejectWithValue }) => {
     try {
-      const roomsRef = ref(storage, 'rooms/' + formData.photo.name);
+      const roomsRef = ref(storage, "rooms/" + formData.photo.name);
 
       const { name, capacity, photo } = formData;
 
       const snapshot = await uploadBytes(roomsRef, photo);
-      const photoLink = await getDownloadURL(snapshot.ref)
+      const photoLink = await getDownloadURL(snapshot.ref);
 
-      return await addDoc(collection(db, "rooms"), { name, capacity, photo: photoLink });
+      return await addDoc(collection(db, "rooms"), {
+        name,
+        capacity,
+        photo: photoLink,
+      });
     } catch (error) {
       return rejectWithValue(error);
     }
   }
+);
+
+export const getRooms = createAsyncThunk(
+  "rooms/list",
+  async ({ rejectWithValue }) => {}
 );
 
 const roomsSlice = createSlice({
