@@ -35,6 +35,9 @@ export const getRoomList = createAsyncThunk(
         snapshot.forEach(doc=>{
           data.push({...doc.data(), id: doc.id})
         })
+
+        // get product data and add to room data
+
         return data
       })
       
