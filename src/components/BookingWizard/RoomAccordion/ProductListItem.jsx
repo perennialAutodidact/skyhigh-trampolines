@@ -16,8 +16,7 @@ const ProductListItem = ({ product }) => {
           <input
             type="text"
             className="form-control p-0 text-center"
-            aria-label="Username"
-            aria-describedby="basic-addon1"
+            aria-label={product.name}
           />
           <div className="btn btn-outline-secondary d-flex justify-content-center align-items-center p-1">
             <BsPlusLg />

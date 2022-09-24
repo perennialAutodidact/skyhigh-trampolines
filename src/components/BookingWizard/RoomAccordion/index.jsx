@@ -5,8 +5,7 @@ import styles from "../BookingWizard.module.scss";
 import ProductList from "./ProductList";
 import StartTimeList from "./StartTimeList";
 
-const ProductSelect = ({ roomData }) => {
-
+const RoomAccordion = ({ roomData }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleIsExpanded = () => setIsExpanded((isExpanded) => !isExpanded);
@@ -57,4 +56,4 @@ const ProductSelect = ({ roomData }) => {
   );
 };
 
-export default ProductSelect;
+export default RoomAccordion;
