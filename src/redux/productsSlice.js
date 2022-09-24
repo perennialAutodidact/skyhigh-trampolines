@@ -16,7 +16,7 @@ export const createProduct = createAsyncThunk(
 
       return await addDoc(
         productsCollection,
-        Object.assign(data, { photo: photo.photoLink })
+        Object.assign(data, { photo: photoLink })
       );
     } catch (error) {
       return rejectWithValue(error);
