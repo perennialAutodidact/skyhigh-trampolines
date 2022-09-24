@@ -1,31 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getRooms } from "../../../redux/roomsSlice";
+import { getRoomList } from "../../../redux/roomsSlice";
 import styles from "../BookingWizard.module.scss";
 import ProductList from "./ProductList";
 import StartTimeList from "./StartTimeList";
 
 const ProductSelect = ({ roomData }) => {
-  const dispatch = useDispatch();
-  const { rooms, loading: roomsLoadingState } = useSelector(
-    (state) => state.rooms
-  );
+
   const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleIsExpanded = () => setIsExpanded((isExpanded) => !isExpanded);
-
-  useEffect(() => {
-    if (!!rooms && roomsLoadingState === "idle") {
-      console.log("loading rooms");
-      const promise = dispatch(getRoomList());
-
-      return () => promise.abort();
-    }
-  }, [rooms, roomsLoadingState, dispatch]);
-
-  if (roomsLoadingState === "pending") {
-    return <div className="text-center">Loading...</div>;
-  }
 
   return (
     <div className="accordion accordion-flush" id="rooms-accordion">
