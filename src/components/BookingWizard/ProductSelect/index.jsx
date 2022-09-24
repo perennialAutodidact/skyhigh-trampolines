@@ -1,18 +1,20 @@
 import React, { useState } from "react";
-import { getHalfHourIncrementStrings } from "./utils";
 import styles from "../BookingWizard.module.scss";
 import ProductList from "./ProductList";
+import StartTimeList from "./StartTimeList";
 
 const ProductSelect = ({ roomData }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const ARRIVAL_TIMES = getHalfHourIncrementStrings("9:00", "16:30");
 
   const toggleIsExpanded = () => setIsExpanded((isExpanded) => !isExpanded);
 
   return (
     <div className="accordion accordion-flush" id="rooms-accordion">
       <div className="accordion-item mb-2">
-        <h2 className="accordion-header" id={`accordion-header-${roomData.id}`}>
+        <h2
+          className="accordion-header shadow border-0"
+          id={`accordion-header-${roomData.id}`}
+        >
           <div className="container-fluid p-0">
             <button
               className="accordion-button ps-0 py-0 row g-0 gap-2"
@@ -42,7 +44,8 @@ const ProductSelect = ({ roomData }) => {
           className="accordion-collapse collapse show"
           aria-labelledby={`accordion-header-${roomData.id}`}
         >
-          <div className="accordion-body px-0 container-fluid">
+          <StartTimeList />
+          <div className="accordion-body container-fluid px-3">
             <ProductList products={roomData.products} />
           </div>
         </div>
