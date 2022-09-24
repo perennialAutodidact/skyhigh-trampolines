@@ -27,14 +27,30 @@ export const createRoom = createAsyncThunk(
 
 export const getRoomList = createAsyncThunk(
   "rooms/getRoomList",
-  async ({ rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      const roomDocs = await getDocs(roomsCollection);
-
-      console.log(roomDocs.map((doc) => doc.data()));
+      
+      const rooms = await getDocs(roomsCollection).then(snapshot=>{
+        let data = []
+        snapshot.forEach(doc=>{
+          data.push({...doc.data(), id: doc.id})
+        })
+        return data
+      })
+      
     } catch (error) {
       return rejectWithValue(error);
     }
+  },
+  {
+    condition: (_, { getState, extra }) => {
+      const { rooms } = getState();
+      const fetchStatus = rooms.loading;
+      if (fetchStatus === "fulfilled" || fetchStatus === "pending") {
+        // Already fetched or in progress, don't need to re-fetch
+        return false;
+      }
+    },
   }
 );
 
@@ -55,7 +71,17 @@ const roomsSlice = createSlice({
       state.loading = "failed";
     },
 
-    [getRoomList]
+    [getRoomList.pending]: (state, action) => {
+      state.loading = "pending";
+    },
+    [getRoomList.fulfilled]: (state, action) => {
+      state.loading = "succeeded";
+      state.rooms = ["roomzzz"];
+    },
+    [getRoomList.rejected]: (state, action) => {
+      state.loading = "failed";
+      console.log(action.error);
+    },
   },
 });
 
