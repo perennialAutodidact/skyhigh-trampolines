@@ -8,14 +8,14 @@ const ProductListItem = ({ product }) => {
         ${product.price / 100}
       </div>
       <div className="col-3 col-lg-2">
-        <div class="input-group input-group-sm mb-3 d-flex">
+        <div className="input-group input-group-sm mb-3 d-flex">
           <div className="btn btn-outline-secondary d-flex justify-content-center align-items-center p-1">
             <BsDashLg />
           </div>
 
           <input
             type="text"
-            class="form-control p-0 text-center"
+            className="form-control p-0 text-center"
             aria-label="Username"
             aria-describedby="basic-addon1"
           />

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { addDoc, collection } from "firebase/firestore";
-import { db, storage } from "../firebase/client";
+import { addDoc, getDocs, query, where } from "firebase/firestore";
+import { storage, roomsCollection } from "../firebase/client";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 export const createRoom = createAsyncThunk(
@@ -14,7 +14,7 @@ export const createRoom = createAsyncThunk(
       const snapshot = await uploadBytes(roomsRef, photo);
       const photoLink = await getDownloadURL(snapshot.ref);
 
-      return await addDoc(collection(db, "rooms"), {
+      return await addDoc(roomsCollection, {
         name,
         capacity,
         photo: photoLink,
@@ -25,9 +25,17 @@ export const createRoom = createAsyncThunk(
   }
 );
 
-export const getRooms = createAsyncThunk(
-  "rooms/list",
-  async ({ rejectWithValue }) => {}
+export const getRoomList = createAsyncThunk(
+  "rooms/getRoomList",
+  async ({ rejectWithValue }) => {
+    try {
+      const roomDocs = await getDocs(roomsCollection);
+
+      console.log(roomDocs.map((doc) => doc.data()));
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
 );
 
 const roomsSlice = createSlice({
@@ -46,6 +54,8 @@ const roomsSlice = createSlice({
     [createRoom.rejected]: (state, action) => {
       state.loading = "failed";
     },
+
+    [getRoomList]
   },
 });
 
