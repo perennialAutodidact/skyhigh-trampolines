@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import styles from "./BookingWizard.module.scss";
+import styles from "./Waiver.module.scss";
 import SignatureCanvas from "react-signature-canvas";
 
 const Waiver = ({ register, setValue, errors, clearErrors }) => {

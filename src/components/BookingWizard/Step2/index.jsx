@@ -11,9 +11,9 @@ import { productSelectReducer } from "./context/reducer";
 import { updateForm, setProgressBarStep } from "../context/actions";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { step2Schema } from "../schema";
+import { step2Schema } from "../context/schema";
 import RoomAccordion from "./RoomAccordion";
-import FormNavButtons from "../FormNavButtons";
+import FormNavButtons from "../common/FormNavButtons";
 import LoadingSpinner from "../../LoadingSpinner";
 import { setInitialRoomState } from "./context/actions";
 

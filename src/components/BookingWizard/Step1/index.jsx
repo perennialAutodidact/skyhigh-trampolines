@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { BookingWizardContext } from "./context";
-import { updateForm, setProgressBarStep } from "./context/actions";
+import { useNavigate } from "react-router-dom";
+import { BookingWizardContext } from "../context";
+import { step1Schema } from "../context/schema";
+import { updateForm, setProgressBarStep } from "../context/actions";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { step1Schema } from "./schema";
 import CalendarDatePicker from "./CalendarDatePicker";
-import FormNavButtons from "./FormNavButtons";
+import FormNavButtons from "../common/FormNavButtons";
 
 const Step1 = () => {
   const navigate = useNavigate();
@@ -17,7 +17,6 @@ const Step1 = () => {
   };
   const {
     handleSubmit,
-    register,
     setValue,
     formState: { errors },
   } = useForm({

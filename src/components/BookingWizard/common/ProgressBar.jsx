@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
-import { BookingWizardContext } from "./context";
-import { setProgressBarStep } from "./context/actions";
+import { BookingWizardContext } from "../context";
+import { setProgressBarStep } from "../context/actions";
 
 const ProgressBar = () => {
   const [state, dispatch] = useContext(BookingWizardContext);

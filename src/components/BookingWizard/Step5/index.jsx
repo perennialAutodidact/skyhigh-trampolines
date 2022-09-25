@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { BookingWizardContext } from "./context";
-import { updateForm, setProgressBarStep } from "./context/actions";
+import { BookingWizardContext } from "../context";
+import { updateForm, setProgressBarStep } from "../context/actions";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { step5Schema } from "./schema";
+import { step5Schema } from "../context/schema";
 import Waiver from "./Waiver";
 
 const Step5 = () => {
@@ -20,7 +20,7 @@ const Step5 = () => {
     register,
     setValue,
     formState: { errors },
-    clearErrors
+    clearErrors,
   } = useForm({
     initialValues,
     resolver: yupResolver(step5Schema),
@@ -37,12 +37,14 @@ const Step5 = () => {
 
   return (
     <div className="container pt-3">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="container text-start"
-      >
+      <form onSubmit={handleSubmit(onSubmit)} className="container text-start">
         <h3 className="mb-3">Sign the Waiver</h3>
-        <Waiver register={register} setValue={setValue} errors={errors} clearErrors={clearErrors} />
+        <Waiver
+          register={register}
+          setValue={setValue}
+          errors={errors}
+          clearErrors={clearErrors}
+        />
         <div className="row my-3 align-items">
           <div className="col-12 col-lg-2 p-0 mt-3 mt-lg-0 order-2 order-lg-1">
             <Link
