@@ -13,7 +13,8 @@ const StartTimeList = ({ room }) => {
 
   const changeSelectedStartTime = (time) => {
     if (!isDisabled(time)) {
-      dispatch(setSelectedStartTime(roomId, time));
+      const newTime = selectedStartTime !== time ? time : "";
+      dispatch(setSelectedStartTime(roomId, newTime));
     }
   };
 
