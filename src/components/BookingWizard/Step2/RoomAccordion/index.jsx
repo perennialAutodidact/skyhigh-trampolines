@@ -52,7 +52,7 @@ const RoomAccordion = ({ roomIndex }) => {
         >
           <StartTimeList room={room} />
           <div className="accordion-body container-fluid px-3">
-            <ProductList products={room.products} />
+            <ProductList products={room.products} roomId={room.id} />
           </div>
         </div>
       </div>
