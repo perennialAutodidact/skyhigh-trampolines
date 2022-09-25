@@ -24,7 +24,7 @@ const Step2 = () => {
   const [state, dispatch] = useContext(BookingWizardContext);
 
   const initialValues = {
-    productsSelected: false,
+    productDataExists: false,
   };
   const {
     handleSubmit,
@@ -45,18 +45,18 @@ const Step2 = () => {
 
   const goBack = () => dispatch(setProgressBarStep(1));
 
-  const atLeastOneProductAdded = useCallback(
+  const roomDataIsValid = useCallback(
     () =>
       state.rooms.some((room) =>
-        room.products.some((product) => product.quantity > 0)
+        room.selectedStartTime && room.products.some((product) => product.quantity > 0)
       ),
     [state.rooms]
   );
 
   useEffect(() => {
-    setValue("productsAdded", atLeastOneProductAdded());
+    setValue("productDataExists", roomDataIsValid());
     clearErrors();
-  }, [setValue, atLeastOneProductAdded, clearErrors]);
+  }, [setValue, roomDataIsValid, clearErrors]);
 
   useEffect(() => {
     if (!!rooms && roomsLoadingState === "idle") {
@@ -89,15 +89,15 @@ const Step2 = () => {
         </div>
 
         {/* hidden input field to handle errors if no products are selected */}
-        <input type="hidden" {...register("productsSelected")} />
+        <input type="hidden" {...register("productDataExists")} />
 
         {state.rooms.map((room, index) => (
           <RoomAccordion roomIndex={index} key={room.id} />
         ))}
 
-        {errors.productsAdded && (
+        {errors.productDataExists && (
           <p className="text-danger text-center">
-            {errors.productsAdded.message}
+            {errors.productDataExists.message}
           </p>
         )}
 
