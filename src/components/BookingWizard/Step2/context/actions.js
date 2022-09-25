@@ -16,3 +16,14 @@ export const setSelectedStartTime = (roomId, selectedStartTime) => {
     },
   };
 };
+
+export const setProductQuantity = (roomId, productId, quantity) => {
+  return {
+    type: "SET_PRODUCT_QUANTITY",
+    payload: {
+      roomId,
+      productId,
+      quantity,
+    },
+  };
+};

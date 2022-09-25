@@ -1,4 +1,5 @@
 export const productSelectReducer = (state, action) => {
+  const { roomId, productId, selectedStartTime, quantity } = action.payload;
   switch (action.type) {
     case "SET_INITIAL_ROOM_STATE":
       return {
@@ -6,7 +7,6 @@ export const productSelectReducer = (state, action) => {
         rooms: action.payload.rooms,
       };
     case "SET_SELECTED_START_TIME":
-      const { roomId, selectedStartTime } = action.payload;
       return {
         ...state,
         rooms: state.rooms.map((room) =>
@@ -15,6 +15,25 @@ export const productSelectReducer = (state, action) => {
             : {
                 ...room,
                 selectedStartTime,
+              }
+        ),
+      };
+    case "SET_PRODUCT_QUANTITY":
+      return {
+        ...state,
+        rooms: state.rooms.map((room) =>
+          room.id !== roomId
+            ? room
+            : {
+                ...room,
+                products: room.products.map((product) =>
+                  product.id !== productId
+                    ? room.products
+                    : {
+                        ...product,
+                        quantity,
+                      }
+                ),
               }
         ),
       };
