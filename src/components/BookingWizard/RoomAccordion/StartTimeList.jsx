@@ -15,7 +15,7 @@ const StartTimeList = ({
               className={`
                 py-1 border text-center
                 ${time === selectedStartTime ? "bg-info" : ""}
-                ${disabledStartTimes.includes(time) ? styles.disabledTime : ""}
+                ${disabledStartTimes.includes(time) ? styles.startTimeButton__disabled : styles.startTimeButton}
                 `}
             >
               {time}
