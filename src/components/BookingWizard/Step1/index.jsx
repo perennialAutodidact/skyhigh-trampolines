@@ -13,9 +13,10 @@ const Step1 = () => {
   const [state, dispatch] = useContext(BookingWizardContext);
 
   const initialValues = {
-    ...state.formData,
+    date: state.formData.date
   };
   const {
+    register,
     handleSubmit,
     setValue,
     formState: { errors },
@@ -44,6 +45,7 @@ const Step1 = () => {
             <label htmlFor="date" className="form-label p-0 d-flex gap-1">
               <h3>Select Date</h3> <span className="text-danger">*</span>
             </label>
+            <input type="hidden" {...register('date')} value={initialValues.date}/>
             <CalendarDatePicker setFormDate={setDate} />
             {errors.date && (
               <p className="text-danger">{errors.date.message}</p>

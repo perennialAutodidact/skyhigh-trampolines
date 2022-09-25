@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { createContext } from "react";
 import { getHalfHourIncrementStrings } from "./utils";
 
@@ -6,7 +7,7 @@ export const initialState = {
   currentStep: 1,
   totalSteps: 6,
   formData: {
-    date: "",
+    date: dayjs().format('YYYY-MM-DD'),
     time: "",
     waiverAgreed: false,
     signatureImageData: "",
