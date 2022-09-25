@@ -12,7 +12,7 @@ import { updateForm, setProgressBarStep } from "../context/actions";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { step2Schema } from "../schema";
-import RoomAccordion from "../RoomAccordion";
+import RoomAccordion from "./RoomAccordion";
 import FormNavButtons from "../FormNavButtons";
 import LoadingSpinner from "../../LoadingSpinner";
 import { setInitialRoomState } from "./context/actions";
@@ -51,8 +51,8 @@ const Step2 = () => {
 
   useEffect(() => {
     if (!!rooms && roomsLoadingState === "idle") {
-      appDispatch(getRoomList()).then(rooms=>{
-        dispatch(setInitialRoomState(TEMP_ROOM_DATA))
+      appDispatch(getRoomList()).then((rooms) => {
+        dispatch(setInitialRoomState(TEMP_ROOM_DATA));
       });
     }
   }, [rooms, roomsLoadingState, appDispatch]);
@@ -84,8 +84,8 @@ const Step2 = () => {
         </div>
 
         <ProductSelectContext.Provider value={[state, dispatch]}>
-          {state.rooms && state.rooms.map((room,index) => (
-            <RoomAccordion roomIndex={index} key={room.id}/>
+          {state.rooms.map((room, index) => (
+            <RoomAccordion roomIndex={index} key={room.id} />
           ))}
         </ProductSelectContext.Provider>
 
