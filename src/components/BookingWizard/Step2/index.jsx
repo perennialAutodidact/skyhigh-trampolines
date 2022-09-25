@@ -15,7 +15,7 @@ import { step2Schema } from "../context/schema";
 import RoomAccordion from "./RoomAccordion";
 import FormNavButtons from "../common/FormNavButtons";
 import LoadingSpinner from "../../LoadingSpinner";
-import { setInitialRoomState } from "./context/actions";
+import { addFormValueSetter, setInitialRoomState } from "./context/actions";
 
 const Step2 = () => {
   const appDispatch = useDispatch();
@@ -30,16 +30,20 @@ const Step2 = () => {
   );
 
   const initialValues = {
-    ...wizardState.formData,
+    productsSelected: false,
   };
   const {
     handleSubmit,
     setValue,
+    register,
     formState: { errors },
   } = useForm({
     initialValues,
     resolver: yupResolver(step2Schema),
   });
+  useEffect(() => {
+    dispatch(addFormValueSetter(setValue));
+  }, [setValue, dispatch]);
 
   const onSubmit = (formData) => {
     wizardDispatch(updateForm(formData));
@@ -55,7 +59,7 @@ const Step2 = () => {
         dispatch(setInitialRoomState(TEMP_ROOM_DATA));
       });
     }
-  }, [rooms, roomsLoadingState, appDispatch]);
+  }, [rooms, roomsLoadingState, appDispatch, setValue]);
 
   if (roomsLoadingState === "pending") {
     return (
@@ -83,6 +87,7 @@ const Step2 = () => {
           </div>
         </div>
 
+        <input type="hidden" {...register("productsSelected")} />
         <ProductSelectContext.Provider value={[state, dispatch]}>
           {state.rooms.map((room, index) => (
             <RoomAccordion roomIndex={index} key={room.id} />
