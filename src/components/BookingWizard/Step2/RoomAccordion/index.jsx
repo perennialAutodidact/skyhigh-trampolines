@@ -8,7 +8,7 @@ const RoomAccordion = ({ roomIndex }) => {
   const [state, dispatch] = useContext(ProductSelectContext);
   const { rooms, startTimes } = state;
 
-  const room = useMemo(() => rooms[roomIndex], [rooms]);
+  const room = useMemo(() => rooms[roomIndex], [rooms, roomIndex]);
 
   const [isExpanded, setIsExpanded] = useState(false);
 
