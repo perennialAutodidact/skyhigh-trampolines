@@ -20,7 +20,7 @@ import { setInitialRoomState } from "./context/actions";
 const Step2 = () => {
   const appDispatch = useDispatch();
   const { rooms, loading: roomsLoadingState } = useSelector(
-    (state) => state.rooms
+    (appState) => appState.rooms
   );
   const navigate = useNavigate();
   const [wizardState, wizardDispatch] = useContext(BookingWizardContext);
@@ -52,6 +52,7 @@ const Step2 = () => {
   useEffect(() => {
     if (!!rooms && roomsLoadingState === "idle") {
       appDispatch(getRoomList()).then(rooms=>{
+        console.log('dispatching rooms')
         dispatch(setInitialRoomState(TEMP_ROOM_DATA))
       });
     }
@@ -84,8 +85,8 @@ const Step2 = () => {
         </div>
 
         <ProductSelectContext.Provider value={[state, dispatch]}>
-          {TEMP_ROOM_DATA.map((roomData) => (
-            <RoomAccordion roomData={roomData} />
+          {state.rooms && state.rooms.map((room,index) => (
+            <RoomAccordion roomIndex={index} key={room.id}/>
           ))}
         </ProductSelectContext.Provider>
 
