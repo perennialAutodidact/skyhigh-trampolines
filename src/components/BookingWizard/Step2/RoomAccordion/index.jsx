@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import styles from "./RoomAccordion.module.scss";
-import { ProductSelectContext } from "../Step2/context";
+import { ProductSelectContext } from "../context";
 import ProductList from "./ProductList";
 import StartTimeList from "./StartTimeList";
 

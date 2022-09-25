@@ -1,4 +1,4 @@
-@import '../../../styles/team-sapphire-variables';
+@import '../../../../styles/team-sapphire-variables';
 
 .accordionHeaderImage {
     width: 100%;
@@ -6,6 +6,7 @@
 
 .startTimeButton {
     transition: all .2s ease-in-out;
+
     &:hover {
         cursor: pointer;
         background-color: $custom-info;
@@ -16,8 +17,8 @@
 .startTimeButton__disabled {
     background-color: $custom-disabled;
     color: adjust-color($custom-disabled, $lightness: -30%);
-    &:hover{
+
+    &:hover {
         cursor: default;
     }
 }
-
