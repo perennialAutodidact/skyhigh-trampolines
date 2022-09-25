@@ -52,7 +52,6 @@ const Step2 = () => {
   useEffect(() => {
     if (!!rooms && roomsLoadingState === "idle") {
       appDispatch(getRoomList()).then(rooms=>{
-        console.log('dispatching rooms')
         dispatch(setInitialRoomState(TEMP_ROOM_DATA))
       });
     }
