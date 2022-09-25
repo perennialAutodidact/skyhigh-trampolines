@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useMemo } from "react";
 import styles from "./RoomAccordion.module.scss";
 import { ProductSelectContext } from "../context";
 import ProductList from "./ProductList";
@@ -8,7 +8,8 @@ const RoomAccordion = ({ roomIndex }) => {
   const [state, dispatch] = useContext(ProductSelectContext);
   const { rooms, startTimes } = state;
 
-  const room = rooms[roomIndex];
+  const room = useMemo(() => rooms[roomIndex], [rooms]);
+
   const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleIsExpanded = () => setIsExpanded((isExpanded) => !isExpanded);
@@ -49,11 +50,7 @@ const RoomAccordion = ({ roomIndex }) => {
           className="accordion-collapse collapse show"
           aria-labelledby={`accordion-header-${room.id}`}
         >
-          <StartTimeList
-            startTimes={startTimes}
-            selectedStartTime={room.selectedStartTime}
-            disabledStartTimes={room.disabledStartTimes}
-          />
+          <StartTimeList room={room} />
           <div className="accordion-body container-fluid px-3">
             <ProductList products={room.products} />
           </div>
