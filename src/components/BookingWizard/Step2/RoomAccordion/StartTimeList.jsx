@@ -1,11 +1,11 @@
 import { useContext } from "react";
-import { ProductSelectContext } from "../context";
-import { setSelectedStartTime } from "../context/actions";
+import { BookingWizardContext } from "../../context";
+import { setSelectedStartTime } from "../../context/actions";
 
 import styles from "../RoomAccordion/RoomAccordion.module.scss";
 
 const StartTimeList = ({ room }) => {
-  const [state, dispatch] = useContext(ProductSelectContext);
+  const [state, dispatch] = useContext(BookingWizardContext);
   const { startTimes } = state;
   const { selectedStartTime, disabledStartTimes, id: roomId } = room;
 

@@ -9,7 +9,7 @@ export const step1Schema = object().shape({
 });
 
 export const step2Schema = object().shape({
-  productsSelected: boolean().oneOf(
+  productsAdded: boolean().oneOf(
     [true],
     "Please select at least one product."
   ),

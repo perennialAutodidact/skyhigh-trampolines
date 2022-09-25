@@ -1,21 +1,19 @@
-import React, { useContext, useEffect, useReducer } from "react";
+import React, { useCallback, useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getRoomList } from "../../../redux/roomsSlice";
 import { useNavigate } from "react-router-dom";
 import { BookingWizardContext } from "../context";
 import {
-  initialState as productSelectInitialState,
-  ProductSelectContext,
-} from "./context";
-import { productSelectReducer } from "./context/reducer";
-import { updateForm, setProgressBarStep } from "../context/actions";
+  updateForm,
+  setProgressBarStep,
+  setInitialRoomState,
+} from "../context/actions";
+import { step2Schema } from "../context/schema";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { step2Schema } from "../context/schema";
 import RoomAccordion from "./RoomAccordion";
 import FormNavButtons from "../common/FormNavButtons";
 import LoadingSpinner from "../../LoadingSpinner";
-import { addFormValueSetter, setInitialRoomState } from "./context/actions";
 
 const Step2 = () => {
   const appDispatch = useDispatch();
@@ -23,11 +21,7 @@ const Step2 = () => {
     (appState) => appState.rooms
   );
   const navigate = useNavigate();
-  const [wizardState, wizardDispatch] = useContext(BookingWizardContext);
-  const [state, dispatch] = useReducer(
-    productSelectReducer,
-    productSelectInitialState
-  );
+  const [state, dispatch] = useContext(BookingWizardContext);
 
   const initialValues = {
     productsSelected: false,
@@ -37,21 +31,32 @@ const Step2 = () => {
     setValue,
     register,
     formState: { errors },
+    clearErrors,
   } = useForm({
     initialValues,
     resolver: yupResolver(step2Schema),
   });
-  useEffect(() => {
-    dispatch(addFormValueSetter(setValue));
-  }, [setValue, dispatch]);
 
   const onSubmit = (formData) => {
-    wizardDispatch(updateForm(formData));
-    wizardDispatch(setProgressBarStep(3));
+    dispatch(updateForm(formData));
+    dispatch(setProgressBarStep(3));
     navigate("/booking/step-3");
   };
 
-  const goBack = () => wizardDispatch(setProgressBarStep(1));
+  const goBack = () => dispatch(setProgressBarStep(1));
+
+  const atLeastOneProductAdded = useCallback(
+    () =>
+      state.rooms.some((room) =>
+        room.products.some((product) => product.quantity > 0)
+      ),
+    [state.rooms]
+  );
+
+  useEffect(() => {
+    setValue("productsAdded", atLeastOneProductAdded());
+    clearErrors();
+  }, [setValue, atLeastOneProductAdded, clearErrors]);
 
   useEffect(() => {
     if (!!rooms && roomsLoadingState === "idle") {
@@ -59,7 +64,7 @@ const Step2 = () => {
         dispatch(setInitialRoomState(TEMP_ROOM_DATA));
       });
     }
-  }, [rooms, roomsLoadingState, appDispatch, setValue]);
+  }, [rooms, roomsLoadingState, appDispatch, dispatch]);
 
   if (roomsLoadingState === "pending") {
     return (
@@ -80,19 +85,21 @@ const Step2 = () => {
             <label htmlFor="date" className="form-label p-0 d-flex gap-1">
               <h3>Select Products</h3> <span className="text-danger">*</span>
             </label>
-
-            {/* {errors.products && (
-              <p className="text-danger">{errors.products.message}</p>
-            )} */}
           </div>
         </div>
 
+        {/* hidden input field to handle errors if no products are selected */}
         <input type="hidden" {...register("productsSelected")} />
-        <ProductSelectContext.Provider value={[state, dispatch]}>
-          {state.rooms.map((room, index) => (
-            <RoomAccordion roomIndex={index} key={room.id} />
-          ))}
-        </ProductSelectContext.Provider>
+
+        {state.rooms.map((room, index) => (
+          <RoomAccordion roomIndex={index} key={room.id} />
+        ))}
+
+        {errors.productsAdded && (
+          <p className="text-danger text-center">
+            {errors.productsAdded.message}
+          </p>
+        )}
 
         <FormNavButtons
           backHref={"/booking"}

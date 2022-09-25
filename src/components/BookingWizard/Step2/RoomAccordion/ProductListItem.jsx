@@ -1,12 +1,26 @@
 import React, { useContext } from "react";
-import { ProductSelectContext } from "../context";
-import { setProductQuantity } from "../context/actions";
+import { BookingWizardContext } from "../../context";
+import { setProductQuantity } from "../../context/actions";
 import { BsPlusLg, BsDashLg } from "react-icons/bs";
 
 const ProductListItem = ({ product, roomId }) => {
-  const [state, dispatch] = useContext(ProductSelectContext);
+  const [state, dispatch] = useContext(BookingWizardContext);
+
   const onChange = (e) => {
     dispatch(setProductQuantity(roomId, product.id, e.target.value));
+  };
+
+  const incrementQuantity = (product) => {
+    const quantity = parseInt(product.quantity);
+
+    dispatch(setProductQuantity(roomId, product.id, quantity + 1));
+  };
+
+  const decrementQuantity = (product) => {
+    const quantity = parseInt(product.quantity);
+    if (quantity > 0) {
+      dispatch(setProductQuantity(roomId, product.id, quantity - 1));
+    }
   };
 
   return (
@@ -17,7 +31,10 @@ const ProductListItem = ({ product, roomId }) => {
       </div>
       <div className="col-3 col-lg-2">
         <div className="input-group input-group-sm mb-3 d-flex">
-          <div className="btn btn-outline-secondary d-flex justify-content-center align-items-center p-1">
+          <div
+            onClick={() => decrementQuantity(product)}
+            className="btn btn-outline-secondary d-flex justify-content-center align-items-center p-1"
+          >
             <BsDashLg />
           </div>
 
@@ -28,7 +45,10 @@ const ProductListItem = ({ product, roomId }) => {
             value={product.quantity}
             onChange={onChange}
           />
-          <div className="btn btn-outline-secondary d-flex justify-content-center align-items-center p-1">
+          <div
+            onClick={() => incrementQuantity(product)}
+            className="btn btn-outline-secondary d-flex justify-content-center align-items-center p-1"
+          >
             <BsPlusLg />
           </div>
         </div>

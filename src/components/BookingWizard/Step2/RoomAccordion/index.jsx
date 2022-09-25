@@ -1,11 +1,11 @@
 import React, { useState, useContext, useMemo } from "react";
 import styles from "./RoomAccordion.module.scss";
-import { ProductSelectContext } from "../context";
 import ProductList from "./ProductList";
 import StartTimeList from "./StartTimeList";
+import { BookingWizardContext } from "../../context";
 
 const RoomAccordion = ({ roomIndex }) => {
-  const [state, dispatch] = useContext(ProductSelectContext);
+  const [state, dispatch] = useContext(BookingWizardContext);
   const { rooms, startTimes } = state;
 
   const room = useMemo(() => rooms[roomIndex], [rooms, roomIndex]);

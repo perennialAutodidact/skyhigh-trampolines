@@ -2,6 +2,8 @@ import dayjs from "dayjs";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 dayjs.extend(isSameOrBefore);
 
+export const formatPercent = (x, y) => Math.round((x / y)*100);
+
 export const createInitialRoomState = (rooms) =>
   rooms.map((room) => ({
     ...room,
