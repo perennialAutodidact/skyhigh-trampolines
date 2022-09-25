@@ -1,6 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { addDoc, getDocs, query, where } from "firebase/firestore";
-import { storage, roomsCollection } from "../firebase/client";
+import {
+  storage,
+  roomsCollection,
+  productsCollection,
+} from "../firebase/client";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 export const createRoom = createAsyncThunk(
@@ -25,22 +29,46 @@ export const createRoom = createAsyncThunk(
   }
 );
 
+// const getRoomProducts = async (roomId) => {
+//   const productsQuery = query(
+//     productsCollection,
+//     where("room", "==", roomId)
+//   );
+  
+//   const products = await getDocs(productsQuery).then((productDocs) => {
+//     let productData = [];
+    
+//     productDocs.forEach((productDoc) => {
+//       productData.push({ ...productDoc.data(), id: productDoc.id });
+//     });
+    
+//     return productData;
+//   });
+
+//   return products
+// }
+
 export const getRoomList = createAsyncThunk(
   "rooms/getRoomList",
-  async (_, { rejectWithValue }) => {
+  async (_, { fulfillWithValue, rejectWithValue }) => {
     try {
-      
-      const rooms = await getDocs(roomsCollection).then(snapshot=>{
-        let data = []
-        snapshot.forEach(doc=>{
-          data.push({...doc.data(), id: doc.id})
-        })
+      let rooms = await getDocs(roomsCollection).then((roomDocs) => {
+        let roomData = [];
+        roomDocs.forEach(async (roomDoc) => {
+          roomData.push({ ...roomDoc.data(), id: roomDoc.id });
+        });
+        return roomData;
+      });
 
-        // get product data and add to room data
+      // rooms = rooms.map(async room=>{
+      //   let products = await getRoomProducts(room.id)
 
-        return data
-      })
-      
+      //   return {...room, products}
+
+      // })
+
+      return fulfillWithValue(rooms)
+
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -79,7 +107,7 @@ const roomsSlice = createSlice({
     },
     [getRoomList.fulfilled]: (state, action) => {
       state.loading = "succeeded";
-      state.rooms = ["roomzzz"];
+      state.rooms = action.payload;
     },
     [getRoomList.rejected]: (state, action) => {
       state.loading = "failed";
