@@ -30,6 +30,11 @@ const Step1 = () => {
     navigate("/booking/step-2");
   };
 
+  const setDate = (date) => {
+    setValue('date', date)
+    dispatch(updateForm({date}))
+  }
+  
   return (
     <div className="container pt-3">
       <form onSubmit={handleSubmit(onSubmit)} className="container text-start">
@@ -39,7 +44,7 @@ const Step1 = () => {
             <label htmlFor="date" className="form-label p-0 d-flex gap-1">
               <h3>Select Date</h3> <span className="text-danger">*</span>
             </label>
-            <CalendarDatePicker setFormValue={setValue} />
+            <CalendarDatePicker setFormDate={setDate} />
             {errors.date && (
               <p className="text-danger">{errors.date.message}</p>
             )}

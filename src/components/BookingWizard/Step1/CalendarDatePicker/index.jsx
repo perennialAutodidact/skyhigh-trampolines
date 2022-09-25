@@ -5,13 +5,13 @@ import MonthYearDisplay from "./MonthYearDisplay";
 import WeekdayLabels from "./WeekdayLabels";
 import CalendarPage from "./CalendarPage";
 
-const CalenderDatePicker = ({setFormValue}) => {
+const CalenderDatePicker = ({setFormDate}) => {
   const [state, dispatch] = useReducer(calendarDatePickerReducer, initialState);
   const { selectedDate } = state;
 
   useEffect(()=>{
-    setFormValue('date', selectedDate.format('YYYY-MM-DD'))
-  },[selectedDate, setFormValue])
+    setFormDate(selectedDate)
+  },[selectedDate, setFormDate])
 
   return (
     <CalendarDatePickerContext.Provider value={[state, dispatch]}>
