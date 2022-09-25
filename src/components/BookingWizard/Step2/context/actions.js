@@ -27,3 +27,10 @@ export const setProductQuantity = (roomId, productId, quantity) => {
     },
   };
 };
+
+export const addFormValueSetter = (setFormValue) => {
+  return {
+    type: "ADD_FORM_VALUE_SETTER",
+    payload: { setFormValue },
+  };
+};

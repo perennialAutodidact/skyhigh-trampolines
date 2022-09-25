@@ -1,11 +1,26 @@
 export const productSelectReducer = (state, action) => {
-  const { roomId, productId, selectedStartTime, quantity } = action.payload;
+  const {
+    rooms,
+    setFormValue,
+    roomId,
+    productId,
+    selectedStartTime,
+    quantity,
+  } = action.payload;
+
   switch (action.type) {
     case "SET_INITIAL_ROOM_STATE":
       return {
         ...state,
-        rooms: action.payload.rooms,
+        rooms,
       };
+
+    case "ADD_FORM_VALUE_SETTER":
+      return {
+        ...state,
+        setFormValue,
+      };
+
     case "SET_SELECTED_START_TIME":
       return {
         ...state,

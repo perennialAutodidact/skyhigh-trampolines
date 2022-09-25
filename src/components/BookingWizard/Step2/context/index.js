@@ -17,7 +17,8 @@ export const initialState = {
     //   disabledStartTimes: ["9:00", "9:30", "16:00"]
     // }
   ],
-  startTimes: getHalfHourIncrementStrings("9:00", "16:30")  
-}
+  startTimes: getHalfHourIncrementStrings("9:00", "16:30"),
+  setFormValue: null, // function to set values in the BookingWizard
+};
 
-export const ProductSelectContext = createContext(initialState)
+export const ProductSelectContext = createContext(initialState);
