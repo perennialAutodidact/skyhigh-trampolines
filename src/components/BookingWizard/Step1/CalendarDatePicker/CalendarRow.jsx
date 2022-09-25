@@ -3,13 +3,17 @@ import { CalendarDatePickerContext } from "./context";
 import { dateIsSelectable, dateIsSelected } from "./utils";
 import { setSelectedDate } from "./context/actions";
 import styles from "./CalendarDatePicker.module.scss";
+import { BookingWizardContext } from "../../context";
+import { updateForm } from "../../context/actions";
 
 const CalendarRow = ({ dates }) => {
+  const [wizardState, wizardDispatch] = useContext(BookingWizardContext)
   const [state, dispatch] = useContext(CalendarDatePickerContext);
   const { currentPage, selectedDate } = state;
 
   const handleDateSelect = (date) => {
     if (dateIsSelectable(currentPage.date, selectedDate, date)) {
+      wizardDispatch(updateForm({date}))
       dispatch(setSelectedDate(date));
     }
   };
