@@ -1,6 +1,9 @@
-const formatPercent = (x, y) => Math.round((x / y)*100);
+import { formatPercent, createInitialRoomState } from "./utils";
 
 export const wizardReducer = (state, action) => {
+  const { rooms, roomId, productId, selectedStartTime, quantity } =
+    action.payload;
+    
   switch (action.type) {
     case "UPDATE_FORM":
       return {
@@ -17,6 +20,57 @@ export const wizardReducer = (state, action) => {
         ...state,
         currentStep: step,
         percentComplete: formatPercent(step, totalSteps),
+      };
+
+    // adds product quantities, selectedStartTime and disabledStartTimes to each room
+    case "SET_INITIAL_ROOM_STATE":
+      return {
+        ...state,
+        formData: {
+          ...state.formData,
+          rooms: createInitialRoomState(rooms),
+        },
+      };
+
+    // sets the selected start time for the room
+    case "SET_SELECTED_START_TIME":
+      return {
+        ...state,
+        formData: {
+          ...state.formData,
+          rooms: state.formData.rooms.map((room) =>
+            room.id !== roomId
+              ? room
+              : {
+                  ...room,
+                  selectedStartTime,
+                }
+          ),
+        },
+      };
+
+    // sets the quantity value for a particular product
+    case "SET_PRODUCT_QUANTITY":
+      return {
+        ...state,
+        formData: {
+          ...state.formData,
+          rooms: state.formData.rooms.map((room) =>
+            room.id !== roomId
+              ? room
+              : {
+                  ...room,
+                  products: room.products.map((product) =>
+                    product.id !== productId
+                      ? product
+                      : {
+                          ...product,
+                          quantity,
+                        }
+                  ),
+                }
+          ),
+        },
       };
     default:
       return state;

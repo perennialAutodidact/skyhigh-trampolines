@@ -1,23 +1,87 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { addDoc, collection } from "firebase/firestore";
-import { db, storage } from "../firebase/client";
+import { addDoc, getDocs, query, where } from "firebase/firestore";
+import {
+  storage,
+  roomsCollection,
+  productsCollection,
+} from "../firebase/client";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 export const createRoom = createAsyncThunk(
   "rooms/create",
   async (formData, { rejectWithValue }) => {
     try {
-      const roomsRef = ref(storage, 'rooms/' + formData.photo.name);
+      const roomsRef = ref(storage, "rooms/" + formData.photo.name);
 
       const { name, capacity, photo } = formData;
 
       const snapshot = await uploadBytes(roomsRef, photo);
-      const photoLink = await getDownloadURL(snapshot.ref)
+      const photoLink = await getDownloadURL(snapshot.ref);
 
-      return await addDoc(collection(db, "rooms"), { name, capacity, photo: photoLink });
+      return await addDoc(roomsCollection, {
+        name,
+        capacity,
+        photo: photoLink,
+      });
     } catch (error) {
       return rejectWithValue(error);
     }
+  }
+);
+
+// const getRoomProducts = async (roomId) => {
+//   const productsQuery = query(
+//     productsCollection,
+//     where("room", "==", roomId)
+//   );
+  
+//   const products = await getDocs(productsQuery).then((productDocs) => {
+//     let productData = [];
+    
+//     productDocs.forEach((productDoc) => {
+//       productData.push({ ...productDoc.data(), id: productDoc.id });
+//     });
+    
+//     return productData;
+//   });
+
+//   return products
+// }
+
+export const getRoomList = createAsyncThunk(
+  "rooms/getRoomList",
+  async (_, { fulfillWithValue, rejectWithValue }) => {
+    try {
+      let rooms = await getDocs(roomsCollection).then((roomDocs) => {
+        let roomData = [];
+        roomDocs.forEach(async (roomDoc) => {
+          roomData.push({ ...roomDoc.data(), id: roomDoc.id });
+        });
+        return roomData;
+      });
+
+      // rooms = rooms.map(async room=>{
+      //   let products = await getRoomProducts(room.id)
+
+      //   return {...room, products}
+
+      // })
+
+      return fulfillWithValue(rooms)
+
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  },
+  {
+    condition: (_, { getState, extra }) => {
+      const { rooms } = getState();
+      const fetchStatus = rooms.loading;
+      if (fetchStatus === "fulfilled" || fetchStatus === "pending") {
+        // Already fetched or in progress, don't need to re-fetch
+        return false;
+      }
+    },
   }
 );
 
@@ -36,6 +100,18 @@ const roomsSlice = createSlice({
     },
     [createRoom.rejected]: (state, action) => {
       state.loading = "failed";
+    },
+
+    [getRoomList.pending]: (state, action) => {
+      state.loading = "pending";
+    },
+    [getRoomList.fulfilled]: (state, action) => {
+      state.loading = "succeeded";
+      state.rooms = action.payload;
+    },
+    [getRoomList.rejected]: (state, action) => {
+      state.loading = "failed";
+      console.log(action.error);
     },
   },
 });

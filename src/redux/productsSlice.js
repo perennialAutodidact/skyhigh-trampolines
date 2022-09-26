@@ -1,28 +1,23 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { addDoc, collection, getDocs } from "firebase/firestore";
-import { db, productsRef } from "../firebase/client";
-import { getStorage, getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { addDoc, getDocs } from "firebase/firestore";
+import { storage, productsCollection } from "../firebase/client";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 export const createProduct = createAsyncThunk(
   "products/createProduct",
   async (formData, { rejectWithValue }) => {
-    console.log("onSubmit");
-    console.log(formData);
     // save data to firebase
     const { photo, ...data } = formData;
     try {
-      const storage = getStorage();
-      const storageRef = ref(storage, photo.name);
-      const snapshot = await uploadBytes(storageRef, photo);
-      console.log(snapshot);
+      const productsStorageRef = ref(storage, "products/" + photo.name);
+      const snapshot = await uploadBytes(productsStorageRef, photo);
 
       const photoLink = await getDownloadURL(snapshot.ref);
-      console.log(photoLink);
 
       return await addDoc(
-        collection(db, "Product Form"),
-        Object.assign(data, { photo: photo.name })
-      ).then((result) => result.someValueFromTheResult);
+        productsCollection,
+        Object.assign(data, { photo: photoLink })
+      );
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -34,7 +29,7 @@ export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
   async () => {
     // fetch data from firebase and store in constant
-    const data = await getDocs(productsRef)
+    const data = await getDocs(productsCollection)
       .then((snapshot) => {
         let productForm = [];
         snapshot.forEach((doc) => {

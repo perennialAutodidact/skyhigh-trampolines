@@ -4,14 +4,13 @@ import { BookingWizardContext } from "./context";
 import { setProgressBarStep } from "./context/actions";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { step6Schema } from "./schema";
+import { step6Schema } from "./context/schema";
 
 const Checkout = () => {
   const navigate = useNavigate();
   const [state, dispatch] = useContext(BookingWizardContext);
 
-  const initialValues = {
-  };
+  const initialValues = {};
   const {
     handleSubmit,
     register,
@@ -22,7 +21,7 @@ const Checkout = () => {
   });
 
   const onSubmit = (formData) => {
-    console.log(state.formData)
+    console.log(state.formData);
   };
 
   const goBack = () => dispatch(setProgressBarStep(5));

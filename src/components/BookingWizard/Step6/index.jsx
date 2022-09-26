@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { BookingWizardContext } from "./context";
-import { updateForm, setProgressBarStep } from "./context/actions";
+import { BookingWizardContext } from "../context";
+import { updateForm, setProgressBarStep } from "../context/actions";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { step6Schema } from "./schema";
+import { step6Schema } from "../context/schema";
 
 const Step2 = () => {
   const navigate = useNavigate();
@@ -15,8 +15,7 @@ const Step2 = () => {
   };
   const {
     handleSubmit,
-    register,
-    formState: { errors },
+    // formState: { errors },
   } = useForm({
     initialValues,
     resolver: yupResolver(step6Schema),
