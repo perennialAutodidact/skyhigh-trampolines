@@ -26,42 +26,51 @@ export const wizardReducer = (state, action) => {
     case "SET_INITIAL_ROOM_STATE":
       return {
         ...state,
-        rooms: createInitialRoomState(rooms),
+        formData: {
+          ...state.formData,
+          rooms: createInitialRoomState(rooms),
+        },
       };
 
     // sets the selected start time for the room
     case "SET_SELECTED_START_TIME":
       return {
         ...state,
-        rooms: state.rooms.map((room) =>
-          room.id !== roomId
-            ? room
-            : {
-                ...room,
-                selectedStartTime,
-              }
-        ),
+        formData: {
+          ...state.formData,
+          rooms: state.formData.rooms.map((room) =>
+            room.id !== roomId
+              ? room
+              : {
+                  ...room,
+                  selectedStartTime,
+                }
+          ),
+        },
       };
 
     // sets the quantity value for a particular product
     case "SET_PRODUCT_QUANTITY":
       return {
         ...state,
-        rooms: state.rooms.map((room) =>
-          room.id !== roomId
-            ? room
-            : {
-                ...room,
-                products: room.products.map((product) =>
-                  product.id !== productId
-                    ? product
-                    : {
-                        ...product,
-                        quantity,
-                      }
-                ),
-              }
-        ),
+        formData: {
+          ...state.formData,
+          rooms: state.formData.rooms.map((room) =>
+            room.id !== roomId
+              ? room
+              : {
+                  ...room,
+                  products: room.products.map((product) =>
+                    product.id !== productId
+                      ? product
+                      : {
+                          ...product,
+                          quantity,
+                        }
+                  ),
+                }
+          ),
+        },
       };
     default:
       return state;
