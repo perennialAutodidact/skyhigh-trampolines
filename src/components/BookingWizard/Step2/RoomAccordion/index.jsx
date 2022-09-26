@@ -6,7 +6,7 @@ import { BookingWizardContext } from "../../context";
 
 const RoomAccordion = ({ roomIndex }) => {
   const [state, dispatch] = useContext(BookingWizardContext);
-  const { rooms, startTimes } = state;
+  const { formData: {rooms} } = state;
 
   const room = useMemo(() => rooms[roomIndex], [rooms, roomIndex]);
 

@@ -38,19 +38,19 @@ const Step2 = () => {
   });
 
   const onSubmit = (formData) => {
-    dispatch(updateForm(formData));
+    dispatch(updateForm({rooms: state.formData.rooms}));
     dispatch(setProgressBarStep(3));
     navigate("/booking/step-3");
   };
 
   const goBack = () => dispatch(setProgressBarStep(1));
-
+  
   const roomDataIsValid = useCallback(
     () =>
-      state.rooms.some((room) =>
+      state.formData.rooms.some((room) =>
         room.selectedStartTime && room.products.some((product) => product.quantity > 0)
       ),
-    [state.rooms]
+    [state.formData.rooms]
   );
 
   useEffect(() => {
@@ -91,7 +91,7 @@ const Step2 = () => {
         {/* hidden input field to handle errors if no products are selected */}
         <input type="hidden" {...register("productDataExists")} />
 
-        {state.rooms.map((room, index) => (
+        {state.formData.rooms.map((room, index) => (
           <RoomAccordion roomIndex={index} key={room.id} />
         ))}
 
