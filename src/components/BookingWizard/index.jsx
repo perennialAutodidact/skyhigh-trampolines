@@ -10,7 +10,7 @@ import Step5 from "./Step5";
 import Step6 from "./Step6";
 import CartPreview from "./common/CartPreview";
 import ProgressBar from "./common/ProgressBar";
-
+import TestPayment from "./TestPayment";
 const BookingWizard = () => {
   const [state, dispatch] = useReducer(wizardReducer, initialState);
 
@@ -32,8 +32,9 @@ const BookingWizard = () => {
               </Routes>
             </div>
           </div>
-          <div className="d-none d-lg-flex align-items-start col-lg-4">
+          <div className="d-none d-lg-flex align-items-start flex-column col-lg-4">
             <CartPreview />
+            <TestPayment/>
           </div>
         </div>
       </div>
