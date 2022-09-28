@@ -34,14 +34,14 @@ export const createRoom = createAsyncThunk(
 //     productsCollection,
 //     where("room", "==", roomId)
 //   );
-  
+
 //   const products = await getDocs(productsQuery).then((productDocs) => {
 //     let productData = [];
-    
+
 //     productDocs.forEach((productDoc) => {
 //       productData.push({ ...productDoc.data(), id: productDoc.id });
 //     });
-    
+
 //     return productData;
 //   });
 
@@ -67,8 +67,7 @@ export const getRoomList = createAsyncThunk(
 
       // })
 
-      return fulfillWithValue(rooms)
-
+      return fulfillWithValue(rooms);
     } catch (error) {
       return rejectWithValue(error);
     }

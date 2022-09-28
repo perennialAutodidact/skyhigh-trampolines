@@ -1,9 +1,12 @@
 import React from "react";
-import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { createAddOn } from "../../redux/addOnsSlice";
+import { useForm, useController } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { addOnSchema } from "./schema";
 
-const AddOnForm = ({ headerText, onSubmit }) => {
+const AddOnForm = () => {
+  const dispatch = useDispatch();
 
   const defaultValues = {
     name: "",
@@ -12,16 +15,28 @@ const AddOnForm = ({ headerText, onSubmit }) => {
 
   const {
     register, // provides onChange, onBlur, name and ref
+    control,
+    setValue,
     handleSubmit,
+
     formState: { errors },
   } = useForm({
     defaultValues,
     resolver: yupResolver(addOnSchema), // handles form validation
   });
 
+  const imageField = useController({ control, name: "photo" });
+
+  const imageFieldOnChange = (e) => {
+    setValue("photo", e.target.files[0]);
+  };
+
+  const onSubmit = (formData) => {
+    dispatch(createAddOn(formData));
+  };
   return (
     <div className="container">
-      <h1 className="text-start">{headerText}</h1>
+      <h1>Add an add-on</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="container text-start">
         {/* ADDON NAME */}
         <div className="row mb-3">
@@ -55,10 +70,27 @@ const AddOnForm = ({ headerText, onSubmit }) => {
           )}
         </div>
 
+        <div className="row mb-4">
+          <label htmlFor="photo-url" className="form-label text-start p-0">
+            Photo <span className="text-danger">*</span>
+          </label>
+          <input
+            type="file"
+            multiple
+            name={"photo"}
+            ref={imageField.ref}
+            onChange={imageFieldOnChange}
+            id="photo"
+            className={`form-control ${errors.photo && "is-invalid"}`}
+          />
+          {errors.photo && (
+            <p className="text-danger">{errors.photo.message}</p>
+          )}
+        </div>
         <div className="row mb-3">
           <div className="col col-4 col-lg-2 p-0">
             <button type="submit" className="btn btn-success w-100">
-              {headerText}
+              Submit
             </button>
           </div>
         </div>

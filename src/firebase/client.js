@@ -27,6 +27,7 @@ const storage = getStorage(app);
 const functions = getFunctions(app);
 const colRef = collection(db, "Product Form");
 const productsCollection = collection(db, "products");
+const addOnsCollection = collection(db, "addOns");
 const roomsCollection = collection(db, "rooms");
 getDocs(colRef)
   .then((snapshot) => {
@@ -47,5 +48,6 @@ export {
   functions,
   colRef,
   productsCollection,
+  addOnsCollection,
   roomsCollection,
 };

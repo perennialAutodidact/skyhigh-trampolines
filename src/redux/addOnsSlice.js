@@ -1,57 +1,45 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-import { addDoc, collection } from 'firebase/firestore'
-import { db, storage } from '../firebase/client'
-import { getStorage, ref } from 'firebase/storage'
+import { addDoc } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage, addOnsCollection } from "../firebase/client";
 
-export const createAddOns = createAsyncThunk(
-  'addOns/create',
+export const createAddOn = createAsyncThunk(
+  "addOns/create",
   async (formData, { rejectWithValue }) => {
-    console.log('onSubmit')
-    console.log(formData)
     // save data to firebase
-    const colRef = collection(db, 'add on')
+    const { photo, ...data } = formData;
+    try {
+      const addOnsStorageRef = ref(storage, "addOns/" + photo.name);
+      const snapshot = await uploadBytes(addOnsStorageRef, photo);
 
-    // try {
-    //   return await addDoc(colRef, formData).then(
-    //     (result) => result.someValueFromTheResult,
-    //   )
-    // } catch (error) {
-    //   return rejectWithValue(error)
-    // }
-    return addDoc(colRef, formData)
-      .then((snapshot) => {
-        console.log('snap', snapshot)
-        let addOnForm = []
-        snapshot.forEach((doc) => {
-          addOnForm.push({ ...doc.data(), id: doc.id })
-        })
-        console.log(addOnForm)
-      })
-      .catch((err) => {
-        console.log('err', err)
-      })
-  },
-)
+      const photoLink = await getDownloadURL(snapshot.ref);
+
+      return await addDoc(addOnsCollection, { ...data, photo: photoLink });
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
 
 const addOnsSlice = createSlice({
-  name: 'addOns',
+  name: "addOns",
   initialState: {
-    products: [],
-    loading: 'idle',
+    addOns: [],
+    loading: "idle",
   },
   //reducers: {},
   extraReducers: {
-    [createAddOns.pending]: (state, action) => {
-      state.loading = 'pending'
+    [createAddOn.pending]: (state, action) => {
+      state.loading = "pending";
     },
-    [createAddOns.fulfilled]: (state, action) => {
-      state.loading = 'fulfilled'
+    [createAddOn.fulfilled]: (state, action) => {
+      state.loading = "fulfilled";
     },
-    [createAddOns.rejected]: (state, action) => {
-      state.loading = 'rejected'
+    [createAddOn.rejected]: (state, action) => {
+      state.loading = "rejected";
     },
   },
-})
+});
 
-export default addOnsSlice.reducer
+export default addOnsSlice.reducer;
