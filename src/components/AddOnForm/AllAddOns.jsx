@@ -4,7 +4,7 @@ import { getAddOnsList } from "../../redux/addOnsSlice";
 
 const AllAddOns = () => {
   const dispatch = useDispatch();
-  const { products, loading } = useSelector((state) => state.addOns);
+  const { addOns, loading } = useSelector((state) => state.addOns);
 
   // dispatch action to fetch addOns
   useEffect(() => {
@@ -16,7 +16,7 @@ const AllAddOns = () => {
     };
   }, [dispatch]);
 
-  const data = products?.map((product) => {
+  const data = addOns?.map((product) => {
     return (
       <tr key={product.id}>
         <th scope="row">
