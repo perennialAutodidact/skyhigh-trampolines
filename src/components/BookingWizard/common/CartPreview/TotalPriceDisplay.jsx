@@ -7,15 +7,11 @@ const TotalPriceDisplay = ({ rooms, addOns }) => {
   const SALES_TAX_RATE = 0.0635;
   const TRANSATION_FEE = 400;
 
-  console.log(addOns);
-
   const subTotal = getOrderSubtotal(rooms, addOns);
 
   const tax = subTotal * SALES_TAX_RATE;
 
   const grandTotal = subTotal + tax + TRANSATION_FEE;
-
-  console.log(grandTotal);
 
   return (
     <div className="container p-0">
