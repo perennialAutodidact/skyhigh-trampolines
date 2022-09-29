@@ -5,6 +5,8 @@ import { updateForm, setProgressBarStep } from "../context/actions";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { step6Schema } from "../context/schema";
+import { httpsCallable } from "firebase/functions";
+import { functions } from "../../../firebase/client";
 
 const Step2 = () => {
   const navigate = useNavigate();
@@ -29,6 +31,15 @@ const Step2 = () => {
 
   const goBack = () => dispatch(setProgressBarStep(1));
 
+  const handleMail = () => {
+    console.log("calling mail function");
+    //send mail with firebase functions
+    const sendMail = httpsCallable(functions, "sendEmail");
+    sendMail({ to: "jebiyi6262@migonom.com" })
+      .then((result) => console.log(result.data))
+      .catch((error) => console.log(error.message));
+  };
+
   return (
     <div className="container pt-3">
       <form onSubmit={handleSubmit(onSubmit)} className="container text-start">
@@ -45,6 +56,14 @@ const Step2 = () => {
           <div className="col col-12 col-lg-4 offset-lg-6 p-0 order-1 order-lg-2">
             <button type="submit" className="btn btn-success w-100">
               Next
+            </button>
+
+            <button
+              type="submit"
+              className="btn btn-primary w-100 mt-2"
+              onClick={handleMail}
+            >
+              Send mail
             </button>
           </div>
         </div>
