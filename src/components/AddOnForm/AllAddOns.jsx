@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAddOns } from "../../redux/addOnsSlice";
+import { getAddOnsList } from "../../redux/addOnsSlice";
 
 const AllAddOns = () => {
   const dispatch = useDispatch();
@@ -8,10 +8,12 @@ const AllAddOns = () => {
 
   // dispatch action to fetch addOns
   useEffect(() => {
-    const promise = dispatch(fetchAddOns());
+    const promise = dispatch(getAddOnsList());
 
     // cancel the promise if the component unmounts
-    return () => promise.abort();
+    return () => {
+      promise.abort();
+    };
   }, [dispatch]);
 
   const data = products?.map((product) => {
@@ -43,7 +45,7 @@ const AllAddOns = () => {
         <table className="table table-striped">
           <thead>
             <tr>
-              <th scope="col">Product</th>
+              <th scope="col">Add On</th>
               <th scope="col">Price</th>
             </tr>
           </thead>

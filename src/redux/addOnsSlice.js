@@ -35,8 +35,8 @@ export const createAddOns = createAsyncThunk(
 );
 
 // fetch all add ons from firebase
-export const fetchAddOns = createAsyncThunk(
-  "products/fetchProducts",
+export const getAddOnsList = createAsyncThunk(
+  "addOns/getAddOnsList",
   async () => {
     // fetch data from firebase and store in constant
     const data = await getDocs(addOnsCollection)
@@ -73,14 +73,14 @@ const addOnsSlice = createSlice({
     },
 
     //fetch add ons
-    [fetchAddOns.pending]: (state) => {
+    [getAddOnsList.pending]: (state) => {
       state.loading = "pending";
     },
-    [fetchAddOns.fulfilled]: (state, action) => {
+    [getAddOnsList.fulfilled]: (state, action) => {
       state.loading = "fulfilled";
       state.products = action.payload;
     },
-    [fetchAddOns.rejected]: (state) => {
+    [getAddOnsList.rejected]: (state) => {
       state.loading = "rejected";
     },
   },
