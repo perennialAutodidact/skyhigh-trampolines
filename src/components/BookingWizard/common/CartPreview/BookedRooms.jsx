@@ -2,14 +2,11 @@ import React from "react";
 import { getBookedRooms } from "./utils";
 
 const BookedRooms = ({ rooms }) => {
-
-  const bookedRooms = getBookedRooms(rooms)
-  
   return (
     <div className="container p-0">
-      {bookedRooms.map((room) => (
+      {rooms.map((room) => (
         <div key={room.id}>
-          <h5 className="fw-bold">{room.name}</h5>
+          <h4 className="fw-bold">{room.name}</h4>
           <div className="row gy-1">
             <div className="col-12">
               <div className="badge bg-info text-dark" title="Start Time">
@@ -25,9 +22,7 @@ const BookedRooms = ({ rooms }) => {
                 <span>
                   {product.quantity} x {product.name}
                 </span>
-                <span>
-                  ${product.totalPrice / 100}
-                </span>
+                <span>${product.totalPrice / 100}</span>
               </div>
             ))}
           </div>

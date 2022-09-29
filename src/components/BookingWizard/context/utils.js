@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 dayjs.extend(isSameOrBefore);
 
-export const formatPercent = (x, y) => Math.round((x / y)*100);
+export const formatPercent = (x, y) => Math.round((x / y) * 100);
 
 export const createInitialRoomState = (rooms) =>
   rooms.map((room) => ({
@@ -13,6 +13,12 @@ export const createInitialRoomState = (rooms) =>
     })),
     selectedStartTime: "",
     disabledStartTimes: ["9:00", "9:30", "16:00"],
+  }));
+
+export const createInitialAddOnState = (addOns) =>
+  addOns.map((addOn) => ({
+    ...addOn,
+    quantity: 0,
   }));
 
 export const getHalfHourIncrementStrings = (startTime, endTime) => {
