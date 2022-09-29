@@ -1,19 +1,21 @@
 import React from "react";
 import { getOrderSubtotal } from "./utils";
 
-const toMoney = (amount) => (amount.toFixed(0)/100).toFixed(2)
+const toMoney = (amount) => (amount.toFixed(0) / 100).toFixed(2);
 
-const TotalPriceDisplay = ({ rooms }) => {
+const TotalPriceDisplay = ({ rooms, addOns }) => {
   const SALES_TAX_RATE = 0.0635;
   const TRANSATION_FEE = 400;
 
-  const subTotal = getOrderSubtotal(rooms)
+  console.log(addOns);
 
-  const tax = subTotal * SALES_TAX_RATE
+  const subTotal = getOrderSubtotal(rooms, addOns);
 
-  const grandTotal = subTotal + tax + TRANSATION_FEE
+  const tax = subTotal * SALES_TAX_RATE;
 
-  console.log(grandTotal)
+  const grandTotal = subTotal + tax + TRANSATION_FEE;
+
+  console.log(grandTotal);
 
   return (
     <div className="container p-0">
