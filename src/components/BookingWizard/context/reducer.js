@@ -21,7 +21,7 @@ export const wizardReducer = (state, action) => {
       return {
         ...state,
         formData: {
-          ...state.formData,
+          ...formData,
           ...action.payload,
         },
       };
@@ -39,7 +39,7 @@ export const wizardReducer = (state, action) => {
       return {
         ...state,
         formData: {
-          ...state.formData,
+          ...formData,
           rooms: createInitialRoomState(rooms),
         },
       };
@@ -49,8 +49,8 @@ export const wizardReducer = (state, action) => {
       return {
         ...state,
         formData: {
-          ...state.formData,
-          rooms: state.formData.rooms.map((room) =>
+          ...formData,
+          rooms: formData.rooms.map((room) =>
             room.id !== roomId
               ? room
               : {
@@ -66,8 +66,8 @@ export const wizardReducer = (state, action) => {
       return {
         ...state,
         formData: {
-          ...state.formData,
-          rooms: state.formData.rooms.map((room) =>
+          ...formData,
+          rooms: formData.rooms.map((room) =>
             room.id !== roomId
               ? room
               : {
@@ -90,7 +90,7 @@ export const wizardReducer = (state, action) => {
       return {
         ...state,
         formData: {
-          ...state.formData,
+          ...formData,
           addOns: createInitialAddOnState(addOns),
         },
       };
