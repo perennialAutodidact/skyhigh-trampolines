@@ -40,7 +40,7 @@ const Step3 = () => {
     resolver: yupResolver(step3Schema),
   });
 
-  const addOnDataIsValid = useCallback(
+  const addOnsDataIsValid = useCallback(
     () => state.formData.addOns.some((addOn) => addOn.quantity > 0),
     [state.formData.addOns]
   );
@@ -54,16 +54,15 @@ const Step3 = () => {
   const goBack = () => dispatch(setProgressBarStep(2));
 
   useEffect(() => {
-    setValue("addOnDataExists", addOnDataIsValid());
+    setValue("addOnsDataExists", addOnsDataIsValid());
     clearErrors();
-  }, [setValue, addOnDataIsValid, clearErrors]);
+  }, [setValue, addOnsDataIsValid, clearErrors]);
 
   useEffect(() => {
     if (!!addOns && addOnsLoadingState === "idle") {
       appDispatch(getAddOnsList())
         .unwrap()
         .then((addOns) => {
-          console.log("ADDONS", addOns);
           dispatch(setInitialAddOnState(addOns));
         });
     }
