@@ -38,7 +38,7 @@ export const setProductQuantity = (roomId, productId, quantity) => ({
 });
 
 export const setAddOnQuantity = (addOnId, quantity) => ({
-  type: "SET_ADD_ON_QUANTITY",
+  type: "SET_ADDON_QUANTITY",
   payload: {
     addOnId,
     quantity,
