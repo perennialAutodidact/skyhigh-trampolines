@@ -1,16 +1,16 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-import { addDoc, collection } from 'firebase/firestore'
-import { db, storage } from '../firebase/client'
-import { getStorage, ref } from 'firebase/storage'
+import { addDoc, collection, getDocs } from "firebase/firestore";
+import { addOnsCollection, db, storage } from "../firebase/client";
+import { getStorage, ref } from "firebase/storage";
 
 export const createAddOns = createAsyncThunk(
-  'addOns/create',
+  "addOns/create",
   async (formData, { rejectWithValue }) => {
-    console.log('onSubmit')
-    console.log(formData)
+    console.log("onSubmit");
+    console.log(formData);
     // save data to firebase
-    const colRef = collection(db, 'add on')
+    const colRef = collection(db, "add on");
 
     // try {
     //   return await addDoc(colRef, formData).then(
@@ -21,37 +21,69 @@ export const createAddOns = createAsyncThunk(
     // }
     return addDoc(colRef, formData)
       .then((snapshot) => {
-        console.log('snap', snapshot)
-        let addOnForm = []
+        console.log("snap", snapshot);
+        let addOnForm = [];
         snapshot.forEach((doc) => {
-          addOnForm.push({ ...doc.data(), id: doc.id })
-        })
-        console.log(addOnForm)
+          addOnForm.push({ ...doc.data(), id: doc.id });
+        });
+        console.log(addOnForm);
       })
       .catch((err) => {
-        console.log('err', err)
+        console.log("err", err);
+      });
+  }
+);
+
+// fetch all add ons from firebase
+export const fetchAddOns = createAsyncThunk(
+  "products/fetchProducts",
+  async () => {
+    // fetch data from firebase and store in constant
+    const data = await getDocs(addOnsCollection)
+      .then((snapshot) => {
+        const addOns = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        return addOns;
       })
-  },
-)
+      .catch((err) => console.log(err.message));
+
+    return data;
+  }
+);
 
 const addOnsSlice = createSlice({
-  name: 'addOns',
+  name: "addOns",
   initialState: {
     products: [],
-    loading: 'idle',
+    loading: "idle",
   },
   //reducers: {},
   extraReducers: {
     [createAddOns.pending]: (state, action) => {
-      state.loading = 'pending'
+      state.loading = "pending";
     },
     [createAddOns.fulfilled]: (state, action) => {
-      state.loading = 'fulfilled'
+      state.loading = "fulfilled";
     },
     [createAddOns.rejected]: (state, action) => {
-      state.loading = 'rejected'
+      state.loading = "rejected";
+    },
+
+    //fetch add ons
+    [fetchAddOns.pending]: (state) => {
+      state.loading = "pending";
+    },
+    [fetchAddOns.fulfilled]: (state, action) => {
+      state.loading = "fulfilled";
+      state.products = action.payload;
+    },
+    [fetchAddOns.rejected]: (state) => {
+      state.loading = "rejected";
     },
   },
-})
+});
 
-export default addOnsSlice.reducer
+export default addOnsSlice.reducer;
