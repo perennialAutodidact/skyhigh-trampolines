@@ -15,6 +15,11 @@ export const setInitialRoomState = (rooms) => ({
   payload: { rooms },
 });
 
+export const setInitialAddOnState = (addOns) => ({
+  type: "SET_INITIAL_ADDON_STATE",
+  payload: { addOns },
+});
+
 export const setSelectedStartTime = (roomId, selectedStartTime) => ({
   type: "SET_SELECTED_START_TIME",
   payload: {
