@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs, addDoc } from "firebase/firestore";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 import { getFunctions } from "firebase/functions";
@@ -27,8 +27,9 @@ const storage = getStorage(app);
 const functions = getFunctions(app);
 const colRef = collection(db, "Product Form");
 const productsCollection = collection(db, "products");
-const addOnsCollection = collection(db, "addOns");
 const roomsCollection = collection(db, "rooms");
+const addOnsCollection = collection(db, "addOns");
+
 getDocs(colRef)
   .then((snapshot) => {
     let productForm = [];
@@ -48,6 +49,6 @@ export {
   functions,
   colRef,
   productsCollection,
-  addOnsCollection,
   roomsCollection,
+  addOnsCollection,
 };
