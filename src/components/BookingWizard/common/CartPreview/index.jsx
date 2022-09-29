@@ -28,7 +28,7 @@ const CartPreview = () => {
               <BookedRooms rooms={bookedRooms} />
             </div>
 
-            {currentStep > 3 && <SelectedAddOns addOns={selectedAddOns} />}
+            <SelectedAddOns addOns={selectedAddOns} />
 
             <div className="col-12">
               <TotalPriceDisplay rooms={bookedRooms} addOns={selectedAddOns} />
