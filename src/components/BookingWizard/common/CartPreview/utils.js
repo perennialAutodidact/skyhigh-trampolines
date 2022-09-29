@@ -1,4 +1,6 @@
-const getProductTotal = (product) => (product.quantity * product.price);
+const getProductTotal = (product) => product.quantity * product.price;
+
+const getAddOnTotal = (addOn) => addOn.quantity * addOn.price;
 
 const hasSelectedProducts = (room) =>
   room && room.products.some((product) => product.quantity > 0);
@@ -16,7 +18,12 @@ export const getBookedRooms = (rooms) =>
       products: selectedProducts(room.products),
     }));
 
-export const getOrderSubtotal = (rooms) =>
+export const getSelectedAddOns = (addOns) =>
+  addOns
+    .filter((addOn) => addOn.quantity > 0)
+    .map((addOn) => ({ ...addOn, totalPrice: getAddOnTotal(addOn) }));
+
+export const getOrderSubtotal = (rooms, addOns) =>
   rooms.reduce(
     (total, room) =>
       total +
@@ -25,4 +32,4 @@ export const getOrderSubtotal = (rooms) =>
         0
       ),
     0
-  );
+  ) + addOns.reduce((total, addOn) => total + addOn.totalPrice, 0);

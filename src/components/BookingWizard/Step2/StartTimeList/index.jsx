@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { BookingWizardContext } from "../../context";
 import { setSelectedStartTime } from "../../context/actions";
 
-import styles from "../RoomAccordion/RoomAccordion.module.scss";
+import styles from "./StartTimeList.module.scss";
 
 const StartTimeList = ({ room }) => {
   const [state, dispatch] = useContext(BookingWizardContext);

@@ -1,38 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
-import { addDoc, collection, getDocs } from "firebase/firestore";
-import { addOnsCollection, db, storage } from "../firebase/client";
-import { getStorage, ref } from "firebase/storage";
-
-export const createAddOns = createAsyncThunk(
-  "addOns/create",
-  async (formData, { rejectWithValue }) => {
-    console.log("onSubmit");
-    console.log(formData);
-    // save data to firebase
-    const colRef = collection(db, "add on");
-
-    // try {
-    //   return await addDoc(colRef, formData).then(
-    //     (result) => result.someValueFromTheResult,
-    //   )
-    // } catch (error) {
-    //   return rejectWithValue(error)
-    // }
-    return addDoc(colRef, formData)
-      .then((snapshot) => {
-        console.log("snap", snapshot);
-        let addOnForm = [];
-        snapshot.forEach((doc) => {
-          addOnForm.push({ ...doc.data(), id: doc.id });
-        });
-        console.log(addOnForm);
-      })
-      .catch((err) => {
-        console.log("err", err);
-      });
-  }
-);
+import { addDoc, getDocs } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage, addOnsCollection } from "../firebase/client";
 
 // fetch all add ons from firebase
 export const getAddOnsList = createAsyncThunk(
@@ -54,33 +23,50 @@ export const getAddOnsList = createAsyncThunk(
   }
 );
 
+export const createAddOn = createAsyncThunk(
+  "addOns/create",
+  async (formData, { rejectWithValue }) => {
+    // save data to firebase
+    const { photo, ...data } = formData;
+    try {
+      const addOnsStorageRef = ref(storage, "addOns/" + photo.name);
+      const snapshot = await uploadBytes(addOnsStorageRef, photo);
+
+      const photoLink = await getDownloadURL(snapshot.ref);
+
+      return await addDoc(addOnsCollection, { ...data, photo: photoLink });
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
 const addOnsSlice = createSlice({
   name: "addOns",
   initialState: {
-    products: [],
+    addOns: [],
     loading: "idle",
   },
   //reducers: {},
   extraReducers: {
-    [createAddOns.pending]: (state, action) => {
+    [createAddOn.pending]: (state, action) => {
       state.loading = "pending";
     },
-    [createAddOns.fulfilled]: (state, action) => {
+    [createAddOn.fulfilled]: (state, action) => {
       state.loading = "fulfilled";
     },
-    [createAddOns.rejected]: (state, action) => {
+    [createAddOn.rejected]: (state, action) => {
       state.loading = "rejected";
     },
 
-    //fetch add ons
-    [getAddOnsList.pending]: (state) => {
+    [getAddOnsList.pending]: (state, action) => {
       state.loading = "pending";
     },
     [getAddOnsList.fulfilled]: (state, action) => {
       state.loading = "fulfilled";
-      state.products = action.payload;
+      state.addOns = action.payload;
     },
-    [getAddOnsList.rejected]: (state) => {
+    [getAddOnsList.rejected]: (state, action) => {
       state.loading = "rejected";
     },
   },
