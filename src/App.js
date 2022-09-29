@@ -15,6 +15,7 @@ import ProductForm from "./components/ProductForm";
 import RoomForm from "./components/RoomForm";
 import AddOnForm from "./components/AddOnForm";
 import ProductData from "./components/product/ProductData";
+import AllAddOns from "./components/AddOnForm/AllAddOns";
 
 function App() {
   const [user, loading] = useAuthState(auth);
@@ -40,6 +41,7 @@ function App() {
             <Route path="all-products" element={<ProductData />} />
             <Route path="add-products" element={<ProductForm />} />
             <Route path="add-ons" element={<AddOnForm />} />
+            <Route path="all-add-ons" element={<AllAddOns />} />
 
             {/* bookings */}
 
