@@ -12,7 +12,15 @@ const TestPayment = () => {
 
       const response = await createPaymentIntent({
         amount: 199,
-        metadata: { order_id: "abcdefg" },
+        metadata: { 
+          bookingDate: "2022-09-30",
+          sessionTime: "9:00",
+          headCount: 8,
+          bookingName: "George Harrison",
+          contactDetails: "01-1234-6789",
+          confirmationNumber: null,
+          status: "PENDING"
+         },
       });
       console.log(response.data);
     } catch (error) {
