@@ -8,10 +8,8 @@ export const initialState = {
   totalSteps: 6,
   formData: {
     date: dayjs().format("YYYY-MM-DD"),
-    time: "",
     waiverAgreed: false,
     signatureImageData: "",
-    products: [],
     addOns: [],
     customerData: {},
     rooms: [
@@ -29,7 +27,6 @@ export const initialState = {
       //   disabledStartTimes: ["9:00", "9:30", "16:00"]
       // }
     ],
-    addOns: [],
   },
   startTimes: getHalfHourIncrementStrings("9:00", "16:30"),
   setFormValue: null, // function to set values in the BookingWizard
