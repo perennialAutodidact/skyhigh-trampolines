@@ -51,7 +51,9 @@ const Step3 = () => {
     navigate("/booking/step-4");
   };
 
-  const goBack = () => dispatch(setProgressBarStep(2));
+  const goBack = () => {
+    navigate('/booking/step-2')
+    dispatch(setProgressBarStep(2))};
 
   useEffect(() => {
     setValue("addOnsDataExists", addOnsDataIsValid());
@@ -115,9 +117,8 @@ const Step3 = () => {
         )}
 
         <FormNavButtons
-          backHref={"/booking"}
-          submitButtonText={"Next"}
           goBack={goBack}
+          submitButtonText={"Next"}
         />
       </form>
     </div>

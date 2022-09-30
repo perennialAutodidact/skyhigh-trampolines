@@ -47,7 +47,10 @@ const Step2 = () => {
     navigate("/booking/step-3");
   };
 
-  const goBack = () => dispatch(setProgressBarStep(1));
+  const goBack = () => {
+    navigate("/booking");
+    dispatch(setProgressBarStep(1));
+  };
 
   const roomDataIsValid = useCallback(
     () =>
@@ -99,7 +102,7 @@ const Step2 = () => {
 
         <Accordion>
           {state.formData.rooms.map((room, index) => (
-            <AccordionItem item={room} headerText={room.name}>
+            <AccordionItem item={room} headerText={room.name} key={room.id}>
               <AccordionCollapse collapseId={room.id}>
                 <StartTimeList room={room} />
 
@@ -116,9 +119,8 @@ const Step2 = () => {
         )}
 
         <FormNavButtons
-          backHref={"/booking"}
-          submitButtonText={"Next"}
           goBack={goBack}
+          submitButtonText={"Next"}
         />
       </form>
     </div>
