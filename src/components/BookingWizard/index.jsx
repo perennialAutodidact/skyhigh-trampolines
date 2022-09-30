@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useEffect } from "react";
 import {
   Routes,
   Route,
@@ -16,7 +16,7 @@ import Step5 from "./Step5";
 import Step6 from "./Step6";
 import CartPreview from "./common/CartPreview";
 import ProgressBar from "./common/ProgressBar";
-import { useEffect } from "react";
+
 
 const BookingWizard = () => {
   const [state, dispatch] = useReducer(wizardReducer, initialState);
