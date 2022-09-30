@@ -29,8 +29,8 @@ const Step2 = () => {
 
 
   const goBack = () => {
-    navigate("/booking/step-5");
     dispatch(setProgressBarStep(5));
+    navigate("/booking/step-5");
   };
 
   return (
