@@ -24,7 +24,7 @@ const AccordionItem = ({ item, headerText, children }) => {
           >
             <div className="col-4 col-lg-3">
               <img
-                src={item.photo && item.photo}
+                src={item.photo ? item.photo : undefined}
                 alt={item.name + " Photo"}
                 className={`${styles.accordionHeaderImage}`}
               />
