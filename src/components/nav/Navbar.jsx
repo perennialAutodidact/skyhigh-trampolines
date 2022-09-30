@@ -1,12 +1,24 @@
 import React, { useState } from "react";
-import styled from "./Navbar.module.scss";
+
 import { HiOutlineUserCircle } from "react-icons/hi";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { VscThreeBars } from "react-icons/vsc";
-
+import { auth } from "../../firebase/client";
+import { logout } from "../../redux/authSlice";
+import { signOut } from "firebase/auth";
+import styled from "./Navbar.module.scss";
+import { useDispatch } from "react-redux";
+//
 const Navbar = (props) => {
+  const dispatch = useDispatch();
+
   const { setToggleSidebar } = props;
   const [showLogout, setShowLogout] = useState(false);
+
+  const logoutHandler = () => {
+    signOut(auth);
+    dispatch(logout());
+  };
 
   // toggle sidebar state
   const handleSidebar = () => setToggleSidebar((state) => !state);
@@ -33,7 +45,11 @@ const Navbar = (props) => {
             <HiOutlineUserCircle size={30} />
             <p className="p-0 m-0">Admin</p>
             <MdOutlineKeyboardArrowDown size={25} onClick={handleLogout} />
-            {showLogout && <button className="bg-light">Logout</button>}
+            {showLogout && (
+              <button onClick={logoutHandler} className="bg-light">
+                Logout
+              </button>
+            )}
           </div>
         </nav>
       </div>
