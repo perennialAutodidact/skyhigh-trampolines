@@ -13,7 +13,7 @@ const Step5 = () => {
   const [state, dispatch] = useContext(BookingWizardContext);
 
   const initialValues = {
-    waiverAgreed: true,
+    waiverAgreed: state.formData.waiverAgreed,
     signatureImageData: "",
   };
   const {
