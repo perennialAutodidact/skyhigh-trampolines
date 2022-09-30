@@ -1,17 +1,19 @@
 import React, { useContext } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { BookingWizardContext } from "../context";
 import { step4Schema } from "../context/schema";
 import { updateForm, setProgressBarStep } from "../context/actions";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-
+import FormNavButtons from "../common/FormNavButtons";
 const Step4 = () => {
   const navigate = useNavigate();
   const [state, dispatch] = useContext(BookingWizardContext);
 
   const initialValues = {
-    arrivalTime: "",
+    fullName: "",
+    email: "",
+    address: "",
   };
   const {
     handleSubmit,
@@ -28,27 +30,55 @@ const Step4 = () => {
     navigate("/booking/step-5");
   };
 
-  const goBack = () => dispatch(setProgressBarStep(3));
+  const goBack = () => {
+    navigate("/booking/step-3");
+    dispatch(setProgressBarStep(3));
+  };
 
   return (
     <div className="container pt-3">
       <form onSubmit={handleSubmit(onSubmit)} className="container text-start">
-        <div className="row my-3 align-items-end">
-          <div className="col-12 col-lg-2 p-0 mb-3 mb-lg-0 order-2 order-lg-1">
-            <Link
-              to="/booking/step-3"
-              onClick={goBack}
-              className="link-dark text-decoration-none"
-            >
-              Back
-            </Link>
-          </div>
-          <div className="col col-12 col-lg-4 offset-lg-6 p-0 order-1 order-lg-2">
-            <button type="submit" className="btn btn-success w-100">
-              Next
-            </button>
-          </div>
+
+        {/* CUSTOMER FULL NAME */}
+        <div className="row mb-3">
+          <label htmlFor="fullName" className="form-label p-0">
+            Name <span className="text-danger">*</span>
+          </label>
+          <input
+            {...register("fullName")}
+            id="fullName"
+            className={`form-control ${errors.fullName && "is-invalid"}`}
+          />
+          {errors.fullName && <p className="text-danger">{errors.fullName.message}</p>}
         </div>
+
+        {/* CUSTOMER EMAIL */}
+        <div className="row mb-3">
+          <label htmlFor="email" className="form-label p-0">
+            Email <span className="text-danger">*</span>
+          </label>
+          <input
+            {...register("email")}
+            id="email"
+            className={`form-control ${errors.email && "is-invalid"}`}
+          />
+          {errors.email && <p className="text-danger">{errors.email.message}</p>}
+        </div>
+
+        {/* CUSTOMER ADDRESS */}
+        <div className="row mb-3">
+          <label htmlFor="address" className="form-label p-0">
+            Address <span className="text-danger">*</span>
+          </label>
+          <input
+            {...register("address")}
+            id="address"
+            className={`form-control ${errors.address && "is-invalid"}`}
+          />
+          {errors.address && <p className="text-danger">{errors.address.message}</p>}
+        </div>
+
+        <FormNavButtons submitButtonText={"Next"} goBack={goBack} />
       </form>
     </div>
   );
