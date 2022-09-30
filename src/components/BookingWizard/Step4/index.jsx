@@ -9,7 +9,7 @@ import FormNavButtons from "../common/FormNavButtons";
 const Step4 = () => {
   const navigate = useNavigate();
   const [state, dispatch] = useContext(BookingWizardContext);
-
+ const {fullName, email, address} = state.formData
   const initialValues = {
     fullName: "",
     email: "",
@@ -31,8 +31,8 @@ const Step4 = () => {
   };
 
   const goBack = () => {
-    navigate("/booking/step-3");
     dispatch(setProgressBarStep(3));
+    navigate("/booking/step-3");
   };
 
   return (
@@ -47,6 +47,7 @@ const Step4 = () => {
           <input
             {...register("fullName")}
             id="fullName"
+            value={fullName }
             className={`form-control ${errors.fullName && "is-invalid"}`}
           />
           {errors.fullName && <p className="text-danger">{errors.fullName.message}</p>}
@@ -60,6 +61,7 @@ const Step4 = () => {
           <input
             {...register("email")}
             id="email"
+            value={email}
             className={`form-control ${errors.email && "is-invalid"}`}
           />
           {errors.email && <p className="text-danger">{errors.email.message}</p>}
@@ -73,6 +75,7 @@ const Step4 = () => {
           <input
             {...register("address")}
             id="address"
+            value={address}
             className={`form-control ${errors.address && "is-invalid"}`}
           />
           {errors.address && <p className="text-danger">{errors.address.message}</p>}
