@@ -32,6 +32,8 @@ process.env.EMULATE_FUNCTIONS && connectFunctionsEmulator(functions, "localhost"
 
 const productsCollection = collection(db, "products");
 const roomsCollection = collection(db, "rooms");
+const addOnsCollection = collection(db, "addOns");
+
 
 export {
   db,
@@ -40,4 +42,5 @@ export {
   functions,
   productsCollection,
   roomsCollection,
+  addOnsCollection,
 };

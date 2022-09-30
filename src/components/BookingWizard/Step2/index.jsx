@@ -11,9 +11,13 @@ import {
 import { step2Schema } from "../context/schema";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import RoomAccordion from "./RoomAccordion";
+import Accordion from "../common/Accordion";
 import FormNavButtons from "../common/FormNavButtons";
 import LoadingSpinner from "../../LoadingSpinner";
+import StartTimeList from "./StartTimeList";
+import AccordionCollapse from "../common/Accordion/AccordionCollapse";
+import ProductList from "./ProductList";
+import AccordionItem from "../common/Accordion/AccordionItem";
 
 const Step2 = () => {
   const appDispatch = useDispatch();
@@ -38,17 +42,19 @@ const Step2 = () => {
   });
 
   const onSubmit = (formData) => {
-    dispatch(updateForm({rooms: state.formData.rooms}));
+    dispatch(updateForm({ rooms: state.formData.rooms }));
     dispatch(setProgressBarStep(3));
     navigate("/booking/step-3");
   };
 
   const goBack = () => dispatch(setProgressBarStep(1));
-  
+
   const roomDataIsValid = useCallback(
     () =>
-      state.formData.rooms.some((room) =>
-        room.selectedStartTime && room.products.some((product) => product.quantity > 0)
+      state.formData.rooms.some(
+        (room) =>
+          room.selectedStartTime &&
+          room.products.some((product) => product.quantity > 0)
       ),
     [state.formData.rooms]
   );
@@ -91,9 +97,17 @@ const Step2 = () => {
         {/* hidden input field to handle errors if no products are selected */}
         <input type="hidden" {...register("productDataExists")} />
 
-        {state.formData.rooms.map((room, index) => (
-          <RoomAccordion roomIndex={index} key={room.id} />
-        ))}
+        <Accordion>
+          {state.formData.rooms.map((room, index) => (
+            <AccordionItem item={room} headerText={room.name}>
+              <AccordionCollapse collapseId={room.id}>
+                <StartTimeList room={room} />
+
+                <ProductList products={room.products} roomId={room.id} />
+              </AccordionCollapse>
+            </AccordionItem>
+          ))}
+        </Accordion>
 
         {errors.productDataExists && (
           <p className="text-danger text-center">
