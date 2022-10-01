@@ -39,3 +39,57 @@ export const getHalfHourIncrementStrings = (startTime, endTime) => {
 
   return halfHourIncrementStrings;
 };
+const getProductTotal = (product) => product.quantity * product.price;
+
+const getAddOnTotal = (addOn) => addOn.quantity * addOn.price;
+
+const hasSelectedProducts = (room) =>
+  room && room.products.some((product) => product.quantity > 0);
+
+const selectedProducts = (products) =>
+  products
+    .filter((product) => product.quantity > 0)
+    .map((product) => ({ ...product, totalPrice: getProductTotal(product) }));
+
+export const getBookedRooms = (rooms) =>
+  rooms
+    .filter((room) => hasSelectedProducts(room))
+    .map((room) => ({
+      ...room,
+      products: selectedProducts(room.products),
+      headCount: getHeadCount(room)
+    }));
+
+export const getSelectedAddOns = (addOns) =>
+  addOns
+    .filter((addOn) => addOn.quantity > 0)
+    .map((addOn) => ({ ...addOn, totalPrice: getAddOnTotal(addOn) }));
+
+export const toMoney = (amount) =>
+  amount && (amount.toFixed(0) / 100).toFixed(2);
+
+export const getRoomsPaymentData = (rooms) =>
+  getBookedRooms(rooms).map((room) => ({
+    name: room.name,
+    startTime: room.selectedStartTime,
+    products: room.products.map((product) => ({
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      quantity: product.quantity,
+    })),
+  }));
+
+export const getAddOnsPaymentData = (addOns) =>
+  getSelectedAddOns(addOns).map((addOn) => ({
+    name: addOn.name,
+    price: addOn.price,
+    quantity: addOn.quantity,
+  }));
+
+export const getHeadCount = (room) =>
+  room.products.reduce(
+    (roomHeadCount, product) => roomHeadCount + product.quantity,
+    0
+  );
+
