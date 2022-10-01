@@ -31,11 +31,11 @@ export const fetchProducts = createAsyncThunk(
     // fetch data from firebase and store in constant
     const data = await getDocs(productsCollection)
       .then((snapshot) => {
-        let productForm = [];
+        let products = [];
         snapshot.forEach((doc) => {
-          productForm.push({ ...doc.data(), id: doc.id });
+          products.push({ ...doc.data(), id: doc.id });
         });
-        return productForm;
+        return products;
       })
       .catch((err) => console.log(err.message));
 
