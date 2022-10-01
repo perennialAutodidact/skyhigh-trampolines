@@ -30,10 +30,7 @@ export const createRoom = createAsyncThunk(
 );
 
 const getRoomProducts = async (roomId) => {
-  const productsQuery = query(
-    productsCollection,
-    where("room", "==", roomId)
-  );
+  const productsQuery = query(productsCollection, where("room", "==", roomId));
 
   const products = await getDocs(productsQuery).then((productDocs) => {
     let productData = [];
@@ -45,8 +42,8 @@ const getRoomProducts = async (roomId) => {
     return productData;
   });
 
-  return products
-}
+  return products;
+};
 
 export const getRoomList = createAsyncThunk(
   "rooms/getRoomList",
@@ -60,15 +57,13 @@ export const getRoomList = createAsyncThunk(
         return roomData;
       });
 
-      rooms = await Promise.all(rooms.map(async room=>{
-        let products = await getRoomProducts(room.id)
+      rooms = await Promise.all(
+        rooms.map(async (room) => {
+          let products = await getRoomProducts(room.id);
 
-
-        return {...room, products}
-
-      }))
-
-      console.log('rooms', rooms)
+          return { ...room, products };
+        })
+      );
 
       return fulfillWithValue(rooms);
     } catch (error) {
