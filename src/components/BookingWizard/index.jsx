@@ -28,6 +28,10 @@ const BookingWizard = () => {
     if (pathChunks.length > 2 && state.currentStep === 1) {
       navigate("/booking");
     }
+
+    return () => {
+      // cancel payment intent
+    }
   }, [location, state.currentStep, navigate]);
 
   return (
