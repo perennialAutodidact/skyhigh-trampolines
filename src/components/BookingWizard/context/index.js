@@ -28,8 +28,15 @@ export const initialState = {
       // }
     ],
   },
+  grandTotal: 0,
+  SALES_TAX_RATE: 0.065,
+  TRANSACTION_FEE: 400,
   startTimes: getHalfHourIncrementStrings("9:00", "16:30"),
   setFormValue: null, // function to set values in the BookingWizard
+  paymentIntent: {
+    clientSecret: null,
+    id: null
+  }
 };
 
 export const BookingWizardContext = createContext(initialState);

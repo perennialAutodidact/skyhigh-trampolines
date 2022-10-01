@@ -13,6 +13,8 @@ export const wizardReducer = (state, action) => {
     quantity,
     addOns,
     addOnId,
+    grandTotal,
+    paymentIntent
   } = action.payload;
 
   const { formData } = state;
@@ -105,6 +107,18 @@ export const wizardReducer = (state, action) => {
           ),
         },
       };
+
+    case "UPDATE_GRAND_TOTAL":
+      return {
+        ...state,
+        grandTotal,
+      };
+
+      case "SET_PAYMENT_INTENT":
+        return {
+          ...state,
+          paymentIntent
+        }
 
     default:
       return state;
