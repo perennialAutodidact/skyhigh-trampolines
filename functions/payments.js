@@ -18,3 +18,13 @@ exports.createPaymentIntent = functions.https.onCall(async (data, context) => {
     throw new functions.https.HttpsError("unknown", error);
   }
 });
+
+exports.cancelPaymentIntent = functions.https.onCall(
+  async (paymentIntentId, context) => {
+    try {
+      return await stripe.paymentIntents.cancel(paymentIntentId);
+    } catch (error) {
+      throw new functions.https.HttpsError("unknown", error);
+    }
+  }
+);
