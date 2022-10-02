@@ -7,12 +7,18 @@ if (admin.apps.length === 0) {
 const db = admin.firestore();
 
 const createBooking = (eventData) => {
-  db.collection("bookings")
-    .doc()
-    .set({
-      paymentId: eventData.id,
-      ...eventData.metadata,
+  try {
+    const rooms = JSON.parse(eventData.data.object.metadata.rooms);
+
+    // const bookingData = JSON.parse(eventData.data.object.metadata);
+    // functions.logger.log(bookingData);
+    db.collection("bookings").doc().set({
+      paymentId: eventData.data.object.id,
+      rooms,
     });
+  } catch (error) {
+    throw new functions.https.HttpsError("unknown", error);
+  }
 };
 
 const updateBooking = (eventData) => {};
