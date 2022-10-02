@@ -11,7 +11,9 @@ export const initialState = {
     waiverAgreed: false,
     signatureImageData: "",
     addOns: [],
-    customerData: {},
+    fullName: "George Harrison",
+    email: "iamthewalrus@abbeyroad.com",
+    address: "123 Faux St.",
     rooms: [
       // populate once room data is loaded
       // {
@@ -33,10 +35,6 @@ export const initialState = {
   TRANSACTION_FEE: 400,
   startTimes: getHalfHourIncrementStrings("9:00", "16:30"),
   setFormValue: null, // function to set values in the BookingWizard
-  paymentIntent: {
-    clientSecret: null,
-    id: null
-  }
 };
 
 export const BookingWizardContext = createContext(initialState);

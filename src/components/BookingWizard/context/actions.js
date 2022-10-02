@@ -49,8 +49,3 @@ export const updateGrandTotal = (grandTotal) => ({
   type: "UPDATE_GRAND_TOTAL",
   payload: { grandTotal },
 });
-
-export const setPaymentIntent = (paymentIntent) => ({
-  type: "SET_PAYMENT_INTENT",
-  payload: {paymentIntent}
-});
