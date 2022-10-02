@@ -1,9 +1,8 @@
-import React, { useContext, useState, useMemo } from "react";
-import { httpsCallable } from "firebase/functions";
-import { functions } from "../../../firebase/client";
+import React, { useContext } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { BookingWizardContext } from "../context";
-import { setProgressBarStep, setPaymentIntent } from "../context/actions";
+import { setProgressBarStep } from "../context/actions";
 import {
   getBookedRooms,
   getSelectedAddOns,
@@ -12,26 +11,21 @@ import {
   getAddOnsPaymentData,
   getHeadCount,
 } from "../context/utils";
-import { Elements, PaymentElement, useElements } from "@stripe/react-stripe-js";
-import FormNavButtons from "../common/FormNavButtons";
-import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 import { useEffect } from "react";
 import LoadingSpinner from "../../LoadingSpinner";
 import CheckoutForm from "./CheckoutForm";
 import styles from "./CheckoutForm.module.scss";
+import { createPaymentIntent } from "../../../redux/stripeSlice";
 
-const Step6 = () => {
-  const stripe = useMemo(
-    () => loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY),
-    []
-  );
-  // const elements = useElements()
+const Step6 = ({ stripe }) => {
+  const appDispatch = useDispatch();
   const navigate = useNavigate();
+  const { paymentIntent } = useSelector((state) => state.stripe);
   const [state, dispatch] = useContext(BookingWizardContext);
   const {
     grandTotal,
     formData: { date, rooms, addOns, signatureImageData, customerDetails },
-    paymentIntent,
   } = state;
 
   const goBack = () => {
@@ -46,38 +40,37 @@ const Step6 = () => {
   //   addOns: getAddOnsPaymentData(addOns),
   // }),
   useEffect(() => {
-    const createPaymentIntent = httpsCallable(functions, "createPaymentIntent");
-    // const updatePaymentIntent = httpsCallable(functions, 'updatePaymentIntent')
-
     if (!paymentIntent.clientSecret) {
-      (async () => {
-        const response = await createPaymentIntent({
-          amount: toMoney(grandTotal) * 100,
-          metadata: {
-            rooms: JSON.stringify(
-              getBookedRooms(rooms).map((room) => ({
-                room: room.id,
-                startTime: room.selectedStartTime,
-                products: room.products.map((product) => ({
-                  duration: product.duration,
-                  quantity: product.quantity,
-                })),
-              }))
-            ),
-          },
-        });
-        const { clientSecret, id } = response.data;
-        dispatch(setPaymentIntent({ clientSecret, id }));
-      })();
+      const data = {
+        amount: toMoney(grandTotal) * 100,
+        metadata: {
+          rooms: JSON.stringify(
+            getBookedRooms(rooms).map((room) => ({
+              room: room.id,
+              startTime: room.selectedStartTime,
+              products: room.products.map((product) => ({
+                duration: product.duration,
+                quantity: product.quantity,
+              })),
+            }))
+          ),
+        },
+      };
+      appDispatch(createPaymentIntent(data)).unwrap();
     }
   }, [paymentIntent, grandTotal, dispatch, rooms]);
 
   if (!stripe || !paymentIntent.clientSecret) {
-    return <LoadingSpinner />;
+    return (
+      <div className="my-5">
+        <LoadingSpinner />;
+      </div>
+    );
   }
 
   return (
     <div className="container pt-3">
+      <h3 className="mb-3">Checkout</h3>
       <Elements
         stripe={stripe}
         options={{
