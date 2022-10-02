@@ -57,7 +57,7 @@ export const getBookedRooms = (rooms) =>
     .map((room) => ({
       ...room,
       products: selectedProducts(room.products),
-      headCount: getHeadCount(room)
+      headCount: getHeadCount(room),
     }));
 
 export const getSelectedAddOns = (addOns) =>
@@ -92,4 +92,3 @@ export const getHeadCount = (room) =>
     (roomHeadCount, product) => roomHeadCount + product.quantity,
     0
   );
-

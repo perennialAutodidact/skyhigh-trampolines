@@ -8,13 +8,21 @@ const db = admin.firestore();
 
 const createBooking = (eventData) => {
   try {
-    const rooms = JSON.parse(eventData.data.object.metadata.rooms);
+    const bookingData = eventData.data.object;
+    let { date, customer, rooms, addOns } = bookingData.metadata;
+    customer = JSON.parse(customer);
+    rooms = JSON.parse(rooms);
+    addOns = JSON.parse(addOns);
 
     // const bookingData = JSON.parse(eventData.data.object.metadata);
     // functions.logger.log(bookingData);
     db.collection("bookings").doc().set({
+      date,
       paymentId: eventData.data.object.id,
+      confirmation: "pending",
+      customer,
       rooms,
+      addOns,
     });
   } catch (error) {
     throw new functions.https.HttpsError("unknown", error);
