@@ -2,6 +2,9 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { addDoc, getDocs } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage, addOnsCollection } from "../firebase/client";
+import { createThunkCondition } from "./utils";
+
+const thunkCondition = createThunkCondition("addOns");
 
 // fetch all add ons from firebase
 export const getAddOnsList = createAsyncThunk(
@@ -20,7 +23,8 @@ export const getAddOnsList = createAsyncThunk(
       .catch((err) => console.log(err.message));
 
     return data;
-  }
+  },
+  thunkCondition
 );
 
 export const createAddOn = createAsyncThunk(
@@ -38,7 +42,8 @@ export const createAddOn = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error);
     }
-  }
+  },
+  thunkCondition
 );
 
 const addOnsSlice = createSlice({

@@ -6,6 +6,9 @@ import {
   productsCollection,
 } from "../firebase/client";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { createThunkCondition } from "./utils";
+
+const thunkCondition = createThunkCondition("rooms");
 
 export const createRoom = createAsyncThunk(
   "rooms/create",
@@ -26,7 +29,8 @@ export const createRoom = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error);
     }
-  }
+  },
+  thunkCondition
 );
 
 const getRoomProducts = async (roomId) => {
@@ -70,16 +74,7 @@ export const getRoomList = createAsyncThunk(
       return rejectWithValue(error);
     }
   },
-  {
-    condition: (_, { getState, extra }) => {
-      const { rooms } = getState();
-      const fetchStatus = rooms.loading;
-      if (fetchStatus === "fulfilled" || fetchStatus === "pending") {
-        // Already fetched or in progress, don't need to re-fetch
-        return false;
-      }
-    },
-  }
+  thunkCondition
 );
 
 const roomsSlice = createSlice({
@@ -93,21 +88,21 @@ const roomsSlice = createSlice({
       state.loading = "pending";
     },
     [createRoom.fulfilled]: (state, action) => {
-      state.loading = "succeeded";
+      state.loading = "fulfilled";
     },
     [createRoom.rejected]: (state, action) => {
-      state.loading = "failed";
+      state.loading = "rejected";
     },
 
     [getRoomList.pending]: (state, action) => {
       state.loading = "pending";
     },
     [getRoomList.fulfilled]: (state, action) => {
-      state.loading = "succeeded";
+      state.loading = "fulfilled";
       state.rooms = action.payload;
     },
     [getRoomList.rejected]: (state, action) => {
-      state.loading = "failed";
+      state.loading = "rejected";
       console.log(action.error);
     },
   },
