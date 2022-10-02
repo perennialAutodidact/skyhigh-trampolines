@@ -11,9 +11,9 @@ exports.createPaymentIntent = functions.https.onCall(async (data, context) => {
       metadata,
     });
 
-    const {client_secret} = paymentIntent
+    const { client_secret: clientSecret, id } = paymentIntent;
 
-    return {client_secret}
+    return { clientSecret, id };
   } catch (error) {
     throw new functions.https.HttpsError("unknown", error);
   }
