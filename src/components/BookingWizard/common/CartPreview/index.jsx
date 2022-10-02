@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { BookingWizardContext } from "../../context";
-import { getBookedRooms, getSelectedAddOns } from "./utils";
+import { getBookedRooms, getSelectedAddOns } from "../../context/utils";
 import BookedRooms from "./BookedRooms";
 import SelectedAddOns from "./SelectedAddOns";
 import TotalPriceDisplay from "./TotalPriceDisplay";

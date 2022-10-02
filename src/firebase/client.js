@@ -1,8 +1,8 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs } from "firebase/firestore";
+import { getFirestore, collection } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
-import { getFunctions } from "firebase/functions";
+import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
 
 import "@firebase/auth";
 import "@firebase/storage";
@@ -25,29 +25,21 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 const storage = getStorage(app);
 const functions = getFunctions(app);
-const colRef = collection(db, "Product Form");
+
+// run the following command before changing .env value to true:
+// firebase emulators:start
+process.env.EMULATE_FUNCTIONS && connectFunctionsEmulator(functions, "localhost", 5001)
+
 const productsCollection = collection(db, "products");
 const roomsCollection = collection(db, "rooms");
 const addOnsCollection = collection(db, "addOns");
 
-getDocs(colRef)
-  .then((snapshot) => {
-    let productForm = [];
-    snapshot.forEach((doc) => {
-      productForm.push({ ...doc.data(), id: doc.id });
-    });
-    console.log(productForm);
-  })
-  .catch((err) => {
-    console.log(err.message);
-  });
 
 export {
   db,
   auth,
   storage,
   functions,
-  colRef,
   productsCollection,
   roomsCollection,
   addOnsCollection,

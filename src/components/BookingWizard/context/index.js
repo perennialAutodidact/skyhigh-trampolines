@@ -8,12 +8,12 @@ export const initialState = {
   totalSteps: 6,
   formData: {
     date: dayjs().format("YYYY-MM-DD"),
-    time: "",
     waiverAgreed: false,
     signatureImageData: "",
-    products: [],
     addOns: [],
-    customerData: {},
+    fullName: "George Harrison",
+    email: "iamthewalrus@abbeyroad.com",
+    address: "123 Faux St.",
     rooms: [
       // populate once room data is loaded
       // {
@@ -29,8 +29,10 @@ export const initialState = {
       //   disabledStartTimes: ["9:00", "9:30", "16:00"]
       // }
     ],
-    addOns: [],
   },
+  grandTotal: 0,
+  SALES_TAX_RATE: 0.065,
+  TRANSACTION_FEE: 400,
   startTimes: getHalfHourIncrementStrings("9:00", "16:30"),
   setFormValue: null, // function to set values in the BookingWizard
 };

@@ -44,3 +44,8 @@ export const setAddOnQuantity = (addOnId, quantity) => ({
     quantity,
   },
 });
+
+export const updateGrandTotal = (grandTotal) => ({
+  type: "UPDATE_GRAND_TOTAL",
+  payload: { grandTotal },
+});

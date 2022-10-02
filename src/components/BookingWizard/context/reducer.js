@@ -13,6 +13,7 @@ export const wizardReducer = (state, action) => {
     quantity,
     addOns,
     addOnId,
+    grandTotal,
   } = action.payload;
 
   const { formData } = state;
@@ -104,6 +105,12 @@ export const wizardReducer = (state, action) => {
             addOn.id !== addOnId ? addOn : { ...addOn, quantity }
           ),
         },
+      };
+
+    case "UPDATE_GRAND_TOTAL":
+      return {
+        ...state,
+        grandTotal,
       };
 
     default:

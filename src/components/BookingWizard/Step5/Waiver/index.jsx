@@ -1,8 +1,12 @@
-import React, { useRef } from "react";
+import React, { useRef, useContext } from "react";
 import styles from "./Waiver.module.scss";
 import SignatureCanvas from "react-signature-canvas";
+import { BookingWizardContext } from "../../context";
+import { useEffect } from "react";
 
 const Waiver = ({ register, setValue, errors, clearErrors }) => {
+  const [state, dispatch] = useContext(BookingWizardContext)
+  const {signatureImageData, waiverAgreed} = state.formData;
   const signaturePadRef = useRef(null);
 
   const clearSignature = (e) => {
@@ -14,6 +18,17 @@ const Waiver = ({ register, setValue, errors, clearErrors }) => {
     setValue("signatureImageData", signaturePadRef.current.toDataURL());
     clearErrors("signatureImageData");
   };
+
+  useEffect(()=>{
+    if(signatureImageData){
+      signaturePadRef.current.fromDataURL(signatureImageData)
+      setValue("signatureImageData", signatureImageData)
+    }
+  },[signatureImageData, setValue])
+
+  useEffect(()=>{
+    setValue("waiverAgreed", waiverAgreed)
+  },[setValue, waiverAgreed])
 
   return (
     <div className="container">
@@ -32,7 +47,7 @@ const Waiver = ({ register, setValue, errors, clearErrors }) => {
         <p>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur earum
           suscipit magnam nemo eveniet dolorum odio, odit qui quasi. Beatae
-          cumque autem inventore sequi deleniti aliquam provident numquam, eum
+          cumque autem inventore sequi deleniti aliquam provident numquam, eum"
           vel?
         </p>
         {errors.waiverAgreed && (

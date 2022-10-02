@@ -2,6 +2,9 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { addDoc, getDocs } from "firebase/firestore";
 import { storage, productsCollection } from "../firebase/client";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { createThunkCondition } from "./utils";
+
+const thunkCondition = createThunkCondition("products");
 
 export const createProduct = createAsyncThunk(
   "products/createProduct",
@@ -21,7 +24,8 @@ export const createProduct = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error);
     }
-  }
+  },
+  thunkCondition
 );
 
 // fetch all products from firebase
@@ -31,16 +35,17 @@ export const fetchProducts = createAsyncThunk(
     // fetch data from firebase and store in constant
     const data = await getDocs(productsCollection)
       .then((snapshot) => {
-        let productForm = [];
+        let products = [];
         snapshot.forEach((doc) => {
-          productForm.push({ ...doc.data(), id: doc.id });
+          products.push({ ...doc.data(), id: doc.id });
         });
-        return productForm;
+        return products;
       })
       .catch((err) => console.log(err.message));
 
     return data;
-  }
+  },
+  thunkCondition
 );
 
 const productSlice = createSlice({
