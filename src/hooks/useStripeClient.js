@@ -1,0 +1,28 @@
+import { useEffect, useState } from "react";
+import { loadStripe } from "@stripe/stripe-js";
+
+export const useStripeClient = () => {
+  const [stripeClient, setStripeClient] = useState(null);
+  const [loadingStripe, setLoadingStripe] = useState(false);
+
+  useEffect(() => {
+    if (!stripeClient) {
+      setLoadingStripe(true);
+
+      (async () => {
+        try {
+          const stripe = await loadStripe(
+            process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY
+          );
+          setStripeClient(stripe);
+          setLoadingStripe(false);
+        } catch (error) {
+          console.log(error);
+          setLoadingStripe(false);
+        }
+      })();
+    }
+  }, [stripeClient]);
+
+  return [stripeClient, loadingStripe];
+};
