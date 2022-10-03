@@ -1,12 +1,16 @@
 import React, { useContext, useMemo, useEffect } from "react";
 import { BookingWizardContext } from "../../context";
-import { updateGrandTotal } from "../../context/actions";
+import { updateGrandTotal, updateTax } from "../../context/actions";
 import { toMoney } from "../../context/utils";
 import { getOrderSubtotal } from "./utils";
 
 const TotalPriceDisplay = ({ rooms, addOns }) => {
   const [state, dispatch] = useContext(BookingWizardContext);
-  const { SALES_TAX_RATE, TRANSACTION_FEE, grandTotal } = state;
+  const {
+    SALES_TAX_RATE,
+    TRANSACTION_FEE,
+    formData: { grandTotal },
+  } = state;
   const subTotal = useMemo(
     () => getOrderSubtotal(rooms, addOns),
     [rooms, addOns]
@@ -19,9 +23,9 @@ const TotalPriceDisplay = ({ rooms, addOns }) => {
   useEffect(() => {
     if (subTotal) {
       dispatch(updateGrandTotal(subTotal + tax + TRANSACTION_FEE));
+      dispatch(updateTax(tax));
     }
   }, [dispatch, subTotal, tax, TRANSACTION_FEE]);
-
 
   return (
     <div className="container p-0">

@@ -5,5 +5,9 @@ const bookings = require("./bookings");
 exports.createPaymentIntent = payments.createPaymentIntent;
 exports.updatePaymentIntent = payments.updatePaymentIntent;
 exports.cancelPaymentIntent = payments.cancelPaymentIntent;
+
 exports.handleStripeEvent = stripeConfig.handleStripeEvent;
+
 exports.writeBookingFromStripeEvent = bookings.writeBookingFromStripeEvent;
+exports.createBooking = bookings.createBooking;
+exports.updateBooking = bookings.updateBooking;

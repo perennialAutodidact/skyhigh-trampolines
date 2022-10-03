@@ -1,96 +1,29 @@
-import React, { useContext, useMemo } from "react";
+import React, { useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { updatePaymentIntent } from "../../../redux/stripeSlice";
+import { useCreateOrUpdateBooking } from "../../../hooks/useCreateOrUpdateBooking";
 import { useNavigate } from "react-router-dom";
+import { Elements } from "@stripe/react-stripe-js";
+import { toMoney } from "../context/utils";
+
 import { BookingWizardContext } from "../context";
 import { setProgressBarStep } from "../context/actions";
-import {
-  getBookedRooms,
-  getSelectedAddOns,
-  toMoney,
-  getRoomsPaymentData,
-  getAddOnsPaymentData,
-  getHeadCount,
-} from "../context/utils";
-import { Elements } from "@stripe/react-stripe-js";
-import { useEffect } from "react";
+import styles from "./CheckoutForm.module.scss";
 import LoadingSpinner from "../../LoadingSpinner";
 import CheckoutForm from "./CheckoutForm";
-import styles from "./CheckoutForm.module.scss";
-import { createPaymentIntent } from "../../../redux/stripeSlice";
 
 const Step6 = ({ stripe }) => {
   const appDispatch = useDispatch();
   const navigate = useNavigate();
-  const { paymentIntent } = useSelector((state) => state.stripe);
   const [state, dispatch] = useContext(BookingWizardContext);
+  const { formData } = state;
+  const { grandTotal, tax } = formData;
   const {
-    grandTotal,
-    formData: {
-      date,
-      rooms,
-      addOns,
-      tax,
-      SALES_TAX_RATE,
-      TRANSACTION_FEE,
-      signatureImageData,
-      fullName,
-      email,
-      address,
-    },
-  } = state;
-
-  const bookingData = useMemo(
-    () => ({
-      amount: toMoney(grandTotal) * 100,
-      metadata: {
-        tax,
-        salesTaxRate: SALES_TAX_RATE,
-        transactionFee: TRANSACTION_FEE,
-        date,
-        customer: JSON.stringify({
-          fullName,
-          email,
-          address,
-        }),
-        rooms: JSON.stringify(
-          getBookedRooms(rooms).map((room) => ({
-            room: room.id,
-            startTime: room.selectedStartTime,
-            headCount: room.headCount,
-            products: room.products.map((product) => ({
-              id: product.id,
-              duration: product.duration,
-              quantity: product.quantity,
-              price: product.price,
-              totalPrice: toMoney(product.totalPrice) * 100,
-            })),
-          }))
-        ),
-        addOns: JSON.stringify(
-          getSelectedAddOns(addOns).map((addOn) => ({
-            id: addOn.id,
-            name: addOn.name,
-            quantity: addOn.quantity,
-            price: addOn.price,
-            totalPrice: toMoney(addOn.totalPrice) * 100,
-          }))
-        ),
-      },
-    }),
-    [
-      grandTotal,
-      date,
-      rooms,
-      addOns,
-      fullName,
-      email,
-      address,
-      toMoney,
-      getBookedRooms,
-      getSelectedAddOns,
-      getHeadCount,
-    ]
-  );
+    paymentIntent: { clientSecret, id: paymentIntentId },
+  } = useSelector((state) => state.stripe);
+  const {
+    bookingInProgress: { id: bookingId },
+  } = useCreateOrUpdateBooking(formData);
 
   const goBack = () => {
     navigate("/booking/step-5");
@@ -98,17 +31,26 @@ const Step6 = ({ stripe }) => {
   };
 
   useEffect(() => {
-    if (!paymentIntent.clientSecret) {
-      appDispatch(createPaymentIntent(bookingData));
-    } else {
-      //   appDispatch(updatePaymentIntent(bookingData));
+    if (bookingId && tax && grandTotal && paymentIntentId) {
+      appDispatch(
+        updatePaymentIntent({
+          id: paymentIntentId,
+          data: {
+            amount: toMoney(grandTotal) * 100,
+            metadata: {
+              bookingId,
+              tax,
+            },
+          },
+        })
+      );
     }
-  }, [paymentIntent, dispatch, bookingData]);
+  }, [appDispatch, grandTotal, paymentIntentId, bookingId, tax]);
 
-  if (!stripe || !paymentIntent.clientSecret) {
+  if (!stripe || !clientSecret) {
     return (
       <div className="my-5">
-        <LoadingSpinner />;
+        <LoadingSpinner />
       </div>
     );
   }
@@ -119,7 +61,7 @@ const Step6 = ({ stripe }) => {
       <Elements
         stripe={stripe}
         options={{
-          clientSecret: paymentIntent.clientSecret,
+          clientSecret,
           appearance: {
             variables: {
               colorDanger: styles.danger,

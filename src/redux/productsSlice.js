@@ -59,17 +59,20 @@ const productSlice = createSlice({
   extraReducers: {
     [createProduct.pending]: (state, action) => {
       state.loading = "pending";
+      state.error = null;
     },
     [createProduct.fulfilled]: (state, action) => {
       state.loading = "fulfilled";
     },
     [createProduct.rejected]: (state, action) => {
       state.loading = "rejected";
+      state.error = action.payload;
     },
 
     // fetch products
     [fetchProducts.pending]: (state) => {
       state.loading = "pending";
+      state.error = null;
     },
     [fetchProducts.fulfilled]: (state, action) => {
       state.loading = "fulfilled";
@@ -77,6 +80,7 @@ const productSlice = createSlice({
     },
     [fetchProducts.rejected]: (state) => {
       state.loading = "rejected";
+      state.error = action.payload;
     },
   },
 });

@@ -29,10 +29,11 @@ export const initialState = {
       //   disabledStartTimes: ["9:00", "9:30", "16:00"]
       // }
     ],
+    grandTotal: 0,
+    tax: 0,
+    SALES_TAX_RATE: 0.065,
+    TRANSACTION_FEE: 400,
   },
-  grandTotal: 0,
-  SALES_TAX_RATE: 0.065,
-  TRANSACTION_FEE: 400,
   startTimes: getHalfHourIncrementStrings("9:00", "16:30"),
   setFormValue: null, // function to set values in the BookingWizard
 };

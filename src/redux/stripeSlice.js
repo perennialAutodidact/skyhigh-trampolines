@@ -25,14 +25,14 @@ export const createPaymentIntent = createAsyncThunk(
 
 export const updatePaymentIntent = createAsyncThunk(
   "stripe/updatePaymentIntent",
-  async (paymentIntentData, { rejectWithValue }) => {
+  async ({ id, data }, { rejectWithValue }) => {
     const callUpdatePaymentIntent = httpsCallable(
       functions,
       "updatePaymentIntent"
     );
 
     try {
-      return await callUpdatePaymentIntent(paymentIntentData);
+      return await callUpdatePaymentIntent({ id, data });
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -63,6 +63,7 @@ const initialState = {
     id: null,
   },
   loading: "idle",
+  error: null,
 };
 
 export const stripeSlice = createSlice({
@@ -71,6 +72,7 @@ export const stripeSlice = createSlice({
   extraReducers: {
     [createPaymentIntent.pending]: (state, action) => {
       state.loading = "pending";
+      state.error = null;
     },
     [createPaymentIntent.fulfilled]: (state, action) => {
       state.loading = "fulfilled";
@@ -83,10 +85,12 @@ export const stripeSlice = createSlice({
         clientSecret: null,
         id: null,
       };
+      state.error = action.payload;
     },
 
     [cancelPaymentIntent.pending]: (state, action) => {
       state.loading = "pending";
+      state.error = null;
     },
     [cancelPaymentIntent.fulfilled]: (state, action) => {
       state.loading = "fulfilled";
@@ -97,10 +101,7 @@ export const stripeSlice = createSlice({
     },
     [cancelPaymentIntent.rejected]: (state, action) => {
       state.loading = "rejected";
-      state.paymentIntent = {
-        clientSecret: null,
-        id: null,
-      };
+      state.error = action.payload;
     },
   },
 });

@@ -82,20 +82,24 @@ const roomsSlice = createSlice({
   initialState: {
     rooms: [],
     loading: "idle",
+    error: null,
   },
   extraReducers: {
     [createRoom.pending]: (state, action) => {
       state.loading = "pending";
+      state.error = null;
     },
     [createRoom.fulfilled]: (state, action) => {
       state.loading = "fulfilled";
     },
     [createRoom.rejected]: (state, action) => {
       state.loading = "rejected";
+      state.error = action.payload;
     },
 
     [getRoomList.pending]: (state, action) => {
       state.loading = "pending";
+      state.error = null;
     },
     [getRoomList.fulfilled]: (state, action) => {
       state.loading = "fulfilled";
@@ -103,7 +107,7 @@ const roomsSlice = createSlice({
     },
     [getRoomList.rejected]: (state, action) => {
       state.loading = "rejected";
-      console.log(action.error);
+      state.error = action.payload;
     },
   },
 });

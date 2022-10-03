@@ -51,21 +51,25 @@ const addOnsSlice = createSlice({
   initialState: {
     addOns: [],
     loading: "idle",
+    error: null,
   },
   //reducers: {},
   extraReducers: {
     [createAddOn.pending]: (state, action) => {
       state.loading = "pending";
+      state.error = null;
     },
     [createAddOn.fulfilled]: (state, action) => {
       state.loading = "fulfilled";
     },
     [createAddOn.rejected]: (state, action) => {
       state.loading = "rejected";
+      state.error = action.payload;
     },
 
     [getAddOnsList.pending]: (state, action) => {
       state.loading = "pending";
+      state.error = null;
     },
     [getAddOnsList.fulfilled]: (state, action) => {
       state.loading = "fulfilled";
@@ -73,6 +77,7 @@ const addOnsSlice = createSlice({
     },
     [getAddOnsList.rejected]: (state, action) => {
       state.loading = "rejected";
+      state.error = action.payload;
     },
   },
 });

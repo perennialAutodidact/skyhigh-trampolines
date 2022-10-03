@@ -19,45 +19,21 @@ import Step6 from "./Step6";
 import CartPreview from "./common/CartPreview";
 import ProgressBar from "./common/ProgressBar";
 import LoadingSpinner from "../LoadingSpinner";
-import { loadStripe } from "@stripe/stripe-js";
+import { useStripeClient } from "../../hooks/useStripeClient";
 
 const BookingWizard = () => {
-  const [stripeClient, setStripeClient] = useState(null);
-  const [loadingStripe, setLoadingStripe] = useState(false);
-  const appDispatch = useDispatch();
-  const {
-    paymentIntent: { id: paymentIntentId },
-  } = useSelector((state) => state.stripe);
   const [state, dispatch] = useReducer(wizardReducer, initialState);
   const location = useLocation();
   const navigate = useNavigate();
+  const [stripeClient, loadingStripe] = useStripeClient();
 
+  // redirect to step 1 if the page is reloaded and the formData is reset
   useEffect(() => {
     const pathChunks = location.pathname.split("/");
     if (pathChunks.length > 2 && state.currentStep === 1) {
       navigate("/booking");
     }
-  }, [location, state.currentStep, navigate, appDispatch, paymentIntentId]);
-
-  useEffect(() => {
-    if (!stripeClient) {
-      setLoadingStripe(true);
-      {
-        (async () => {
-          try {
-            const stripe = await loadStripe(
-              process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY
-            );
-            setStripeClient(stripe);
-            setLoadingStripe(false);
-          } catch (error) {
-            console.log(error);
-            setLoadingStripe(false);
-          }
-        })();
-      }
-    }
-  }, [stripeClient]);
+  }, [location, state.currentStep, navigate]);
 
   if (!stripeClient && loadingStripe) {
     return (

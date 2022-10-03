@@ -17,6 +17,7 @@ import Accordion from "../common/Accordion";
 import AccordionItem from "../common/Accordion/AccordionItem";
 import AccordionCollapse from "../common/Accordion/AccordionCollapse";
 import AddOnsList from "./AddOnsList";
+import { useCreateOrUpdateBooking } from "../../../hooks/useCreateOrUpdateBooking";
 
 const Step3 = () => {
   const navigate = useNavigate();
@@ -25,6 +26,8 @@ const Step3 = () => {
     (appState) => appState.addOns
   );
   const [state, dispatch] = useContext(BookingWizardContext);
+  const { formData } = state;
+  useCreateOrUpdateBooking(formData);
 
   const initialValues = {
     addOnsDataExists: false,
@@ -52,8 +55,9 @@ const Step3 = () => {
   };
 
   const goBack = () => {
-    navigate('/booking/step-2')
-    dispatch(setProgressBarStep(2))};
+    navigate("/booking/step-2");
+    dispatch(setProgressBarStep(2));
+  };
 
   useEffect(() => {
     setValue("addOnsDataExists", addOnsDataIsValid());
@@ -116,10 +120,7 @@ const Step3 = () => {
           </p>
         )}
 
-        <FormNavButtons
-          goBack={goBack}
-          submitButtonText={"Next"}
-        />
+        <FormNavButtons goBack={goBack} submitButtonText={"Next"} />
       </form>
     </div>
   );
