@@ -23,6 +23,23 @@ export const createPaymentIntent = createAsyncThunk(
   thunkCondition
 );
 
+export const updatePaymentIntent = createAsyncThunk(
+  "stripe/updatePaymentIntent",
+  async (paymentIntentData, { rejectWithValue }) => {
+    const callUpdatePaymentIntent = httpsCallable(
+      functions,
+      "updatePaymentIntent"
+    );
+
+    try {
+      return await callUpdatePaymentIntent(paymentIntentData);
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  },
+  thunkCondition
+);
+
 export const cancelPaymentIntent = createAsyncThunk(
   "stripe/cancelPaymentIntent",
   async (paymentIntentId, { rejectWithValue }) => {
