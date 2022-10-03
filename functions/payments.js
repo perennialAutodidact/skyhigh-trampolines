@@ -19,6 +19,17 @@ exports.createPaymentIntent = functions.https.onCall(async (data, context) => {
   }
 });
 
+exports.updatePaymentIntent = functions.https.onCall(
+  async (paymentIntentData, context) => {
+    const { paymentIntentId, amount } = paymentIntentData;
+    try {
+      return await stripe.paymentIntents.update(paymentIntentId, { amount });
+    } catch (error) {
+      throw new functions.https.HttpsError("unknown", error);
+    }
+  }
+);
+
 exports.cancelPaymentIntent = functions.https.onCall(
   async (paymentIntentId, context) => {
     try {
