@@ -8,8 +8,8 @@ import DateDisplay from "./DateDisplay";
 
 const CartPreview = () => {
   const [state] = useContext(BookingWizardContext);
-  const { currentStep, formData } = state;
-  const { date, rooms, addOns } = formData;
+  const { currentStep, formData, rooms, addOns } = state;
+  const { date } = formData;
 
   const bookedRooms = getBookedRooms(rooms);
   const selectedAddOns = getSelectedAddOns(addOns);
