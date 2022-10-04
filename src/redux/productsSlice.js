@@ -70,7 +70,7 @@ const productSlice = createSlice({
     },
 
     // fetch products
-    [fetchProducts.pending]: (state) => {
+    [fetchProducts.pending]: (state, action) => {
       state.loading = "pending";
       state.error = null;
     },
@@ -78,7 +78,7 @@ const productSlice = createSlice({
       state.loading = "fulfilled";
       state.products = action.payload;
     },
-    [fetchProducts.rejected]: (state) => {
+    [fetchProducts.rejected]: (state, action) => {
       state.loading = "rejected";
       state.error = action.payload;
     },
