@@ -8,7 +8,7 @@ const db = admin.firestore();
 
 exports.createBooking = functions.https.onCall(async (bookingData, context) => {
   try {
-    return await db.collection("bookings").add(bookingData);
+    return await db.collection("bookings").add({...bookingData})
   } catch (error) {
     throw new functions.https.HttpsError("unknown", error);
   }
@@ -21,7 +21,9 @@ exports.updateBooking = functions.https.onCall(async (data, context) => {
       .collection("bookings")
       .doc(bookingId)
       .update({ ...bookingData });
-  } catch (error) {}
+  } catch (error) {
+    throw new functions.https.HttpsError("unknown", error)
+  }
 });
 
 exports.writeBookingFromStripeEvent = functions.firestore
