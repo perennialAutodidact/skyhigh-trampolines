@@ -145,3 +145,24 @@ export const getHeadCount = (room) =>
     (roomHeadCount, product) => roomHeadCount + product.quantity,
     0
   );
+
+/**
+ *
+ * @param {room[]} rooms Array of rooms from the database
+ * @param {addOn[]} addOns Array of addOns from the database
+ * @returns Sum of the total price of the booked rooms and selected addOns
+ */
+export const getOrderSubtotal = (rooms, addOns) =>
+  getBookedRooms(rooms).reduce(
+    (total, room) =>
+      total +
+      room.products.reduce(
+        (roomTotal, product) => roomTotal + product.totalPrice,
+        0
+      ),
+    0
+  ) +
+  getSelectedAddOns(addOns).reduce(
+    (total, addOn) => total + addOn.totalPrice,
+    0
+  );
