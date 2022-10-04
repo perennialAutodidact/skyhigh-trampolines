@@ -1,6 +1,7 @@
 import React, { useCallback, useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getRoomList } from "../../../redux/roomsSlice";
+import { createBooking } from "../../../redux/bookingsSlice";
 import { useNavigate } from "react-router-dom";
 import { BookingWizardContext } from "../context";
 import {
@@ -18,6 +19,7 @@ import StartTimeList from "./StartTimeList";
 import AccordionCollapse from "../common/Accordion/AccordionCollapse";
 import ProductList from "./ProductList";
 import AccordionItem from "../common/Accordion/AccordionItem";
+import { getBookedRooms } from "../context/utils";
 
 const Step2 = () => {
   const appDispatch = useDispatch();
@@ -45,6 +47,24 @@ const Step2 = () => {
     dispatch(updateForm({ rooms: state.formData.rooms }));
     dispatch(setProgressBarStep(3));
     navigate("/booking/step-3");
+
+
+    // appDispatch(
+    //   createBooking({
+    //     date: state.formData.date,
+    //     dateCreated: new Date(),
+    //     rooms: getBookedRooms(state.formData.rooms).map((room) => ({
+    //       id: room.id,
+    //       startTime: room.selectedStartTime,
+    //       products: room.products.map((product) => ({
+    //         id: product.id,
+    //         name: product.name,
+    //         quantity: product.quantity,
+    //         duration: product.duration,
+    //       })),
+    //     })),
+    //   })
+    // );
   };
 
   const goBack = () => {
@@ -54,12 +74,12 @@ const Step2 = () => {
 
   const roomDataIsValid = useCallback(
     () =>
-      state.formData.rooms.some(
+      state.rooms.some(
         (room) =>
           room.selectedStartTime &&
           room.products.some((product) => product.quantity > 0)
       ),
-    [state.formData.rooms]
+    [state.rooms]
   );
 
   useEffect(() => {
@@ -69,9 +89,11 @@ const Step2 = () => {
 
   useEffect(() => {
     if (!!rooms && roomsLoadingState === "idle") {
-      appDispatch(getRoomList()).unwrap().then((rooms) => {
-        dispatch(setInitialRoomState(rooms));
-      });
+      appDispatch(getRoomList())
+        .unwrap()
+        .then((rooms) => {
+          dispatch(setInitialRoomState(rooms));
+        });
     }
   }, [rooms, roomsLoadingState, appDispatch, dispatch]);
 
@@ -101,7 +123,7 @@ const Step2 = () => {
         <input type="hidden" {...register("productDataExists")} />
 
         <Accordion>
-          {state.formData.rooms.map((room, index) => (
+          {state.rooms.map((room, index) => (
             <AccordionItem item={room} headerText={room.name} key={room.id}>
               <AccordionCollapse collapseId={room.id}>
                 <StartTimeList room={room} />
@@ -118,10 +140,7 @@ const Step2 = () => {
           </p>
         )}
 
-        <FormNavButtons
-          goBack={goBack}
-          submitButtonText={"Next"}
-        />
+        <FormNavButtons goBack={goBack} submitButtonText={"Next"} />
       </form>
     </div>
   );

@@ -17,7 +17,6 @@ import Accordion from "../common/Accordion";
 import AccordionItem from "../common/Accordion/AccordionItem";
 import AccordionCollapse from "../common/Accordion/AccordionCollapse";
 import AddOnsList from "./AddOnsList";
-import { useCreateOrUpdateBooking } from "../../../hooks/useCreateOrUpdateBooking";
 
 const Step3 = () => {
   const navigate = useNavigate();
@@ -26,8 +25,6 @@ const Step3 = () => {
     (appState) => appState.addOns
   );
   const [state, dispatch] = useContext(BookingWizardContext);
-  const { formData } = state;
-  useCreateOrUpdateBooking(formData);
 
   const initialValues = {
     addOnsDataExists: false,
@@ -44,8 +41,8 @@ const Step3 = () => {
   });
 
   const addOnsDataIsValid = useCallback(
-    () => state.formData.addOns.some((addOn) => addOn.quantity > 0),
-    [state.formData.addOns]
+    () => state.addOns.some((addOn) => addOn.quantity > 0),
+    [state.addOns]
   );
 
   const onSubmit = (formData) => {
@@ -58,6 +55,21 @@ const Step3 = () => {
     navigate("/booking/step-2");
     dispatch(setProgressBarStep(2));
   };
+
+  // useCreateOrUpdateBooking({
+  //   date: formData.date,
+  //   dateCreated: new Date(),
+  //   rooms: getBookedRooms(formData.rooms).map((room) => ({
+  //     id: room.id,
+  //     startTime: room.selectedStartTime,
+  //     products: room.products.map((product) => ({
+  //       id: product.id,
+  //       name: product.name,
+  //       quantity: product.quantity,
+  //       duration: product.duration,
+  //     })),
+  //   })),
+  // });
 
   useEffect(() => {
     setValue("addOnsDataExists", addOnsDataIsValid());
@@ -102,14 +114,12 @@ const Step3 = () => {
             // organize addons into subcollections by category?
             item={{
               id: 1,
-              photo:
-                state.formData.addOns.length > 0 &&
-                state.formData.addOns[0].photo,
+              photo: state.addOns.length > 0 && state.addOns[0].photo,
             }}
             headerText={"Jump Socks"}
           >
             <AccordionCollapse collapseId={1}>
-              <AddOnsList addOns={state.formData.addOns} />
+              <AddOnsList addOns={state.addOns} />
             </AccordionCollapse>
           </AccordionItem>
         </Accordion>

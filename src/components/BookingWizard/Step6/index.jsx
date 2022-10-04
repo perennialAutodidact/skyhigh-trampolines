@@ -1,6 +1,9 @@
 import React, { useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { updatePaymentIntent } from "../../../redux/stripeSlice";
+import {
+  createPaymentIntent,
+  updatePaymentIntent,
+} from "../../../redux/stripeSlice";
 import { useCreateOrUpdateBooking } from "../../../hooks/useCreateOrUpdateBooking";
 import { useNavigate } from "react-router-dom";
 import { Elements } from "@stripe/react-stripe-js";
@@ -17,13 +20,11 @@ const Step6 = ({ stripe }) => {
   const navigate = useNavigate();
   const [state, dispatch] = useContext(BookingWizardContext);
   const { formData } = state;
-  const { grandTotal, tax } = formData;
+  const { grandTotal, tax, subTotal } = formData;
   const {
     paymentIntent: { clientSecret, id: paymentIntentId },
   } = useSelector((state) => state.stripe);
-  const {
-    bookingInProgress: { id: bookingId },
-  } = useCreateOrUpdateBooking(formData);
+  const { bookingInProgress } = useSelector((appState) => appState.bookings);
 
   const goBack = () => {
     navigate("/booking/step-5");
@@ -31,21 +32,36 @@ const Step6 = ({ stripe }) => {
   };
 
   useEffect(() => {
-    if (bookingId && tax && grandTotal && paymentIntentId) {
-      appDispatch(
-        updatePaymentIntent({
-          id: paymentIntentId,
-          data: {
-            amount: toMoney(grandTotal) * 100,
-            metadata: {
-              bookingId,
-              tax,
-            },
-          },
-        })
-      );
+    if (bookingInProgress) {
+      const paymentIntentData = {
+        amount: toMoney(grandTotal) * 100,
+        metadata: {
+          bookingId: bookingInProgress.id,
+          tax: toMoney(tax) * 100,
+          subTotal: toMoney(subTotal) * 100,
+        },
+      };
+      if (paymentIntentId) {
+        appDispatch(
+          updatePaymentIntent({
+            id: paymentIntentId,
+            paymentIntentData
+          })
+        );
+      } else {
+        appDispatch(
+          createPaymentIntent(paymentIntentData)
+        );
+      }
     }
-  }, [appDispatch, grandTotal, paymentIntentId, bookingId, tax]);
+  }, [
+    appDispatch,
+    grandTotal,
+    paymentIntentId,
+    bookingInProgress,
+    subTotal,
+    tax,
+  ]);
 
   if (!stripe || !clientSecret) {
     return (

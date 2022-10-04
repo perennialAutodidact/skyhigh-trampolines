@@ -39,8 +39,19 @@ const bookingsSlice = createSlice({
     loading: "idle",
     error: null,
     bookingInProgress: null,
+    bookingData: {},
   },
-  reducers: {},
+  reducers: {
+    updateBookingData: (state, action) => {
+      state.bookingData = {
+        ...state.bookingData,
+        ...action.payload,
+      };
+    },
+    clearBookingData: (state, action) => {
+      state.bookingData = {};
+    },
+  },
   extraReducers: {
     [createBooking.pending]: (state, action) => {
       state.loading = "pending";
@@ -48,7 +59,10 @@ const bookingsSlice = createSlice({
     },
     [createBooking.fulfilled]: (state, action) => {
       state.loading = "fulfilled";
-      state.bookingInProgress = action.payload;
+      console.log(action.payload.data)
+      state.bookingInProgress = {
+        id: action.payload.id
+      };
     },
     [createBooking.rejected]: (state, action) => {
       state.loading = "rejected";
@@ -56,5 +70,7 @@ const bookingsSlice = createSlice({
     },
   },
 });
+
+export const { updateBookingData, clearBookingData } = bookingsSlice.actions;
 
 export default bookingsSlice.reducer;
