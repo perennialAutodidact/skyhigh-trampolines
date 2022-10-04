@@ -45,12 +45,17 @@ export const setAddOnQuantity = (addOnId, quantity) => ({
   },
 });
 
-export const updateGrandTotal = (grandTotal) => ({
-  type: "UPDATE_GRAND_TOTAL",
-  payload: { grandTotal },
+export const updateSubtotal = (subTotal) => ({
+  type: "UPDATE_SUBTOTAL",
+  payload: { subTotal },
 });
 
 export const updateTax = (tax) => ({
   type: "UPDATE_TAX",
   payload: { tax },
+});
+
+export const updateGrandTotal = (grandTotal) => ({
+  type: "UPDATE_GRAND_TOTAL",
+  payload: { grandTotal },
 });

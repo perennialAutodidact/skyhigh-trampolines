@@ -29,13 +29,15 @@ export const initialState = {
       //   disabledStartTimes: ["9:00", "9:30", "16:00"]
       // }
     ],
-    grandTotal: 0,
+    subTotal: 0,
     tax: 0,
+    grandTotal: 0,
     SALES_TAX_RATE: 0.065,
     TRANSACTION_FEE: 400,
   },
   startTimes: getHalfHourIncrementStrings("9:00", "16:30"),
-  setFormValue: null, // function to set values in the BookingWizard
+  rooms: [],
+  addOns: []
 };
 
 export const BookingWizardContext = createContext(initialState);
