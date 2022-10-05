@@ -15,7 +15,7 @@ exports.cancelPaymentIntent = payments.cancelPaymentIntent;
 
 exports.handleStripeEvent = stripeConfig.handleStripeEvent;
 
-exports.writeBookingFromStripeEvent = bookings.writeBookingFromStripeEvent;
+exports.updateBookingFromStripeEvent = bookings.updateBookingFromStripeEvent;
 exports.createBooking = bookings.createBooking;
 exports.updateBooking = bookings.updateBooking;
 
