@@ -3,12 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { BookingWizardContext } from "../context";
 import { setProgressBarStep } from "../context/actions";
+import { httpsCallable } from "firebase/functions";
+import { functions } from "../../../firebase/client";
 import {
   getBookedRooms,
   getSelectedAddOns,
   toMoney,
-  getRoomsPaymentData,
-  getAddOnsPaymentData,
   getHeadCount,
 } from "../context/utils";
 import { Elements } from "@stripe/react-stripe-js";
@@ -112,6 +112,33 @@ const Step6 = ({ stripe }) => {
       </div>
     );
   }
+
+  const orderHistory = [
+    { item: "Cloud Jumper", amount: 3, price: 100, bookingTime: "12:00" },
+    { item: "Jump Socks (medium)", amount: 2, price: 7.98 },
+  ];
+
+  const handleMail = () => {
+    console.log("calling mail function");
+    //send mail with firebase functions
+    const sendMail = httpsCallable(functions, "sendEmail");
+    sendMail({
+      to: "perennialautodidact@gmail.com",
+      orderHistory,
+      subject: "Sky High Order History for Dacen Jones",
+      name: "Dacen Jones",
+      text: "Here is your order history",
+      bookingDate: "October 12, 2022.",
+      idNumber: "123456789",
+      currentDate: "September 30, 2022.",
+      subtotal: 100,
+      fee: 10,
+      tax: 10,
+      total: 120,
+    })
+      .then((result) => console.log(result.data))
+      .catch((error) => console.log(error.message));
+  };
 
   return (
     <div className="container pt-3">
