@@ -6,6 +6,9 @@ import {
   productsCollection,
 } from "../firebase/client";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { createThunkCondition } from "./utils";
+
+const thunkCondition = createThunkCondition("rooms");
 
 export const createRoom = createAsyncThunk(
   "rooms/create",
@@ -26,27 +29,25 @@ export const createRoom = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error);
     }
-  }
+  },
+  thunkCondition
 );
 
-// const getRoomProducts = async (roomId) => {
-//   const productsQuery = query(
-//     productsCollection,
-//     where("room", "==", roomId)
-//   );
-  
-//   const products = await getDocs(productsQuery).then((productDocs) => {
-//     let productData = [];
-    
-//     productDocs.forEach((productDoc) => {
-//       productData.push({ ...productDoc.data(), id: productDoc.id });
-//     });
-    
-//     return productData;
-//   });
+const getRoomProducts = async (roomId) => {
+  const productsQuery = query(productsCollection, where("room", "==", roomId));
 
-//   return products
-// }
+  const products = await getDocs(productsQuery).then((productDocs) => {
+    let productData = [];
+
+    productDocs.forEach((productDoc) => {
+      productData.push({ ...productDoc.data(), id: productDoc.id });
+    });
+
+    return productData;
+  });
+
+  return products;
+};
 
 export const getRoomList = createAsyncThunk(
   "rooms/getRoomList",
@@ -60,29 +61,20 @@ export const getRoomList = createAsyncThunk(
         return roomData;
       });
 
-      // rooms = rooms.map(async room=>{
-      //   let products = await getRoomProducts(room.id)
+      rooms = await Promise.all(
+        rooms.map(async (room) => {
+          let products = await getRoomProducts(room.id);
 
-      //   return {...room, products}
+          return { ...room, products };
+        })
+      );
 
-      // })
-
-      return fulfillWithValue(rooms)
-
+      return fulfillWithValue(rooms);
     } catch (error) {
       return rejectWithValue(error);
     }
   },
-  {
-    condition: (_, { getState, extra }) => {
-      const { rooms } = getState();
-      const fetchStatus = rooms.loading;
-      if (fetchStatus === "fulfilled" || fetchStatus === "pending") {
-        // Already fetched or in progress, don't need to re-fetch
-        return false;
-      }
-    },
-  }
+  thunkCondition
 );
 
 const roomsSlice = createSlice({
@@ -96,21 +88,21 @@ const roomsSlice = createSlice({
       state.loading = "pending";
     },
     [createRoom.fulfilled]: (state, action) => {
-      state.loading = "succeeded";
+      state.loading = "fulfilled";
     },
     [createRoom.rejected]: (state, action) => {
-      state.loading = "failed";
+      state.loading = "rejected";
     },
 
     [getRoomList.pending]: (state, action) => {
       state.loading = "pending";
     },
     [getRoomList.fulfilled]: (state, action) => {
-      state.loading = "succeeded";
+      state.loading = "fulfilled";
       state.rooms = action.payload;
     },
     [getRoomList.rejected]: (state, action) => {
-      state.loading = "failed";
+      state.loading = "rejected";
       console.log(action.error);
     },
   },

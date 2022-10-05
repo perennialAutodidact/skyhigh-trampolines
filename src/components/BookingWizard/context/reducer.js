@@ -1,15 +1,28 @@
-import { formatPercent, createInitialRoomState } from "./utils";
+import {
+  formatPercent,
+  createInitialRoomState,
+  createInitialAddOnState,
+} from "./utils";
 
 export const wizardReducer = (state, action) => {
-  const { rooms, roomId, productId, selectedStartTime, quantity } =
-    action.payload;
-    
+  const {
+    rooms,
+    roomId,
+    productId,
+    selectedStartTime,
+    quantity,
+    addOns,
+    addOnId,
+    grandTotal,
+  } = action.payload;
+
+  const { formData } = state;
   switch (action.type) {
     case "UPDATE_FORM":
       return {
         ...state,
         formData: {
-          ...state.formData,
+          ...formData,
           ...action.payload,
         },
       };
@@ -27,7 +40,7 @@ export const wizardReducer = (state, action) => {
       return {
         ...state,
         formData: {
-          ...state.formData,
+          ...formData,
           rooms: createInitialRoomState(rooms),
         },
       };
@@ -37,8 +50,8 @@ export const wizardReducer = (state, action) => {
       return {
         ...state,
         formData: {
-          ...state.formData,
-          rooms: state.formData.rooms.map((room) =>
+          ...formData,
+          rooms: formData.rooms.map((room) =>
             room.id !== roomId
               ? room
               : {
@@ -54,8 +67,8 @@ export const wizardReducer = (state, action) => {
       return {
         ...state,
         formData: {
-          ...state.formData,
-          rooms: state.formData.rooms.map((room) =>
+          ...formData,
+          rooms: formData.rooms.map((room) =>
             room.id !== roomId
               ? room
               : {
@@ -72,6 +85,34 @@ export const wizardReducer = (state, action) => {
           ),
         },
       };
+
+    // adds add on quantities to each add on
+    case "SET_INITIAL_ADDON_STATE":
+      return {
+        ...state,
+        formData: {
+          ...formData,
+          addOns: createInitialAddOnState(addOns),
+        },
+      };
+
+    case "SET_ADDON_QUANTITY":
+      return {
+        ...state,
+        formData: {
+          ...formData,
+          addOns: formData.addOns.map((addOn) =>
+            addOn.id !== addOnId ? addOn : { ...addOn, quantity }
+          ),
+        },
+      };
+
+    case "UPDATE_GRAND_TOTAL":
+      return {
+        ...state,
+        grandTotal,
+      };
+
     default:
       return state;
   }

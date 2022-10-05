@@ -13,7 +13,7 @@ const Step1 = () => {
   const [state, dispatch] = useContext(BookingWizardContext);
 
   const initialValues = {
-    date: state.formData.date
+    date: state.formData.date,
   };
   const {
     register,
@@ -32,10 +32,14 @@ const Step1 = () => {
   };
 
   const setDate = (date) => {
-    setValue('date', date)
-    dispatch(updateForm({date}))
-  }
-  
+    setValue("date", date);
+    dispatch(updateForm({ date }));
+  };
+
+  const goBack = () => {
+    navigate("/");
+    dispatch(setProgressBarStep(1));
+  };
   return (
     <div className="container pt-3">
       <form onSubmit={handleSubmit(onSubmit)} className="container text-start">
@@ -45,7 +49,11 @@ const Step1 = () => {
             <label htmlFor="date" className="form-label p-0 d-flex gap-1">
               <h3>Select Date</h3> <span className="text-danger">*</span>
             </label>
-            <input type="hidden" {...register('date')} value={initialValues.date}/>
+            <input
+              type="hidden"
+              {...register("date")}
+              value={initialValues.date}
+            />
             <CalendarDatePicker setFormDate={setDate} />
             {errors.date && (
               <p className="text-danger">{errors.date.message}</p>
@@ -53,7 +61,7 @@ const Step1 = () => {
           </div>
         </div>
 
-        <FormNavButtons backHref={"/"} submitButtonText={"Next"} />
+        <FormNavButtons goBack={goBack} submitButtonText={"Next"} />
       </form>
     </div>
   );
