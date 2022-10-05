@@ -1,13 +1,18 @@
-import React, { useCallback, useContext, useEffect } from "react";
+import React, { useCallback, useMemo, useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getRoomList } from "../../../redux/roomsSlice";
-import { createBooking } from "../../../redux/bookingsSlice";
+import {
+  clearBookingData,
+  createBooking,
+  updateBooking,
+} from "../../../redux/bookingsSlice";
 import { useNavigate } from "react-router-dom";
 import { BookingWizardContext } from "../context";
 import {
   updateForm,
   setProgressBarStep,
   setInitialRoomState,
+  updateBookedRooms,
 } from "../context/actions";
 import { step2Schema } from "../context/schema";
 import { useForm } from "react-hook-form";
@@ -26,6 +31,9 @@ const Step2 = () => {
   const { rooms, loading: roomsLoadingState } = useSelector(
     (appState) => appState.rooms
   );
+  const { bookingInProgress, loading: bookingLoading } = useSelector(
+    (appState) => appState.bookings
+  );
   const navigate = useNavigate();
   const [state, dispatch] = useContext(BookingWizardContext);
 
@@ -43,28 +51,37 @@ const Step2 = () => {
     resolver: yupResolver(step2Schema),
   });
 
+  const bookingData = useMemo(
+    () => ({
+      rooms: getBookedRooms(state.rooms).map((room) => ({
+        id: room.id,
+        startTime: room.selectedStartTime,
+        products: room.products.map((product) => ({
+          id: product.id,
+          name: product.name,
+          quantity: product.quantity,
+          duration: product.duration,
+        })),
+      })),
+    }),
+    [state.rooms]
+  );
+  const createOrUpdateBooking = useCallback(() => {
+    if (!bookingInProgress && bookingLoading === "idle") {
+      appDispatch(createBooking(bookingData));
+    } else if (bookingInProgress && bookingLoading === "fulfilled") {
+      console.log("updating");
+      appDispatch(
+        updateBooking({ bookingId: bookingInProgress.id, bookingData })
+      );
+    }
+  }, [bookingInProgress, bookingLoading, bookingData, appDispatch]);
+
   const onSubmit = (formData) => {
-    dispatch(updateForm({ rooms: state.formData.rooms }));
+    dispatch(updateForm({ rooms: state.rooms }));
     dispatch(setProgressBarStep(3));
     navigate("/booking/step-3");
-
-
-    // appDispatch(
-    //   createBooking({
-    //     date: state.formData.date,
-    //     dateCreated: new Date(),
-    //     rooms: getBookedRooms(state.formData.rooms).map((room) => ({
-    //       id: room.id,
-    //       startTime: room.selectedStartTime,
-    //       products: room.products.map((product) => ({
-    //         id: product.id,
-    //         name: product.name,
-    //         quantity: product.quantity,
-    //         duration: product.duration,
-    //       })),
-    //     })),
-    //   })
-    // );
+    createOrUpdateBooking(bookingData);
   };
 
   const goBack = () => {
@@ -81,6 +98,12 @@ const Step2 = () => {
       ),
     [state.rooms]
   );
+
+  //   useEffect(() => {
+  //     if (bookingData) {
+  //       appDispatch(clearBookingData());
+  //     }
+  //   }, [bookingData]);
 
   useEffect(() => {
     setValue("productDataExists", roomDataIsValid());

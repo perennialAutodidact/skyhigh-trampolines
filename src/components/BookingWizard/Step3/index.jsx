@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useCallback } from "react";
+import dayjs from "dayjs";
 import { useDispatch, useSelector } from "react-redux";
 import { getAddOnsList } from "../../../redux/addOnsSlice";
 import { useNavigate } from "react-router-dom";
@@ -17,6 +18,11 @@ import Accordion from "../common/Accordion";
 import AccordionItem from "../common/Accordion/AccordionItem";
 import AccordionCollapse from "../common/Accordion/AccordionCollapse";
 import AddOnsList from "./AddOnsList";
+import {
+  createBooking,
+  updateBooking,
+  updateBookingData,
+} from "../../../redux/bookingsSlice";
 
 const Step3 = () => {
   const navigate = useNavigate();
@@ -24,8 +30,11 @@ const Step3 = () => {
   const { addOns, loading: addOnsLoadingState } = useSelector(
     (appState) => appState.addOns
   );
+  const { bookingData, bookingInProgress } = useSelector(
+    (appState) => appState.bookings
+  );
   const [state, dispatch] = useContext(BookingWizardContext);
-
+  const { formData } = state;
   const initialValues = {
     addOnsDataExists: false,
   };
@@ -56,20 +65,37 @@ const Step3 = () => {
     dispatch(setProgressBarStep(2));
   };
 
-  // useCreateOrUpdateBooking({
-  //   date: formData.date,
-  //   dateCreated: new Date(),
-  //   rooms: getBookedRooms(formData.rooms).map((room) => ({
-  //     id: room.id,
-  //     startTime: room.selectedStartTime,
-  //     products: room.products.map((product) => ({
-  //       id: product.id,
-  //       name: product.name,
-  //       quantity: product.quantity,
-  //       duration: product.duration,
-  //     })),
-  //   })),
-  // });
+  //   useEffect(() => {
+  //     if (!bookingData ) {
+  //       appDispatch(
+  //         updateBookingData({
+  //           date: formData.date,
+  //           rooms: formData.bookedRooms.map((room) => ({
+  //             id: room.id,
+  //             startTime: room.selectedStartTime,
+  //             products: room.products.map((product) => ({
+  //               id: product.id,
+  //               name: product.name,
+  //               quantity: product.quantity,
+  //               duration: product.duration,
+  //             })),
+  //           })),
+  //         })
+  //       );
+  //     }
+  //   }, [appDispatch, bookingData, formData, bookingInProgress]);
+
+  useEffect(() => {
+    if (bookingData) {
+      if (!bookingInProgress) {
+        appDispatch(createBooking(bookingData));
+      } else {
+        appDispatch(
+          updateBooking({ bookingId: bookingInProgress.id, bookingData })
+        );
+      }
+    }
+  }, [appDispatch, bookingData, bookingInProgress]);
 
   useEffect(() => {
     setValue("addOnsDataExists", addOnsDataIsValid());

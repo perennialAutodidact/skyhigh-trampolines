@@ -4,7 +4,6 @@ import {
   createPaymentIntent,
   updatePaymentIntent,
 } from "../../../redux/stripeSlice";
-import { useCreateOrUpdateBooking } from "../../../hooks/useCreateOrUpdateBooking";
 import { useNavigate } from "react-router-dom";
 import { Elements } from "@stripe/react-stripe-js";
 import { toMoney } from "../context/utils";
@@ -45,13 +44,11 @@ const Step6 = ({ stripe }) => {
         appDispatch(
           updatePaymentIntent({
             id: paymentIntentId,
-            paymentIntentData
+            paymentIntentData,
           })
         );
       } else {
-        appDispatch(
-          createPaymentIntent(paymentIntentData)
-        );
+        appDispatch(createPaymentIntent(paymentIntentData));
       }
     }
   }, [

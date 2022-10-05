@@ -11,7 +11,9 @@ export const createBooking = createAsyncThunk(
     const callCreateBooking = httpsCallable(functions, "createBooking");
 
     try {
-      return await callCreateBooking(bookingData);
+      const booking = await callCreateBooking(bookingData);
+      console.log("booking", booking.data.bookingId);
+      return booking;
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -23,6 +25,7 @@ export const updateBooking = createAsyncThunk(
   "bookings/updateBooking",
   async ({ bookingData, bookingId }, { rejectWithValue }) => {
     const callUpdateBooking = httpsCallable(functions, "updateBooking");
+    console.log("updating booking");
     try {
       return await callUpdateBooking({ bookingData, bookingId });
     } catch (error) {
@@ -39,7 +42,7 @@ const bookingsSlice = createSlice({
     loading: "idle",
     error: null,
     bookingInProgress: null,
-    bookingData: {},
+    bookingData: null,
   },
   reducers: {
     updateBookingData: (state, action) => {
@@ -49,24 +52,37 @@ const bookingsSlice = createSlice({
       };
     },
     clearBookingData: (state, action) => {
-      state.bookingData = {};
+      state.bookingData = null;
     },
   },
   extraReducers: {
     [createBooking.pending]: (state, action) => {
       state.loading = "pending";
-      state.error = null;
     },
     [createBooking.fulfilled]: (state, action) => {
       state.loading = "fulfilled";
-      console.log(action.payload.data)
       state.bookingInProgress = {
-        id: action.payload.id
+        id: action.payload.data.bookingId,
       };
+      state.bookingData = null;
     },
     [createBooking.rejected]: (state, action) => {
       state.loading = "rejected";
-      state.error = action.payload;
+      state.bookingData = null;
+      state.error = action.payload.error;
+    },
+
+    [updateBooking.pending]: (state, action) => {
+      state.loading = "pending";
+    },
+    [updateBooking.fulfilled]: (state, action) => {
+      state.loading = "fulfilled";
+      state.bookingData = null;
+    },
+    [updateBooking.rejected]: (state, action) => {
+      state.loading = "rejected";
+      state.bookingData = null;
+      state.error = action.payload.error;
     },
   },
 });

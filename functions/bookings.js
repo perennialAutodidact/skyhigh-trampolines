@@ -8,7 +8,8 @@ const db = admin.firestore();
 
 exports.createBooking = functions.https.onCall(async (bookingData, context) => {
   try {
-    return await db.collection("bookings").add({...bookingData})
+    const res = await db.collection("bookings").add({ ...bookingData });
+    return { bookingId: res.id };
   } catch (error) {
     throw new functions.https.HttpsError("unknown", error);
   }
@@ -16,13 +17,16 @@ exports.createBooking = functions.https.onCall(async (bookingData, context) => {
 
 exports.updateBooking = functions.https.onCall(async (data, context) => {
   const { bookingData, bookingId } = data;
+  console.log(bookingId, bookingData);
   try {
-    return await db
+    const res = await db
       .collection("bookings")
       .doc(bookingId)
       .update({ ...bookingData });
+
+    return { message: "updated" };
   } catch (error) {
-    throw new functions.https.HttpsError("unknown", error)
+    throw new functions.https.HttpsError("unknown", error);
   }
 });
 

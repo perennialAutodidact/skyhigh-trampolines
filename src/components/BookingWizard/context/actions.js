@@ -20,6 +20,16 @@ export const setInitialAddOnState = (addOns) => ({
   payload: { addOns },
 });
 
+export const updateBookedRooms = (bookedRooms) => ({
+  type: "UPDATE_BOOKED_ROOMS",
+  payload: { bookedRooms },
+});
+
+export const updateSelectedAddOns = (selectedAddOns) => ({
+  type: "UPDATED_SELECTED_ADDONS",
+  payload: { selectedAddOns },
+});
+
 export const setSelectedStartTime = (roomId, selectedStartTime) => ({
   type: "SET_SELECTED_START_TIME",
   payload: {

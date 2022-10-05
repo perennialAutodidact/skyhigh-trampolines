@@ -10,6 +10,8 @@ export const wizardReducer = (state, action) => {
     roomId,
     productId,
     selectedStartTime,
+    selectedAddOns,
+    bookedRooms,
     quantity,
     addOns,
     addOnId,
@@ -84,6 +86,24 @@ export const wizardReducer = (state, action) => {
       return {
         ...state,
         addOns: createInitialAddOnState(addOns),
+      };
+
+    case "UPDATE_BOOKED_ROOMS":
+      return {
+        ...state,
+        formData: {
+          ...formData,
+          bookedRooms,
+        },
+      };
+
+    case "UPDATE_SELECTED_ADDONS":
+      return {
+        ...state,
+        formData: {
+          ...formData,
+          selectedAddOns,
+        },
       };
 
     case "SET_ADDON_QUANTITY":

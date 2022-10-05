@@ -10,25 +10,11 @@ export const initialState = {
     date: dayjs().format("YYYY-MM-DD"),
     waiverAgreed: false,
     signatureImageData: "",
-    addOns: [],
+    selectedAddOns: [],
     fullName: "George Harrison",
     email: "iamthewalrus@abbeyroad.com",
     address: "123 Faux St.",
-    rooms: [
-      // populate once room data is loaded
-      // {
-      //   id: 283748937,
-      //   products: [
-      //     {
-      //       id: 9989898,
-      //       name: 'Product 1',
-      //       quantity: 0
-      //     }
-      //   ],
-      //   selectedStartTime: "",
-      //   disabledStartTimes: ["9:00", "9:30", "16:00"]
-      // }
-    ],
+    bookedRooms: [],
     subTotal: 0,
     tax: 0,
     grandTotal: 0,
@@ -36,8 +22,22 @@ export const initialState = {
     TRANSACTION_FEE: 400,
   },
   startTimes: getHalfHourIncrementStrings("9:00", "16:30"),
-  rooms: [],
-  addOns: []
+  rooms: [
+    // populate once room data is loaded
+    // {
+    //   id: 283748937,
+    //   products: [
+    //     {
+    //       id: 9989898,
+    //       name: 'Product 1',
+    //       quantity: 0
+    //     }
+    //   ],
+    //   selectedStartTime: "",
+    //   disabledStartTimes: ["9:00", "9:30", "16:00"]
+    // }
+  ],
+  addOns: [],
 };
 
 export const BookingWizardContext = createContext(initialState);
