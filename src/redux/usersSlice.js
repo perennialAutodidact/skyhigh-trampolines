@@ -8,14 +8,14 @@ import { db } from '../firebase/client'
 export const getUsers = createAsyncThunk(
   // This is the action type, more info: https://redux-toolkit.js.org/api/createAsyncThunk#type
   'users/getUsers',
-  async (dispatch, getState) => {
+  async (arg, {dispatch, getState}) => {
     // This is the payload creator, it must be a callback function that should return a promise
     // containing the result of some asynchronous logic. It may also return a value synchronously.
     // More info: https://redux-toolkit.js.org/api/createAsyncThunk#payloadcreator
 
     // createAsyncThunk returns a standard Redux thunk action creator which then is handled on the extraReducers field of the slice.
     // More info: https://redux-toolkit.js.org/api/createAsyncThunk#return-value
-    return await fetch('https://jsonplaceholder.typicode.com/users').then(
+    return await fetch('https://jsonplaceholder.typicode.com/users/${userId}').then(
       (res) => res.json()
     )
   }
