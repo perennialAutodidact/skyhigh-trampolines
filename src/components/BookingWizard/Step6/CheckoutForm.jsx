@@ -13,13 +13,20 @@ import { getSelectedAddOns } from "../context/utils";
 const CheckoutForm = ({ goBack }) => {
   const stripe = useStripe();
   const elements = useElements();
-
+  const appDispatch = useDispatch();
   const [wizardState, wizardDispatch] = useContext(BookingWizardContext);
-  const { addOns, signatureImageData, fullName, email, address } = wizardState;
+  const { addOns, formData } = wizardState;
+  const { signatureImageData, fullName, email, address } = formData;
+  const {
+    bookingInProgress: { id: bookingId },
+  } = useSelector((appState) => appState.bookings);
 
   const bookingData = useMemo(
     () => ({
-      addOns: getSelectedAddOns(addOns),
+      addOns: getSelectedAddOns(addOns).map((addOn) => {
+        const { id, name, quantity, price, totalPrice } = addOn;
+        return { id, name, quantity, price, totalPrice };
+      }),
       waiverSignature: signatureImageData,
       customer: {
         fullName,
@@ -40,6 +47,10 @@ const CheckoutForm = ({ goBack }) => {
 
     if (result.error) {
       console.log(result.error);
+    } else {
+      appDispatch(updateBooking({ bookingId, bookingData }));
+      // dispatch email thunk
+      // redirect to thank you page
     }
   };
   //   if (!elements || !stripe) {

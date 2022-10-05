@@ -37,8 +37,8 @@ const Step6 = ({ stripe }) => {
         amount: toMoney(grandTotal) * 100,
         metadata: {
           bookingId: bookingInProgress.id,
-          tax: toMoney(tax) * 100,
-          subTotal: toMoney(subTotal) * 100,
+          tax: (toMoney(tax) * 100).toFixed(0),
+          subTotal: (toMoney(subTotal) * 100).toFixed(0),
         },
       };
       if (paymentIntentId) {
