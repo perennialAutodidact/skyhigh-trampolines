@@ -61,6 +61,8 @@ const Step2 = () => {
           name: product.name,
           quantity: product.quantity,
           duration: product.duration,
+          price: product.price,
+          totalPrice: product.totalPrice
         })),
       })),
     }),
@@ -70,7 +72,6 @@ const Step2 = () => {
     if (!bookingInProgress && bookingLoading === "idle") {
       appDispatch(createBooking(bookingData));
     } else if (bookingInProgress && bookingLoading === "fulfilled") {
-      console.log("updating");
       appDispatch(
         updateBooking({ bookingId: bookingInProgress.id, bookingData })
       );
