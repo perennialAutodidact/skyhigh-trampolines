@@ -48,7 +48,7 @@ const CheckoutForm = ({ goBack }) => {
     if (result.error) {
       console.log(result.error);
     } else {
-      appDispatch(updateBooking({ bookingId, bookingData }));
+      appDispatch(updateBooking({ bookingId, ...bookingData }));
       // dispatch email thunk
       // redirect to thank you page
     }

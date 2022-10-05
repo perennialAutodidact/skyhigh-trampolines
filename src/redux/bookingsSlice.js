@@ -23,10 +23,10 @@ export const createBooking = createAsyncThunk(
 
 export const updateBooking = createAsyncThunk(
   "bookings/updateBooking",
-  async ({ bookingData, bookingId }, { rejectWithValue }) => {
+  async (bookingData, { rejectWithValue }) => {
     const callUpdateBooking = httpsCallable(functions, "updateBooking");
     try {
-      return await callUpdateBooking({ bookingData, bookingId });
+      return await callUpdateBooking(bookingData);
     } catch (error) {
       return rejectWithValue(error);
     }

@@ -73,7 +73,7 @@ const Step2 = () => {
       appDispatch(createBooking(bookingData));
     } else if (bookingInProgress && bookingLoading === "fulfilled") {
       appDispatch(
-        updateBooking({ bookingId: bookingInProgress.id, bookingData })
+        updateBooking({ bookingId: bookingInProgress.id, ...bookingData })
       );
     }
   }, [bookingInProgress, bookingLoading, bookingData, appDispatch]);
