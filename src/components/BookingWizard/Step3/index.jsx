@@ -30,11 +30,7 @@ const Step3 = () => {
   const { addOns, loading: addOnsLoadingState } = useSelector(
     (appState) => appState.addOns
   );
-  const { bookingData, bookingInProgress } = useSelector(
-    (appState) => appState.bookings
-  );
   const [state, dispatch] = useContext(BookingWizardContext);
-  const { formData } = state;
   const initialValues = {
     addOnsDataExists: false,
   };
@@ -64,39 +60,7 @@ const Step3 = () => {
     navigate("/booking/step-2");
     dispatch(setProgressBarStep(2));
   };
-
-  //   useEffect(() => {
-  //     if (!bookingData ) {
-  //       appDispatch(
-  //         updateBookingData({
-  //           date: formData.date,
-  //           rooms: formData.bookedRooms.map((room) => ({
-  //             id: room.id,
-  //             startTime: room.selectedStartTime,
-  //             products: room.products.map((product) => ({
-  //               id: product.id,
-  //               name: product.name,
-  //               quantity: product.quantity,
-  //               duration: product.duration,
-  //             })),
-  //           })),
-  //         })
-  //       );
-  //     }
-  //   }, [appDispatch, bookingData, formData, bookingInProgress]);
-
-  useEffect(() => {
-    if (bookingData) {
-      if (!bookingInProgress) {
-        appDispatch(createBooking(bookingData));
-      } else {
-        appDispatch(
-          updateBooking({ bookingId: bookingInProgress.id, bookingData })
-        );
-      }
-    }
-  }, [appDispatch, bookingData, bookingInProgress]);
-
+  
   useEffect(() => {
     setValue("addOnsDataExists", addOnsDataIsValid());
     clearErrors();
