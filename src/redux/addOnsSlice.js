@@ -57,7 +57,6 @@ const addOnsSlice = createSlice({
   extraReducers: {
     [createAddOn.pending]: (state, action) => {
       state.loading = "pending";
-      state.error = null;
     },
     [createAddOn.fulfilled]: (state, action) => {
       state.loading = "fulfilled";
@@ -69,7 +68,6 @@ const addOnsSlice = createSlice({
 
     [getAddOnsList.pending]: (state, action) => {
       state.loading = "pending";
-      state.error = null;
     },
     [getAddOnsList.fulfilled]: (state, action) => {
       state.loading = "fulfilled";

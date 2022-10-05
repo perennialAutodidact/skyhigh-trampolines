@@ -87,7 +87,6 @@ const roomsSlice = createSlice({
   extraReducers: {
     [createRoom.pending]: (state, action) => {
       state.loading = "pending";
-      state.error = null;
     },
     [createRoom.fulfilled]: (state, action) => {
       state.loading = "fulfilled";
@@ -99,7 +98,6 @@ const roomsSlice = createSlice({
 
     [getRoomList.pending]: (state, action) => {
       state.loading = "pending";
-      state.error = null;
     },
     [getRoomList.fulfilled]: (state, action) => {
       state.loading = "fulfilled";

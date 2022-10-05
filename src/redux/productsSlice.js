@@ -59,7 +59,6 @@ const productSlice = createSlice({
   extraReducers: {
     [createProduct.pending]: (state, action) => {
       state.loading = "pending";
-      state.error = null;
     },
     [createProduct.fulfilled]: (state, action) => {
       state.loading = "fulfilled";
@@ -72,7 +71,6 @@ const productSlice = createSlice({
     // fetch products
     [fetchProducts.pending]: (state, action) => {
       state.loading = "pending";
-      state.error = null;
     },
     [fetchProducts.fulfilled]: (state, action) => {
       state.loading = "fulfilled";

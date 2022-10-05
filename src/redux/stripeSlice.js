@@ -72,7 +72,6 @@ export const stripeSlice = createSlice({
   extraReducers: {
     [createPaymentIntent.pending]: (state, action) => {
       state.loading = "pending";
-      state.error = null;
     },
     [createPaymentIntent.fulfilled]: (state, action) => {
       state.loading = "fulfilled";
@@ -90,7 +89,6 @@ export const stripeSlice = createSlice({
 
     [cancelPaymentIntent.pending]: (state, action) => {
       state.loading = "pending";
-      state.error = null;
     },
     [cancelPaymentIntent.fulfilled]: (state, action) => {
       state.loading = "fulfilled";
