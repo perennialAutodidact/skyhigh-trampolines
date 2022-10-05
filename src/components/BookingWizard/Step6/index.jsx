@@ -7,10 +7,11 @@ import {
 import { useNavigate } from "react-router-dom";
 import { Elements } from "@stripe/react-stripe-js";
 import { toMoney } from "../context/utils";
-
 import { BookingWizardContext } from "../context";
 import { setProgressBarStep } from "../context/actions";
 import styles from "./CheckoutForm.module.scss";
+import { httpsCallable } from "firebase/functions";
+import { functions } from "../../../firebase/client";
 import LoadingSpinner from "../../LoadingSpinner";
 import CheckoutForm from "./CheckoutForm";
 
@@ -67,6 +68,33 @@ const Step6 = ({ stripe }) => {
       </div>
     );
   }
+
+  const orderHistory = [
+    { item: "Cloud Jumper", amount: 3, price: 100, bookingTime: "12:00" },
+    { item: "Jump Socks (medium)", amount: 2, price: 7.98 },
+  ];
+
+  const handleMail = () => {
+    console.log("calling mail function");
+    //send mail with firebase functions
+    const sendMail = httpsCallable(functions, "sendEmail");
+    sendMail({
+      to: "perennialautodidact@gmail.com",
+      orderHistory,
+      subject: "Sky High Order History for Dacen Jones",
+      name: "Dacen Jones",
+      text: "Here is your order history",
+      bookingDate: "October 12, 2022.",
+      idNumber: "123456789",
+      currentDate: "September 30, 2022.",
+      subtotal: 100,
+      fee: 10,
+      tax: 10,
+      total: 120,
+    })
+      .then((result) => console.log(result.data))
+      .catch((error) => console.log(error.message));
+  };
 
   return (
     <div className="container pt-3">
