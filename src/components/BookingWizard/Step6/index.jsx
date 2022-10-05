@@ -142,16 +142,6 @@ const Step6 = ({ stripe }) => {
 
   return (
     <div className="container pt-3">
-        <div className="row my-3 align-items-end">
-         
-            <button
-              type="submit"
-              className="btn btn-primary w-100 mt-2"
-              onClick={handleMail}
-            >
-              Send mail
-            </button>
-          </div>
       <h3 className="mb-3">Checkout</h3>
       <Elements
         stripe={stripe}
@@ -163,7 +153,7 @@ const Step6 = ({ stripe }) => {
             },
           },
         }}
-        >
+      >
         <CheckoutForm goBack={goBack} />
       </Elements>
     </div>
