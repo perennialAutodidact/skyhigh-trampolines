@@ -35,7 +35,7 @@ const Step2 = () => {
     (appState) => appState.bookings
   );
   const navigate = useNavigate();
-  const [state, dispatch] = useContext(BookingWizardContext);
+  const [wizardState, wizardDispatch] = useContext(BookingWizardContext);
 
   const initialValues = {
     productDataExists: false,
@@ -53,7 +53,7 @@ const Step2 = () => {
 
   const bookingData = useMemo(
     () => ({
-      rooms: getBookedRooms(state.rooms).map((room) => ({
+      rooms: getBookedRooms(wizardState.rooms).map((room) => ({
         id: room.id,
         startTime: room.selectedStartTime,
         products: room.products.map((product) => ({
@@ -66,7 +66,7 @@ const Step2 = () => {
         })),
       })),
     }),
-    [state.rooms]
+    [wizardState.rooms]
   );
   const createOrUpdateBooking = useCallback(() => {
     if (!bookingInProgress && bookingLoading === "idle") {
@@ -79,25 +79,25 @@ const Step2 = () => {
   }, [bookingInProgress, bookingLoading, bookingData, appDispatch]);
 
   const onSubmit = (formData) => {
-    dispatch(updateForm({ rooms: state.rooms }));
-    dispatch(setProgressBarStep(3));
+    wizardDispatch(updateForm({ rooms: wizardState.rooms }));
+    wizardDispatch(setProgressBarStep(3));
     navigate("/booking/step-3");
     createOrUpdateBooking(bookingData);
   };
 
   const goBack = () => {
     navigate("/booking");
-    dispatch(setProgressBarStep(1));
+    wizardDispatch(setProgressBarStep(1));
   };
 
   const roomDataIsValid = useCallback(
     () =>
-      state.rooms.some(
+      wizardState.rooms.some(
         (room) =>
           room.selectedStartTime &&
           room.products.some((product) => product.quantity > 0)
       ),
-    [state.rooms]
+    [wizardState.rooms]
   );
 
   //   useEffect(() => {
@@ -116,10 +116,10 @@ const Step2 = () => {
       appDispatch(getRoomList())
         .unwrap()
         .then((rooms) => {
-          dispatch(setInitialRoomState(rooms));
+          wizardDispatch(setInitialRoomState(rooms));
         });
     }
-  }, [rooms, roomsLoadingState, appDispatch, dispatch]);
+  }, [rooms, roomsLoadingState, appDispatch, wizardDispatch]);
 
   if (roomsLoadingState === "pending") {
     return (
@@ -147,7 +147,7 @@ const Step2 = () => {
         <input type="hidden" {...register("productDataExists")} />
 
         <Accordion>
-          {state.rooms.map((room, index) => (
+          {wizardState.rooms.map((room, index) => (
             <AccordionItem item={room} headerText={room.name} key={room.id}>
               <AccordionCollapse collapseId={room.id}>
                 <StartTimeList room={room} />
