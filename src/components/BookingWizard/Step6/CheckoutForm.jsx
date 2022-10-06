@@ -4,6 +4,7 @@ import {
   useStripe,
   PaymentElement,
 } from "@stripe/react-stripe-js";
+import { useNavigate } from "react-router-dom";
 import FormNavButtons from "../common/FormNavButtons";
 import LoadingSpinner from "../../LoadingSpinner";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,6 +12,7 @@ import { updateBooking } from "../../../redux/bookingsSlice";
 import { BookingWizardContext } from "../context";
 import { getSelectedAddOns } from "../context/utils";
 const CheckoutForm = ({ goBack }) => {
+  const navigate = useNavigate();
   const stripe = useStripe();
   const elements = useElements();
   const appDispatch = useDispatch();
@@ -49,6 +51,7 @@ const CheckoutForm = ({ goBack }) => {
       console.log(result.error);
     } else {
       appDispatch(updateBooking({ bookingId, ...bookingData }));
+      navigate("/booking/thank-you");
       // dispatch email thunk
       // redirect to thank you page
     }
