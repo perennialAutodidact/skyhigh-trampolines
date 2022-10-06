@@ -68,7 +68,8 @@ exports.updateBookingFromStripeEvent = functions.firestore
           // const receiptId = paymentIntent.charges.data[0].receipt_number // use this for live stripe receiptId
           const receiptId = uuid
             .v4(Date.now(), Buffer.alloc(4))
-            .toString("hex");
+            .toString("hex")
+            .toUpperCase();
 
           const receipt = await db
             .collection("receipts")
