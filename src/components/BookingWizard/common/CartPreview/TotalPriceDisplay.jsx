@@ -10,7 +10,7 @@ import { toMoney, getOrderSubtotal } from "../../context/utils";
 const TotalPriceDisplay = ({ rooms, addOns }) => {
   const [state, dispatch] = useContext(BookingWizardContext);
   const {
-    formData: { grandTotal, tax, subTotal, SALES_TAX_RATE, TRANSACTION_FEE },
+    formData: { grandTotal, tax, subTotal, salesTaxRate, transactionFee },
   } = state;
 
   useEffect(() => {
@@ -21,9 +21,9 @@ const TotalPriceDisplay = ({ rooms, addOns }) => {
   }, [dispatch, rooms, addOns, subTotal]);
 
   useEffect(() => {
-    dispatch(updateGrandTotal(subTotal + tax + TRANSACTION_FEE));
-    dispatch(updateTax(subTotal * SALES_TAX_RATE));
-  }, [dispatch, subTotal, tax, TRANSACTION_FEE, SALES_TAX_RATE]);
+    dispatch(updateGrandTotal(subTotal + tax + transactionFee));
+    dispatch(updateTax(subTotal * salesTaxRate));
+  }, [dispatch, subTotal, tax, transactionFee, salesTaxRate]);
 
   return (
     <div className="container p-0">
@@ -36,10 +36,10 @@ const TotalPriceDisplay = ({ rooms, addOns }) => {
           </div>
           <div className="d-flex justify-content-between">
             <span>Transaction Fee</span>
-            <span>${toMoney(TRANSACTION_FEE)}</span>
+            <span>${toMoney(transactionFee)}</span>
           </div>
           <div className=" d-flex justify-content-between">
-            <span>Tax ({SALES_TAX_RATE * 100}%)</span>
+            <span>Tax ({salesTaxRate * 100}%)</span>
             <span>${toMoney(tax)}</span>
           </div>
         </div>

@@ -18,8 +18,8 @@ export const initialState = {
     subTotal: 0,
     tax: 0,
     grandTotal: 0,
-    SALES_TAX_RATE: 0.065,
-    TRANSACTION_FEE: 400,
+    salesTaxRate: 0.065,
+    transactionFee: 400,
   },
   startTimes: getHalfHourIncrementStrings("9:00", "16:30"),
   rooms: [
