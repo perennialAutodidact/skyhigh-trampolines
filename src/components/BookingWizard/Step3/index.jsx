@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useCallback } from "react";
-import dayjs from "dayjs";
 import { useDispatch, useSelector } from "react-redux";
 import { getAddOnsList } from "../../../redux/addOnsSlice";
 import { useNavigate } from "react-router-dom";
@@ -84,19 +83,6 @@ const Step3 = () => {
   //       );
   //     }
   //   }, [appDispatch, bookingData, formData, bookingInProgress]);
-
-  useEffect(() => {
-    if (bookingData) {
-      if (!bookingInProgress) {
-        appDispatch(createBooking(bookingData));
-      } else {
-        appDispatch(
-          updateBooking({ bookingId: bookingInProgress.id, bookingData })
-        );
-      }
-    }
-  }, [appDispatch, bookingData, bookingInProgress]);
-
   useEffect(() => {
     setValue("addOnsDataExists", addOnsDataIsValid());
     clearErrors();
