@@ -60,7 +60,7 @@ exports.updateBookingFromStripeEvent = functions.firestore
       const {
         amount,
         id: paymentIntentId,
-        metadata: { bookingId, tax, subTotal },
+        metadata: { bookingId, tax, subTotal, transactionFee },
       } = paymentIntent;
 
       switch (eventData.type) {
@@ -70,24 +70,23 @@ exports.updateBookingFromStripeEvent = functions.firestore
             .v4(Date.now(), Buffer.alloc(4))
             .toString("hex");
 
-          functions.logger.log(receiptId);
-
           const receipt = await db
             .collection("receipts")
             .doc(receiptId)
             .set({
+              bookingId,
               paymentIntentId,
               grandTotal: amount,
               subTotal: parseInt(subTotal),
               tax: parseInt(tax),
-              bookingId,
+              transactionFee,
             });
 
           const booking = db.collection("bookings").doc(bookingId);
 
           const res = await booking.update({
             status: "complete",
-            receiptId: receipt.id,
+            receiptId: receiptId,
           });
 
           break;
