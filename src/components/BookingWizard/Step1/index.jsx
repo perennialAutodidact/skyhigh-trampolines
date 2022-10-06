@@ -10,10 +10,10 @@ import FormNavButtons from "../common/FormNavButtons";
 
 const Step1 = () => {
   const navigate = useNavigate();
-  const [state, dispatch] = useContext(BookingWizardContext);
+  const [wizardState, wizardDispatch] = useContext(BookingWizardContext);
 
   const initialValues = {
-    date: state.formData.date,
+    date: wizardState.formData.date,
   };
   const {
     register,
@@ -26,19 +26,19 @@ const Step1 = () => {
   });
 
   const onSubmit = (formData) => {
-    dispatch(updateForm(formData));
-    dispatch(setProgressBarStep(2));
+    wizardDispatch(updateForm(formData));
+    wizardDispatch(setProgressBarStep(2));
     navigate("/booking/step-2");
   };
 
   const setDate = (date) => {
     setValue("date", date);
-    dispatch(updateForm({ date }));
+    wizardDispatch(updateForm({ date }));
   };
 
   const goBack = () => {
     navigate("/");
-    dispatch(setProgressBarStep(1));
+    wizardDispatch(setProgressBarStep(1));
   };
   return (
     <div className="container pt-3">

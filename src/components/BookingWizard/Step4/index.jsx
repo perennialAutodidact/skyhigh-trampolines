@@ -8,8 +8,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import FormNavButtons from "../common/FormNavButtons";
 const Step4 = () => {
   const navigate = useNavigate();
-  const [state, dispatch] = useContext(BookingWizardContext);
- const {fullName, email, address} = state.formData
+  const [wizardState, wizardDispatch] = useContext(BookingWizardContext);
+ const {fullName, email, address} = wizardState.formData
   const initialValues = {
     fullName: "",
     email: "",
@@ -25,13 +25,13 @@ const Step4 = () => {
   });
 
   const onSubmit = (formData) => {
-    dispatch(updateForm(formData));
-    dispatch(setProgressBarStep(5));
+    wizardDispatch(updateForm(formData));
+    wizardDispatch(setProgressBarStep(5));
     navigate("/booking/step-5");
   };
 
   const goBack = () => {
-    dispatch(setProgressBarStep(3));
+    wizardDispatch(setProgressBarStep(3));
     navigate("/booking/step-3");
   };
 

@@ -23,16 +23,14 @@ export const createBooking = createAsyncThunk(
 
 export const updateBooking = createAsyncThunk(
   "bookings/updateBooking",
-  async ({ bookingData, bookingId }, { rejectWithValue }) => {
+  async (bookingData, { rejectWithValue }) => {
     const callUpdateBooking = httpsCallable(functions, "updateBooking");
-    console.log("updating booking");
     try {
-      return await callUpdateBooking({ bookingData, bookingId });
+      return await callUpdateBooking(bookingData);
     } catch (error) {
       return rejectWithValue(error);
     }
-  },
-  thunkCondition
+  }
 );
 
 const bookingsSlice = createSlice({
@@ -42,19 +40,8 @@ const bookingsSlice = createSlice({
     loading: "idle",
     error: null,
     bookingInProgress: null,
-    bookingData: null,
   },
-  reducers: {
-    updateBookingData: (state, action) => {
-      state.bookingData = {
-        ...state.bookingData,
-        ...action.payload,
-      };
-    },
-    clearBookingData: (state, action) => {
-      state.bookingData = null;
-    },
-  },
+  reducers: {},
   extraReducers: {
     [createBooking.pending]: (state, action) => {
       state.loading = "pending";
@@ -64,11 +51,9 @@ const bookingsSlice = createSlice({
       state.bookingInProgress = {
         id: action.payload.data.bookingId,
       };
-      state.bookingData = null;
     },
     [createBooking.rejected]: (state, action) => {
       state.loading = "rejected";
-      state.bookingData = null;
       state.error = action.payload.error;
     },
 
@@ -77,16 +62,12 @@ const bookingsSlice = createSlice({
     },
     [updateBooking.fulfilled]: (state, action) => {
       state.loading = "fulfilled";
-      state.bookingData = null;
     },
     [updateBooking.rejected]: (state, action) => {
       state.loading = "rejected";
-      state.bookingData = null;
       state.error = action.payload.error;
     },
   },
 });
-
-export const { updateBookingData, clearBookingData } = bookingsSlice.actions;
 
 export default bookingsSlice.reducer;

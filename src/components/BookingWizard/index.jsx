@@ -22,7 +22,7 @@ import LoadingSpinner from "../LoadingSpinner";
 import { useStripeClient } from "../../hooks/useStripeClient";
 
 const BookingWizard = () => {
-  const [state, dispatch] = useReducer(wizardReducer, initialState);
+  const [wizardState, wizardDispatch] = useReducer(wizardReducer, initialState);
   const location = useLocation();
   const navigate = useNavigate();
   const [stripeClient, loadingStripe] = useStripeClient();
@@ -30,10 +30,10 @@ const BookingWizard = () => {
   // redirect to step 1 if the page is reloaded and the formData is reset
   useEffect(() => {
     const pathChunks = location.pathname.split("/");
-    if (pathChunks.length > 2 && state.currentStep === 1) {
+    if (pathChunks.length > 2 && wizardState.currentStep === 1) {
       navigate("/booking");
     }
-  }, [location, state.currentStep, navigate]);
+  }, [location, wizardState.currentStep, navigate]);
 
   if (!stripeClient && loadingStripe) {
     return (
@@ -44,7 +44,7 @@ const BookingWizard = () => {
   }
 
   return (
-    <BookingWizardContext.Provider value={[state, dispatch]}>
+    <BookingWizardContext.Provider value={[wizardState, wizardDispatch]}>
       <div className="container">
         <h1 className="text-center">Booking</h1>
         <ProgressBar />

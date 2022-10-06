@@ -10,10 +10,10 @@ import FormNavButtons from "../common/FormNavButtons";
 
 const Step5 = () => {
   const navigate = useNavigate();
-  const [state, dispatch] = useContext(BookingWizardContext);
+  const [wizardState, wizardDispatch] = useContext(BookingWizardContext);
 
   const initialValues = {
-    waiverAgreed: state.formData.waiverAgreed,
+    waiverAgreed: wizardState.formData.waiverAgreed,
     signatureImageData: "",
   };
   const {
@@ -29,14 +29,14 @@ const Step5 = () => {
 
   const onSubmit = (formData) => {
     console.log(formData);
-    dispatch(updateForm(formData));
-    dispatch(setProgressBarStep(6));
+    wizardDispatch(updateForm(formData));
+    wizardDispatch(setProgressBarStep(6));
     navigate("/booking/checkout");
   };
 
   const goBack = () => {
     navigate("/booking/step-4");
-    dispatch(setProgressBarStep(4));
+    wizardDispatch(setProgressBarStep(4));
   };
 
   return (

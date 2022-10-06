@@ -29,11 +29,7 @@ const Step3 = () => {
   const { addOns, loading: addOnsLoadingState } = useSelector(
     (appState) => appState.addOns
   );
-  const { bookingData, bookingInProgress } = useSelector(
-    (appState) => appState.bookings
-  );
-  const [state, dispatch] = useContext(BookingWizardContext);
-  const { formData } = state;
+  const [wizardState, wizardDispatch] = useContext(BookingWizardContext);
   const initialValues = {
     addOnsDataExists: false,
   };
@@ -49,20 +45,21 @@ const Step3 = () => {
   });
 
   const addOnsDataIsValid = useCallback(
-    () => state.addOns.some((addOn) => addOn.quantity > 0),
-    [state.addOns]
+    () => wizardState.addOns.some((addOn) => addOn.quantity > 0),
+    [wizardState.addOns]
   );
 
   const onSubmit = (formData) => {
-    dispatch(updateForm(formData));
-    dispatch(setProgressBarStep(4));
+    wizardDispatch(updateForm(formData));
+    wizardDispatch(setProgressBarStep(4));
     navigate("/booking/step-4");
   };
 
   const goBack = () => {
     navigate("/booking/step-2");
-    dispatch(setProgressBarStep(2));
+    wizardDispatch(setProgressBarStep(2));
   };
+<<<<<<< HEAD
 
   //   useEffect(() => {
   //     if (!bookingData ) {
@@ -83,6 +80,9 @@ const Step3 = () => {
   //       );
   //     }
   //   }, [appDispatch, bookingData, formData, bookingInProgress]);
+=======
+  
+>>>>>>> 8b366e98cd0cdb23261208b836469cba2f984b5f
   useEffect(() => {
     setValue("addOnsDataExists", addOnsDataIsValid());
     clearErrors();
@@ -93,10 +93,10 @@ const Step3 = () => {
       appDispatch(getAddOnsList())
         .unwrap()
         .then((addOns) => {
-          dispatch(setInitialAddOnState(addOns));
+          wizardDispatch(setInitialAddOnState(addOns));
         });
     }
-  }, [addOns, addOnsLoadingState, appDispatch, dispatch]);
+  }, [addOns, addOnsLoadingState, appDispatch, wizardDispatch]);
 
   if (addOnsLoadingState === "pending") {
     return (
@@ -126,12 +126,12 @@ const Step3 = () => {
             // organize addons into subcollections by category?
             item={{
               id: 1,
-              photo: state.addOns.length > 0 && state.addOns[0].photo,
+              photo: wizardState.addOns.length > 0 && wizardState.addOns[0].photo,
             }}
             headerText={"Jump Socks"}
           >
             <AccordionCollapse collapseId={1}>
-              <AddOnsList addOns={state.addOns} />
+              <AddOnsList addOns={wizardState.addOns} />
             </AccordionCollapse>
           </AccordionItem>
         </Accordion>
