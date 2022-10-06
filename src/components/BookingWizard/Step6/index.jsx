@@ -20,7 +20,7 @@ const Step6 = ({ stripe }) => {
   const navigate = useNavigate();
   const [state, dispatch] = useContext(BookingWizardContext);
   const { formData } = state;
-  const { grandTotal, tax, subTotal } = formData;
+  const { grandTotal, tax, subTotal, transactionFee } = formData;
   const {
     paymentIntent: { clientSecret, id: paymentIntentId },
   } = useSelector((state) => state.stripe);
@@ -39,6 +39,7 @@ const Step6 = ({ stripe }) => {
           bookingId: bookingInProgress.id,
           tax: (toMoney(tax) * 100).toFixed(0),
           subTotal: (toMoney(subTotal) * 100).toFixed(0),
+          transactionFee,
         },
       };
       if (paymentIntentId) {
