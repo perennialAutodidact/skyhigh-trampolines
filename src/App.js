@@ -1,21 +1,22 @@
-import React, { useState } from "react";
-import { Route, Routes } from "react-router-dom";
-import { ProtectedRoute } from "./components/ProtectedRoute";
-
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "./firebase/client";
 import "./App.scss";
 
+import React, { useState } from "react";
+import { Route, Routes } from "react-router-dom";
+
+import AddOnForm from "./components/AddOnForm";
 import Admin from "./components/admin/Admin";
+import AllAddOns from "./components/AddOnForm/AllAddOns";
+import { AllBookings } from "./components/Booking/AllBookings";
+import BookingWizard from "./components/BookingWizard";
+import Homepage from "./components/customer/Homepage";
 import Login from "./components/login/Login";
 import Navbar from "./components/nav/Navbar";
-import Homepage from "./components/customer/Homepage";
-import BookingWizard from "./components/BookingWizard";
-import ProductForm from "./components/ProductForm";
-import RoomForm from "./components/RoomForm";
-import AddOnForm from "./components/AddOnForm";
 import ProductData from "./components/product/ProductData";
-import AllAddOns from "./components/AddOnForm/AllAddOns";
+import ProductForm from "./components/ProductForm";
+import { ProtectedRoute } from "./components/ProtectedRoute";
+import RoomForm from "./components/RoomForm";
+import { auth } from "./firebase/client";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 function App() {
   const [user, loading] = useAuthState(auth);
@@ -45,7 +46,7 @@ function App() {
 
             {/* bookings */}
 
-            <Route path="all-bookings" element={<p>All Bookings</p>} />
+            <Route path="all-bookings" element={<AllBookings />} />
             <Route path="daily-capacity" element={<p>Daily Capacity</p>} />
 
             {/* rooms */}
