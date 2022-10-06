@@ -1,4 +1,4 @@
-import { MyOwnCalendar } from "./MyOwnCalendar";
+import { AdminCalendar } from "./AdminCalendar";
 import React from "react";
 import Sidebar from "./nav/Sidebar";
 import { auth } from "../../firebase/client";
@@ -20,7 +20,7 @@ const Admin = (props) => {
             <Sidebar toggleSidebar={toggleSidebar} />
           </div>
           <div className="col-lg-10">
-            <MyOwnCalendar />
+            <AdminCalendar />
           </div>
         </>
       ) : null}
