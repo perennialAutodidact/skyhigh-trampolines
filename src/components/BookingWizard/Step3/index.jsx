@@ -59,30 +59,7 @@ const Step3 = () => {
     navigate("/booking/step-2");
     wizardDispatch(setProgressBarStep(2));
   };
-<<<<<<< HEAD
 
-  //   useEffect(() => {
-  //     if (!bookingData ) {
-  //       appDispatch(
-  //         updateBookingData({
-  //           date: formData.date,
-  //           rooms: formData.bookedRooms.map((room) => ({
-  //             id: room.id,
-  //             startTime: room.selectedStartTime,
-  //             products: room.products.map((product) => ({
-  //               id: product.id,
-  //               name: product.name,
-  //               quantity: product.quantity,
-  //               duration: product.duration,
-  //             })),
-  //           })),
-  //         })
-  //       );
-  //     }
-  //   }, [appDispatch, bookingData, formData, bookingInProgress]);
-=======
-  
->>>>>>> 8b366e98cd0cdb23261208b836469cba2f984b5f
   useEffect(() => {
     setValue("addOnsDataExists", addOnsDataIsValid());
     clearErrors();
@@ -126,7 +103,8 @@ const Step3 = () => {
             // organize addons into subcollections by category?
             item={{
               id: 1,
-              photo: wizardState.addOns.length > 0 && wizardState.addOns[0].photo,
+              photo:
+                wizardState.addOns.length > 0 && wizardState.addOns[0].photo,
             }}
             headerText={"Jump Socks"}
           >
