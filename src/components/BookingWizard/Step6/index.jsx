@@ -55,9 +55,10 @@ const Step6 = ({ stripe }) => {
     }
   }, [
     appDispatch,
-    grandTotal,
-    paymentIntentId,
     bookingInProgress,
+    paymentIntentId,
+    transactionFee,
+    grandTotal,
     subTotal,
     tax,
   ]);
