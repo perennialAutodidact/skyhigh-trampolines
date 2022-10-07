@@ -22,6 +22,7 @@ const Step6 = ({ stripe }) => {
   const { formData } = state;
   const { grandTotal, tax, subTotal, transactionFee } = formData;
   const {
+    loading: stripeLoadingStatus,
     paymentIntent: { clientSecret, id: paymentIntentId },
   } = useSelector((state) => state.stripe);
   const { bookingInProgress } = useSelector((appState) => appState.bookings);
@@ -63,7 +64,7 @@ const Step6 = ({ stripe }) => {
     tax,
   ]);
 
-  if (!stripe || !clientSecret) {
+  if ((!stripe || !clientSecret) && stripeLoadingStatus === "pending") {
     return (
       <div className="my-5">
         <LoadingSpinner />

@@ -18,6 +18,7 @@ export const wizardReducer = (state, action) => {
     subTotal,
     tax,
     grandTotal,
+    paymentStatus,
   } = action.payload;
 
   const { formData } = state;
@@ -139,6 +140,12 @@ export const wizardReducer = (state, action) => {
           ...formData,
           grandTotal,
         },
+      };
+
+    case "UPDATE_PAYMENT_STATUS":
+      return {
+        ...state,
+        paymentStatus,
       };
 
     default:

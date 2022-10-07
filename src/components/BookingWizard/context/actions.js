@@ -69,3 +69,8 @@ export const updateGrandTotal = (grandTotal) => ({
   type: "UPDATE_GRAND_TOTAL",
   payload: { grandTotal },
 });
+
+export const updatePaymentStatus = (paymentStatus) => ({
+  type: "updatePaymentStatus",
+  payload: { paymentStatus },
+});

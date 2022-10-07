@@ -49,6 +49,20 @@ exports.updateBooking = functions.https.onCall(async (data, context) => {
   }
 });
 
+exports.cancelBooking = functions.https.onCall(async (data, context) => {
+  const { bookingId } = data;
+
+  try {
+    await db.collection("bookings").doc(bookingId).update({
+      status: "canceled",
+    });
+
+    return { message: "success" };
+  } catch (error) {
+    throw new functions.https.HttpsError("unknown", error);
+  }
+});
+
 exports.updateBookingFromStripeEvent = functions.firestore
   .document("stripeEvents/{eventId}")
   .onCreate(async (event, context) => {
@@ -63,7 +77,13 @@ exports.updateBookingFromStripeEvent = functions.firestore
         metadata: { bookingId, tax, subTotal, transactionFee },
       } = paymentIntent;
 
+      const booking = db.collection("bookings").doc(bookingId);
+
       switch (eventData.type) {
+        case "payment_intent.created":
+          await booking.update({
+            paymentIntentId,
+          });
         case "payment_intent.succeeded":
           // const receiptId = paymentIntent.charges.data[0].receipt_number // use this for live stripe receiptId
           const receiptId = uuid
@@ -71,21 +91,18 @@ exports.updateBookingFromStripeEvent = functions.firestore
             .toString("hex")
             .toUpperCase();
 
-          const receipt = await db
+          await db
             .collection("receipts")
             .doc(receiptId)
             .set({
               bookingId,
-              paymentIntentId,
               grandTotal: amount,
               subTotal: parseInt(subTotal),
               tax: parseInt(tax),
               transactionFee,
             });
 
-          const booking = db.collection("bookings").doc(bookingId);
-
-          const res = await booking.update({
+          await booking.update({
             status: "complete",
             receiptId: receiptId,
           });

@@ -62,12 +62,13 @@ const Step2 = () => {
           quantity: product.quantity,
           duration: product.duration,
           price: product.price,
-          totalPrice: product.totalPrice
+          totalPrice: product.totalPrice,
         })),
       })),
     }),
     [wizardState.rooms]
   );
+
   const createOrUpdateBooking = useCallback(() => {
     if (!bookingInProgress && bookingLoading === "idle") {
       appDispatch(createBooking(bookingData));

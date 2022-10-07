@@ -38,6 +38,7 @@ export const initialState = {
     // }
   ],
   addOns: [],
+  paymentStatus: "idle",
 };
 
 export const BookingWizardContext = createContext(initialState);

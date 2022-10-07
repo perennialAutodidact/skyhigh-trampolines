@@ -34,6 +34,16 @@ exports.updatePaymentIntent = functions.https.onCall(
 exports.cancelPaymentIntent = functions.https.onCall(
   async (paymentIntentId, context) => {
     try {
+      const booking = await db
+        .collection("bookings")
+        .where("paymentIntentId", "==", paymentIntentId)
+        .get();
+
+      await booking.update({
+        status: "canceled",
+        receiptId: "",
+      });
+
       return await stripe.paymentIntents.cancel(paymentIntentId);
     } catch (error) {
       throw new functions.https.HttpsError("unknown", error);

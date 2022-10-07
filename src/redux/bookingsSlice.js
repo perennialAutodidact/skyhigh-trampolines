@@ -33,6 +33,18 @@ export const updateBooking = createAsyncThunk(
   }
 );
 
+export const cancelBooking = createAsyncThunk(
+  "bookings/cancelBooking",
+  async (bookingId, { rejectWithValue }) => {
+    const callCancelBooking = httpsCallable(functions, "cancelBooking");
+    try {
+      return await callCancelBooking({ bookingId });
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
 const bookingsSlice = createSlice({
   name: "bookings",
   initialState: {
@@ -64,6 +76,18 @@ const bookingsSlice = createSlice({
       state.loading = "fulfilled";
     },
     [updateBooking.rejected]: (state, action) => {
+      state.loading = "rejected";
+      state.error = action.payload.error;
+    },
+
+    [cancelBooking.pending]: (state, action) => {
+      state.loading = "pending";
+    },
+    [cancelBooking.fulfilled]: (state, action) => {
+      state.loading = "fulfilled";
+      state.bookingInProgress = null;
+    },
+    [cancelBooking.rejected]: (state, action) => {
       state.loading = "rejected";
       state.error = action.payload.error;
     },

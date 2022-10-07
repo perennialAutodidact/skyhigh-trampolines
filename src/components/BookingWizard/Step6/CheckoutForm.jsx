@@ -11,6 +11,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateBooking } from "../../../redux/bookingsSlice";
 import { BookingWizardContext } from "../context";
 import { getSelectedAddOns } from "../context/utils";
+import { updatePaymentStatus } from "../context/actions";
+import { setStripeLoadingStatus } from "../../../redux/stripeSlice";
+
 const CheckoutForm = ({ goBack }) => {
   const navigate = useNavigate();
   const stripe = useStripe();
@@ -22,6 +25,8 @@ const CheckoutForm = ({ goBack }) => {
   const {
     bookingInProgress: { id: bookingId },
   } = useSelector((appState) => appState.bookings);
+
+  const { loading: stripeLoadingStatus } = useSelector((state) => state.stripe);
 
   const bookingData = useMemo(
     () => ({
@@ -42,14 +47,17 @@ const CheckoutForm = ({ goBack }) => {
   const onSubmit = async (e) => {
     e.preventDefault();
 
+    appDispatch(setStripeLoadingStatus("pending"));
     const result = await stripe.confirmPayment({
       elements,
       redirect: "if_required",
     });
 
     if (result.error) {
+      appDispatch(setStripeLoadingStatus("failed"));
       console.log(result.error);
     } else {
+      appDispatch(setStripeLoadingStatus("succeeded"));
       appDispatch(updateBooking({ bookingId, ...bookingData }));
       navigate("/booking/thank-you");
       // dispatch email thunk
@@ -66,7 +74,12 @@ const CheckoutForm = ({ goBack }) => {
   return (
     <form onSubmit={onSubmit}>
       <PaymentElement />
-      <FormNavButtons goBack={goBack} submitButtonText={"Submit"} />
+      <FormNavButtons
+        goBack={goBack}
+        submitButtonText={
+          stripeLoadingStatus === "pending" ? <LoadingSpinner /> : "Submit"
+        }
+      />
     </form>
   );
 };

@@ -69,6 +69,11 @@ const initialState = {
 export const stripeSlice = createSlice({
   name: "stripe",
   initialState,
+  reducers: {
+    setStripeLoadingStatus: (state, action) => {
+      state.loading = action.payload;
+    },
+  },
   extraReducers: {
     [createPaymentIntent.pending]: (state, action) => {
       state.loading = "pending";
@@ -103,5 +108,7 @@ export const stripeSlice = createSlice({
     },
   },
 });
+
+export const { setStripeLoadingStatus } = stripeSlice.actions;
 
 export default stripeSlice.reducer;
