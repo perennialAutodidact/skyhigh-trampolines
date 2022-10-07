@@ -24,7 +24,7 @@ const Step6 = ({ stripe }) => {
   const {
     loading: stripeLoadingStatus,
     paymentIntent: { clientSecret, id: paymentIntentId },
-    error: stripeError
+    error: stripeError,
   } = useSelector((state) => state.stripe);
   const { bookingInProgress } = useSelector((appState) => appState.bookings);
 
@@ -65,7 +65,7 @@ const Step6 = ({ stripe }) => {
     tax,
   ]);
 
-  if ((!stripe || !clientSecret) || stripeLoadingStatus === "pending") {
+  if (!stripe || !clientSecret) {
     return (
       <div className="my-5">
         <LoadingSpinner />
@@ -103,7 +103,7 @@ const Step6 = ({ stripe }) => {
   return (
     <div className="container pt-3">
       <h3 className="mb-3">Checkout</h3>
-      {stripeError && <p className="text-danger">{stripeError}</p> }
+      {stripeError && <p className="text-danger">{stripeError}</p>}
       <Elements
         stripe={stripe}
         options={{
@@ -115,7 +115,7 @@ const Step6 = ({ stripe }) => {
           },
         }}
       >
-        <CheckoutForm goBack={goBack}/>
+        <CheckoutForm goBack={goBack} />
       </Elements>
     </div>
   );
