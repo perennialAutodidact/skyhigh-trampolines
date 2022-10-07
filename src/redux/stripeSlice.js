@@ -73,6 +73,9 @@ export const stripeSlice = createSlice({
     setStripeLoadingStatus: (state, action) => {
       state.loading = action.payload;
     },
+    setStripeError: (state,action) => {
+      state.error = action.payload.error
+    }
   },
   extraReducers: {
     [createPaymentIntent.pending]: (state, action) => {
@@ -109,6 +112,6 @@ export const stripeSlice = createSlice({
   },
 });
 
-export const { setStripeLoadingStatus } = stripeSlice.actions;
+export const { setStripeLoadingStatus, setStripeError } = stripeSlice.actions;
 
 export default stripeSlice.reducer;

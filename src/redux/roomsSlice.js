@@ -84,6 +84,12 @@ const roomsSlice = createSlice({
     loading: "idle",
     error: null,
   },
+  reducers: {
+    resetRoomsSlice: (state, action) => {
+      state.rooms = [];
+      state.loading = "idle";
+    },
+  },
   extraReducers: {
     [createRoom.pending]: (state, action) => {
       state.loading = "pending";
@@ -109,6 +115,8 @@ const roomsSlice = createSlice({
     },
   },
 });
+
+export const { resetRoomsSlice } = roomsSlice.actions;
 
 export default roomsSlice.reducer;
 

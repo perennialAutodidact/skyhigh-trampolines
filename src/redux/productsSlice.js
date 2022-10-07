@@ -48,14 +48,19 @@ export const fetchProducts = createAsyncThunk(
   thunkCondition
 );
 
-const productSlice = createSlice({
+const productsSlice = createSlice({
   name: "products",
   initialState: {
     products: [],
     loading: "idle",
     error: null,
   },
-  //reducers: {},
+  reducers: {
+    resetProductsSlice: (state, action) => {
+      state.products = [];
+      state.loading = "idle";
+    },
+  },
   extraReducers: {
     [createProduct.pending]: (state, action) => {
       state.loading = "pending";
@@ -83,4 +88,5 @@ const productSlice = createSlice({
   },
 });
 
-export default productSlice.reducer;
+export const { resetProductsSlice } = productsSlice.actions;
+export default productsSlice.reducer;
