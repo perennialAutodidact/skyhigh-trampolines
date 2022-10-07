@@ -84,7 +84,7 @@ const bookingsSlice = createSlice({
       state.loading = "pending";
     },
     [cancelBooking.fulfilled]: (state, action) => {
-      state.loading = "fulfilled";
+      state.loading = "idle";
       state.bookingInProgress = null;
     },
     [cancelBooking.rejected]: (state, action) => {
