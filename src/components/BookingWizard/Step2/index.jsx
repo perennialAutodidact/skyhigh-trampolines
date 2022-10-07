@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getRoomList } from "../../../redux/roomsSlice";
+import { getRoomsList } from "../../../redux/roomsSlice";
 import {
   clearBookingData,
   createBooking,
@@ -114,7 +114,7 @@ const Step2 = () => {
 
   useEffect(() => {
     if (!!rooms && roomsLoadingState === "idle") {
-      appDispatch(getRoomList())
+      appDispatch(getRoomsList())
         .unwrap()
         .then((rooms) => {
           wizardDispatch(setInitialRoomState(rooms));
