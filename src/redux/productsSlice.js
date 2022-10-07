@@ -31,19 +31,20 @@ export const createProduct = createAsyncThunk(
 // fetch all products from firebase
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
-  async () => {
-    // fetch data from firebase and store in constant
-    const data = await getDocs(productsCollection)
-      .then((snapshot) => {
-        let products = [];
-        snapshot.forEach((doc) => {
-          products.push({ ...doc.data(), id: doc.id });
+  async (_, { fulfillWithValue, rejectWithValue }) => {
+    try {
+      const products = await getDocs(productsCollection).then((productDocs) => {
+        let productsData = [];
+        productDocs.forEach((doc) => {
+          productsData.push({ ...doc.data(), id: doc.id });
         });
-        return products;
-      })
-      .catch((err) => console.log(err.message));
+        return productsData;
+      });
 
-    return data;
+      return products;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
   },
   thunkCondition
 );
@@ -78,10 +79,12 @@ const productsSlice = createSlice({
       state.loading = "pending";
     },
     [fetchProducts.fulfilled]: (state, action) => {
+      console.log(action.payload);
       state.loading = "fulfilled";
       state.products = action.payload;
     },
     [fetchProducts.rejected]: (state, action) => {
+      console.log(action.payload);
       state.loading = "rejected";
       state.error = action.payload;
     },
