@@ -1,10 +1,14 @@
 import React, { useCallback } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { cancelPaymentIntent } from "../../../redux/stripeSlice";
 import { cancelBooking } from "../../../redux/bookingsSlice";
+import { resetRoomsSlice } from "../../../redux/roomsSlice";
+import { resetProductsSlice } from "../../../redux/productsSlice";
+import { resetAddOnsSlice } from "../../../redux/addOnsSlice";
 
 const FormNavButtons = ({ submitButtonText, goBack }) => {
+  const navigate = useNavigate();
   const appDispatch = useDispatch();
   const { paymentIntent } = useSelector((appState) => appState.stripe);
   const { bookingInProgress } = useSelector((appState) => appState.bookings);
@@ -12,14 +16,22 @@ const FormNavButtons = ({ submitButtonText, goBack }) => {
   const cancelBookingInProgress = useCallback(
     (paymentIntent, bookingInProgress) => {
       console.log({ paymentIntent, bookingInProgress });
+      const cancelCalls = [];
       if (paymentIntent.id) {
-        appDispatch(cancelPaymentIntent(paymentIntent.id));
+        cancelCalls.push(appDispatch(cancelPaymentIntent(paymentIntent.id)));
       }
       if (bookingInProgress.id) {
-        appDispatch(cancelBooking(bookingInProgress.id));
+        cancelCalls.push(appDispatch(cancelBooking(bookingInProgress.id)));
       }
+
+      Promise.all(cancelCalls).then((res) => {
+        appDispatch(resetRoomsSlice());
+        appDispatch(resetProductsSlice());
+        appDispatch(resetAddOnsSlice())
+        navigate("/");
+      });
     },
-    [appDispatch]
+    [appDispatch, navigate]
   );
   return (
     <div className="row my-3 g-2 px-2 d-flex align-items-end">
