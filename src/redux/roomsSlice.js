@@ -49,7 +49,7 @@ const getRoomProducts = async (roomId) => {
   return products;
 };
 
-export const getRoomList = createAsyncThunk(
+export const getRoomsList = createAsyncThunk(
   "rooms/getRoomList",
   async (_, { fulfillWithValue, rejectWithValue }) => {
     try {
@@ -102,14 +102,14 @@ const roomsSlice = createSlice({
       state.error = action.payload;
     },
 
-    [getRoomList.pending]: (state, action) => {
+    [getRoomsList.pending]: (state, action) => {
       state.loading = "pending";
     },
-    [getRoomList.fulfilled]: (state, action) => {
+    [getRoomsList.fulfilled]: (state, action) => {
       state.loading = "fulfilled";
       state.rooms = action.payload;
     },
-    [getRoomList.rejected]: (state, action) => {
+    [getRoomsList.rejected]: (state, action) => {
       state.loading = "rejected";
       state.error = action.payload;
     },
