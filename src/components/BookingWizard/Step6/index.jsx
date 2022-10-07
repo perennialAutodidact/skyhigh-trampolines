@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   createPaymentIntent,
@@ -24,6 +24,7 @@ const Step6 = ({ stripe }) => {
   const {
     loading: stripeLoadingStatus,
     paymentIntent: { clientSecret, id: paymentIntentId },
+    error: stripeError
   } = useSelector((state) => state.stripe);
   const { bookingInProgress } = useSelector((appState) => appState.bookings);
 
@@ -64,7 +65,7 @@ const Step6 = ({ stripe }) => {
     tax,
   ]);
 
-  if ((!stripe || !clientSecret) && stripeLoadingStatus === "pending") {
+  if ((!stripe || !clientSecret) || stripeLoadingStatus === "pending") {
     return (
       <div className="my-5">
         <LoadingSpinner />
@@ -102,6 +103,7 @@ const Step6 = ({ stripe }) => {
   return (
     <div className="container pt-3">
       <h3 className="mb-3">Checkout</h3>
+      {stripeError && <p className="text-danger">{stripeError}</p> }
       <Elements
         stripe={stripe}
         options={{
@@ -113,7 +115,7 @@ const Step6 = ({ stripe }) => {
           },
         }}
       >
-        <CheckoutForm goBack={goBack} />
+        <CheckoutForm goBack={goBack}/>
       </Elements>
     </div>
   );
