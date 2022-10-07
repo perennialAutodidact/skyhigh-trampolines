@@ -1,8 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { cancelPaymentIntent } from "../../redux/stripeSlice";
 import { Link } from "react-router-dom";
 import styled from "./Homepage.module.scss";
+import { cancelBooking } from "../../redux/bookingsSlice";
 
 const Homepage = () => {
+  const appDispatch = useDispatch();
+  const { paymentIntent } = useSelector((appState) => appState.stripe);
+  const { bookingInProgress } = useSelector((appState) => appState.bookings);
+  useEffect(() => {
+    if (paymentIntent.id) {
+      appDispatch(cancelPaymentIntent(paymentIntent.id));
+    }
+    if (bookingInProgress) {
+      appDispatch(cancelBooking(bookingInProgress.id));
+    }
+  }, [paymentIntent, bookingInProgress, appDispatch]);
+
   return (
     <section className={`${styled.homepage} position-relative`}>
       <figure className="h-100 w-100 position-relative">
@@ -17,7 +32,10 @@ const Homepage = () => {
         className={`${styled.overlay} position-absolute d-flex justify-content-center align-items-center w-100 bg-overlay bg-opacity-50`}
       >
         <button type="button" className="btn btn-light btn-lg rounded shadow">
-          <Link to="/booking" className="text-decoration-none link-dark fs-5 fw-bold">
+          <Link
+            to="/booking"
+            className="text-decoration-none link-dark fs-5 fw-bold"
+          >
             Buy Tickets
           </Link>
         </button>
