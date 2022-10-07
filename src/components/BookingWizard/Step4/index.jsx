@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { BookingWizardContext } from "../context";
 import { step4Schema } from "../context/schema";
@@ -9,18 +9,20 @@ import FormNavButtons from "../common/FormNavButtons";
 const Step4 = () => {
   const navigate = useNavigate();
   const [wizardState, wizardDispatch] = useContext(BookingWizardContext);
- const {fullName, email, address} = wizardState.formData
+  const { fullName, email, address } = wizardState.formData;
   const initialValues = {
     fullName,
     email,
     address,
   };
+
   const {
     handleSubmit,
     register,
     formState: { errors },
   } = useForm({
     initialValues,
+    defaultValues: initialValues,
     resolver: yupResolver(step4Schema),
   });
 
@@ -38,7 +40,6 @@ const Step4 = () => {
   return (
     <div className="container pt-3">
       <form onSubmit={handleSubmit(onSubmit)} className="container text-start">
-
         {/* CUSTOMER FULL NAME */}
         <div className="row mb-3">
           <label htmlFor="fullName" className="form-label p-0">
@@ -49,7 +50,9 @@ const Step4 = () => {
             id="fullName"
             className={`form-control ${errors.fullName && "is-invalid"}`}
           />
-          {errors.fullName && <p className="text-danger">{errors.fullName.message}</p>}
+          {errors.fullName && (
+            <p className="text-danger">{errors.fullName.message}</p>
+          )}
         </div>
 
         {/* CUSTOMER EMAIL */}
@@ -62,7 +65,9 @@ const Step4 = () => {
             id="email"
             className={`form-control ${errors.email && "is-invalid"}`}
           />
-          {errors.email && <p className="text-danger">{errors.email.message}</p>}
+          {errors.email && (
+            <p className="text-danger">{errors.email.message}</p>
+          )}
         </div>
 
         {/* CUSTOMER ADDRESS */}
@@ -75,7 +80,9 @@ const Step4 = () => {
             id="address"
             className={`form-control ${errors.address && "is-invalid"}`}
           />
-          {errors.address && <p className="text-danger">{errors.address.message}</p>}
+          {errors.address && (
+            <p className="text-danger">{errors.address.message}</p>
+          )}
         </div>
 
         <FormNavButtons submitButtonText={"Next"} goBack={goBack} />
