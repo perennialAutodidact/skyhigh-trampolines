@@ -89,7 +89,7 @@ const Step3 = () => {
         <div className="row px-2 mb-3">
           <div className="col-12 col-lg-6 p-2 px-lg-2">
             <label htmlFor="date" className="form-label p-0 d-flex gap-1">
-              <h3>Select Products</h3> <span className="text-danger">*</span>
+              <h3>Select Add-Ons</h3> <span className="text-danger">*</span>
             </label>
           </div>
         </div>
