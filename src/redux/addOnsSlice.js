@@ -53,7 +53,12 @@ const addOnsSlice = createSlice({
     loading: "idle",
     error: null,
   },
-  //reducers: {},
+  reducers: {
+    resetAddOnsSlice: (state, action) => {
+      state.addOns = [];
+      state.loading = "idle";
+    },
+  },
   extraReducers: {
     [createAddOn.pending]: (state, action) => {
       state.loading = "pending";
@@ -79,5 +84,7 @@ const addOnsSlice = createSlice({
     },
   },
 });
+
+export const {resetAddOnsSlice} = addOnsSlice.actions;
 
 export default addOnsSlice.reducer;
