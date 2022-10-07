@@ -26,7 +26,7 @@ const Homepage = () => {
   return (
     <div ref={homePageRef}>
       {!imagesLoaded ? (
-        <div className="vh-100 d-flex justify-content-center align-items-center">
+        <div className="mt-5 d-flex justify-content-center align-items-center">
           <LoadingSpinner />
         </div>
       ) : (
