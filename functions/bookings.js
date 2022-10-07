@@ -27,21 +27,18 @@ exports.createBooking = functions.https.onCall(async (bookingData, context) => {
 exports.updateBooking = functions.https.onCall(async (data, context) => {
   const { bookingId, waiverSignature, ...bookingData } = data;
 
-  functions.logger.log(waiverSignature);
-  functions.logger.log(bookingData);
-
   try {
+    if (waiverSignature) {
+      const waiver = await db.collection("waivers").add({
+        signature: waiverSignature,
+        bookingId,
+      });
+      bookingData['waiverId'] = waiver.id
+    }
     const res = await db
       .collection("bookings")
       .doc(bookingId)
       .update({ ...bookingData });
-
-    if (waiverSignature) {
-      await db.collection("waivers").add({
-        signature: waiverSignature,
-        bookingId,
-      });
-    }
 
     return { message: "updated" };
   } catch (error) {
@@ -84,6 +81,7 @@ exports.updateBookingFromStripeEvent = functions.firestore
           await booking.update({
             paymentIntentId,
           });
+          break;
         case "payment_intent.succeeded":
           // const receiptId = paymentIntent.charges.data[0].receipt_number // use this for live stripe receiptId
           const receiptId = uuid
