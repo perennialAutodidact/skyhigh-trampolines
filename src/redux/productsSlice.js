@@ -31,7 +31,7 @@ export const createProduct = createAsyncThunk(
 // fetch all products from firebase
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
-  async (_, { fulfillWithValue, rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
       const products = await getDocs(productsCollection).then((productDocs) => {
         let productsData = [];
