@@ -1,5 +1,7 @@
-import React, { useContext } from "react";
+import React, { useContext, useMemo } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { updateBooking } from "../../../redux/bookingsSlice";
 import { BookingWizardContext } from "../context";
 import { updateForm, setProgressBarStep } from "../context/actions";
 import { useForm } from "react-hook-form";
@@ -10,11 +12,21 @@ import FormNavButtons from "../common/FormNavButtons";
 
 const Step5 = () => {
   const navigate = useNavigate();
+  const appDispatch = useDispatch();
   const [wizardState, wizardDispatch] = useContext(BookingWizardContext);
+  const { signatureImageData, waiverAgreed } = wizardState;
+  const { bookingInProgress } = useSelector((appState) => appState.bookings);
+
+  const bookingData = useMemo(
+    () => ({
+      waiverSignature: signatureImageData,
+    }),
+    [signatureImageData]
+  );
 
   const initialValues = {
-    waiverAgreed: wizardState.formData.waiverAgreed,
-    signatureImageData: "",
+    waiverAgreed,
+    signatureImageData,
   };
   const {
     handleSubmit,
@@ -32,6 +44,9 @@ const Step5 = () => {
     wizardDispatch(updateForm(formData));
     wizardDispatch(setProgressBarStep(6));
     navigate("/booking/checkout");
+    appDispatch(
+      updateBooking({ bookingId: bookingInProgress?.id, ...bookingData })
+    );
   };
 
   const goBack = () => {

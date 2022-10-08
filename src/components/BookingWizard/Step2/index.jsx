@@ -1,18 +1,13 @@
 import React, { useCallback, useMemo, useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getRoomsList } from "../../../redux/roomsSlice";
-import {
-  clearBookingData,
-  createBooking,
-  updateBooking,
-} from "../../../redux/bookingsSlice";
+import { createBooking, updateBooking } from "../../../redux/bookingsSlice";
 import { useNavigate } from "react-router-dom";
 import { BookingWizardContext } from "../context";
 import {
   updateForm,
   setProgressBarStep,
   setInitialRoomState,
-  updateBookedRooms,
 } from "../context/actions";
 import { step2Schema } from "../context/schema";
 import { useForm } from "react-hook-form";
@@ -53,6 +48,7 @@ const Step2 = () => {
 
   const bookingData = useMemo(
     () => ({
+      date: wizardState.formData.date,
       rooms: getBookedRooms(wizardState.rooms).map((room) => ({
         id: room.id,
         startTime: room.selectedStartTime,
@@ -66,7 +62,7 @@ const Step2 = () => {
         })),
       })),
     }),
-    [wizardState.rooms]
+    [wizardState.formData.date, wizardState.rooms]
   );
 
   const createOrUpdateBooking = useCallback(() => {

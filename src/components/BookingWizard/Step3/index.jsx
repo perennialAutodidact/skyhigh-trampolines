@@ -1,5 +1,7 @@
-import React, { useContext, useEffect, useCallback } from "react";
+import React, { useContext, useEffect, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { getAddOnsList } from "../../../redux/addOnsSlice";
 import { useNavigate } from "react-router-dom";
 import { BookingWizardContext } from "../context";
@@ -9,19 +11,14 @@ import {
   setProgressBarStep,
   updateForm,
 } from "../context/actions";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { getSelectedAddOns } from "../context/utils";
 import LoadingSpinner from "../../LoadingSpinner";
 import FormNavButtons from "../common/FormNavButtons";
 import Accordion from "../common/Accordion";
 import AccordionItem from "../common/Accordion/AccordionItem";
 import AccordionCollapse from "../common/Accordion/AccordionCollapse";
 import AddOnsList from "./AddOnsList";
-import {
-  createBooking,
-  updateBooking,
-  updateBookingData,
-} from "../../../redux/bookingsSlice";
+import { updateBooking } from "../../../redux/bookingsSlice";
 
 const Step3 = () => {
   const navigate = useNavigate();
@@ -30,6 +27,7 @@ const Step3 = () => {
     (appState) => appState.addOns
   );
   const [wizardState, wizardDispatch] = useContext(BookingWizardContext);
+  const { bookingInProgress } = useSelector((appState) => appState.bookings);
   const initialValues = {
     addOnsDataExists: false,
   };
@@ -44,6 +42,15 @@ const Step3 = () => {
     resolver: yupResolver(step3Schema),
   });
 
+  const bookingData = useMemo(
+    () => ({
+      addOns: getSelectedAddOns(wizardState.addOns).map((addOn) => {
+        const { id, name, quantity, price, totalPrice } = addOn;
+        return { id, name, quantity, price, totalPrice };
+      }),
+    }),
+    [wizardState.addOns]
+  );
   const addOnsDataIsValid = useCallback(
     () => wizardState.addOns.some((addOn) => addOn.quantity > 0),
     [wizardState.addOns]
@@ -53,6 +60,9 @@ const Step3 = () => {
     wizardDispatch(updateForm(formData));
     wizardDispatch(setProgressBarStep(4));
     navigate("/booking/step-4");
+    appDispatch(
+      updateBooking({ bookingId: bookingInProgress?.id, ...bookingData })
+    );
   };
 
   const goBack = () => {

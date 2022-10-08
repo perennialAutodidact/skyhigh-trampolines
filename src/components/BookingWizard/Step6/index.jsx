@@ -22,7 +22,6 @@ const Step6 = ({ stripe }) => {
   const { formData } = state;
   const { grandTotal, tax, subTotal, transactionFee } = formData;
   const {
-    loading: stripeLoadingStatus,
     paymentIntent: { clientSecret, id: paymentIntentId },
     error: stripeError,
   } = useSelector((state) => state.stripe);
@@ -78,6 +77,7 @@ const Step6 = ({ stripe }) => {
     { item: "Jump Socks (medium)", amount: 2, price: 7.98 },
   ];
 
+  //eslint-disable-next-line
   const handleMail = () => {
     console.log("calling mail function");
     //send mail with firebase functions
