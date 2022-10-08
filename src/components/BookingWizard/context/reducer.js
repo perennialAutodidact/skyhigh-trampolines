@@ -148,6 +148,14 @@ export const wizardReducer = (state, action) => {
         paymentStatus,
       };
 
+    case "CHECKOUT_SUCCESS":
+      const { confirmationId } = action.payload;
+
+      return {
+        ...state,
+        confirmationId,
+      };
+
     default:
       return state;
   }
