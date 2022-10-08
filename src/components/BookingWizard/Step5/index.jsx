@@ -14,14 +14,17 @@ const Step5 = () => {
   const navigate = useNavigate();
   const appDispatch = useDispatch();
   const [wizardState, wizardDispatch] = useContext(BookingWizardContext);
-  const { signatureImageData, waiverAgreed } = wizardState;
+  const { fullName, email, address, signatureImageData, waiverAgreed } =
+    wizardState.formData;
   const { bookingInProgress } = useSelector((appState) => appState.bookings);
 
   const bookingData = useMemo(
     () => ({
-      waiverSignature: signatureImageData,
+      fullName,
+      email,
+      address,
     }),
-    [signatureImageData]
+    [fullName, email, address]
   );
 
   const initialValues = {
@@ -40,7 +43,6 @@ const Step5 = () => {
   });
 
   const onSubmit = (formData) => {
-    console.log(formData);
     wizardDispatch(updateForm(formData));
     wizardDispatch(setProgressBarStep(6));
     navigate("/booking/checkout");

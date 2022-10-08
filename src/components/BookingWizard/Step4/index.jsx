@@ -1,35 +1,23 @@
-import React, { useContext, useMemo } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { updateBooking } from "../../../redux/bookingsSlice";
 import { BookingWizardContext } from "../context";
 import { step4Schema } from "../context/schema";
 import { updateForm, setProgressBarStep } from "../context/actions";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import FormNavButtons from "../common/FormNavButtons";
+
 const Step4 = () => {
   const navigate = useNavigate();
-  const appDispatch = useDispatch();
   const [wizardState, wizardDispatch] = useContext(BookingWizardContext);
-  const { bookingInProgress } = useSelector((appState) => appState.bookings);
   const { fullName, email, address } = wizardState.formData;
+
   const initialValues = {
     fullName,
     email,
     address,
   };
 
-  const bookingData = useMemo(
-    () => ({
-      customer: {
-        fullName,
-        email,
-        address,
-      },
-    }),
-    [fullName, email, address]
-  );
   const {
     handleSubmit,
     register,
@@ -44,9 +32,6 @@ const Step4 = () => {
     wizardDispatch(updateForm(formData));
     wizardDispatch(setProgressBarStep(5));
     navigate("/booking/step-5");
-    appDispatch(
-      updateBooking({ bookingId: bookingInProgress?.id, ...bookingData })
-    );
   };
 
   const goBack = () => {

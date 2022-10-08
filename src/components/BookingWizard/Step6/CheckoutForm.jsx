@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useContext, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   useElements,
   useStripe,
   PaymentElement,
 } from "@stripe/react-stripe-js";
 import { useNavigate } from "react-router-dom";
+import { updateBooking } from "../../../redux/bookingsSlice";
+import { BookingWizardContext } from "../context";
 import FormNavButtons from "../common/FormNavButtons";
 import LoadingSpinner from "../../LoadingSpinner";
-import { useDispatch, useSelector } from "react-redux";
 import {
   setStripeLoadingStatus,
   setStripeError,
@@ -18,10 +20,26 @@ const CheckoutForm = ({ goBack, setError }) => {
   const stripe = useStripe();
   const elements = useElements();
   const appDispatch = useDispatch();
-  const { loading: stripeLoadingStatus } = useSelector((state) => state.stripe);
+  const { loading: stripeLoadingStatus } = useSelector(
+    (appState) => appState.stripe
+  );
+  const { bookingInProgress } = useSelector((appState) => appState.bookings);
+  const [wizardState] = useContext(BookingWizardContext);
+  const { signatureImageData } = wizardState.formData;
+
+  const bookingData = useMemo(
+    () => ({
+      waiverSignature: signatureImageData,
+    }),
+    [signatureImageData]
+  );
 
   const onSubmit = async (e) => {
     e.preventDefault();
+
+    appDispatch(
+      updateBooking({ bookingId: bookingInProgress?.id, ...bookingData })
+    );
 
     appDispatch(setStripeLoadingStatus("pending"));
     const result = await stripe.confirmPayment({
