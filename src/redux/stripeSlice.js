@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { loadStripe } from "@stripe/stripe-js";
 import { httpsCallable } from "firebase/functions";
 import { functions } from "../firebase/client";
 import { createThunkCondition } from "./utils";
@@ -73,9 +72,9 @@ export const stripeSlice = createSlice({
     setStripeLoadingStatus: (state, action) => {
       state.loading = action.payload;
     },
-    setStripeError: (state,action) => {
-      state.error = action.payload.error
-    }
+    setStripeError: (state, action) => {
+      state.error = action.payload.error;
+    },
   },
   extraReducers: {
     [createPaymentIntent.pending]: (state, action) => {

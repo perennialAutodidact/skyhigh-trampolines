@@ -1,5 +1,4 @@
-import React, { useReducer, useEffect, useMemo, useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useReducer, useEffect, useMemo } from "react";
 import {
   Routes,
   Route,
@@ -7,8 +6,6 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
-import { cancelPaymentIntent } from "../../redux/stripeSlice";
-import { cancelBooking } from "../../redux/bookingsSlice";
 import { BookingWizardContext, initialState } from "./context";
 import { wizardReducer } from "./context/reducer";
 import Step1 from "./Step1";
@@ -21,10 +18,8 @@ import CartPreview from "./common/CartPreview";
 import ProgressBar from "./common/ProgressBar";
 import LoadingSpinner from "../LoadingSpinner";
 import { useStripeClient } from "../../hooks/useStripeClient";
-import { useBeforeunload } from "react-beforeunload";
 
 const BookingWizard = () => {
-  const appDispatch = useDispatch();
   const [wizardState, wizardDispatch] = useReducer(wizardReducer, initialState);
   const location = useLocation();
   const navigate = useNavigate();

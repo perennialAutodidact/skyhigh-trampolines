@@ -13,7 +13,7 @@ const ProductData = () => {
   // dispatch action to fetch products
   useEffect(() => {
     if (!!products && productsLoadingStatus === "idle") {
-      const promise = dispatch(fetchProducts());
+      dispatch(fetchProducts());
     }
   }, [dispatch, products, productsLoadingStatus]);
 

@@ -12,7 +12,7 @@ const AllAddOns = () => {
   // dispatch action to fetch addOns
   useEffect(() => {
     if (!!addOns && addOnsLoadingStatus === "idle") {
-      const promise = dispatch(getAddOnsList());
+      dispatch(getAddOnsList());
     }
   }, [addOns, addOnsLoadingStatus, dispatch]);
 

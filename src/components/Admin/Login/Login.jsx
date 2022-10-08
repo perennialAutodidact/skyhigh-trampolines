@@ -1,8 +1,7 @@
-import { login, logout } from "../../../redux/authSlice";
+import { login } from "../../../redux/authSlice";
 
 import { GrGoogle, GrGithub } from "react-icons/gr";
 import { auth } from "../../../firebase/client";
-import { signOut } from "firebase/auth";
 import { useDispatch } from "react-redux";
 import { useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
@@ -47,11 +46,6 @@ const Login = () => {
       navigate(`/admin`);
     }
   }, [user, dispatch, navigate]);
-
-  const logoutHandler = () => {
-    signOut(auth);
-    dispatch(logout());
-  };
 
   return loading ? (
     <div className="mt-5 d-flex flex-column align-items-center">

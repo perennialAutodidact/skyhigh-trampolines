@@ -33,7 +33,7 @@ exports.updateBooking = functions.https.onCall(async (data, context) => {
         signature: waiverSignature,
         bookingId,
       });
-      bookingData['waiverId'] = waiver.id
+      bookingData["waiverId"] = waiver.id;
     }
     const res = await db
       .collection("bookings")
@@ -104,6 +104,10 @@ exports.updateBookingFromStripeEvent = functions.firestore
             status: "complete",
             receiptId: receiptId,
           });
+
+          //
+          // SEND RECEIPT EMAIL
+          //
 
           break;
         case "payment_intent.cancelled":

@@ -10,7 +10,7 @@ const RoomsList = () => {
   // dispatch action to fetch addOns
   useEffect(() => {
     if (!!rooms && loading === "idle") {
-      const promise = appDispatch(getRoomsList());
+      appDispatch(getRoomsList());
     }
   }, [rooms, loading, appDispatch]);
 

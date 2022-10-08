@@ -5,7 +5,7 @@ import { BookingWizardContext } from "../../context";
 import { useEffect } from "react";
 
 const Waiver = ({ register, setValue, errors, clearErrors }) => {
-  const [state, dispatch] = useContext(BookingWizardContext);
+  const [state] = useContext(BookingWizardContext);
   const { signatureImageData, waiverAgreed } = state.formData;
   const signaturePadRef = useRef(null);
 
