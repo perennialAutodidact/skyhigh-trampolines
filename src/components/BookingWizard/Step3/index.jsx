@@ -93,11 +93,14 @@ const Step3 = () => {
     );
   }
   return (
-    <div className="container pt-3">
-      <form onSubmit={handleSubmit(onSubmit)} className="container text-start">
+    <div className="container px-0 pt-3">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="container px-0 text-start"
+      >
         {/* PRODUCT SELECT */}
-        <div className="row px-2 mb-3">
-          <div className="col-12 col-lg-6 p-2 px-lg-2">
+        <div className="row px-0 mb-3">
+          <div className="col-12 col-lg-6">
             <label htmlFor="date" className="form-label p-0 d-flex gap-1">
               <h3>Select Add-Ons</h3> <span className="text-danger">*</span>
             </label>
@@ -130,7 +133,9 @@ const Step3 = () => {
           </p>
         )}
 
-        <FormNavButtons goBack={goBack} submitButtonText={"Next"} />
+        <div className="container px-0 px-lg-4">
+          <FormNavButtons goBack={goBack} submitButtonText={"Next"} />
+        </div>
       </form>
     </div>
   );
