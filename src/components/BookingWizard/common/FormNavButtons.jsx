@@ -27,14 +27,14 @@ const FormNavButtons = ({ submitButtonText, goBack }) => {
       Promise.all(cancelCalls).then((res) => {
         appDispatch(resetRoomsSlice());
         appDispatch(resetProductsSlice());
-        appDispatch(resetAddOnsSlice())
+        appDispatch(resetAddOnsSlice());
         navigate("/");
       });
     },
     [appDispatch, navigate]
   );
   return (
-    <div className="row my-3 g-2 px-2 d-flex align-items-end">
+    <div className="row my-3 g-2 d-flex align-items-end">
       <div className="col-12 col-lg-6 order-2 order-lg-1">
         <button onClick={goBack} className="btn btn-outline-dark w-100">
           Back
