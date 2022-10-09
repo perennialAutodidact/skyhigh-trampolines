@@ -52,9 +52,7 @@ const BookingWizard = () => {
   return (
     <BookingWizardContext.Provider value={[wizardState, wizardDispatch]}>
       <div className="container">
-        <h1 className="text-center">
-          {!isThankYouPage ? "Booking" : "Thank you!"}
-        </h1>
+        {!isThankYouPage && <h1 className="text-center">Booking</h1>}
         {!isThankYouPage && <ProgressBar />}
         <div className="row">
           <div
@@ -73,7 +71,7 @@ const BookingWizard = () => {
                   path="/checkout"
                   element={<Step6 stripe={stripeClient} />}
                 />
-                <Route path="thank-you" element={<ThankYou />} />
+                <Route path="/thank-you" element={<ThankYou />} />
                 <Route path="/*" element={<Navigate to="/booking" />} />
               </Routes>
             </div>

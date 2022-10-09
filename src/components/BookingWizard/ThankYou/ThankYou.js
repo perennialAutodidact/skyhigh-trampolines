@@ -2,15 +2,13 @@ import React, { useContext } from "react";
 import { BookingWizardContext } from "../context";
 import styles from "./ThankYou.module.scss";
 import { toMoney, getBookedRooms, getSelectedAddOns } from "../context/utils";
-import { getOrderSubtotal } from "../common/CartPreview/utils";
 
 const ThankYou = () => {
-  const [state] = useContext(BookingWizardContext);
+  const [wizardState] = useContext(BookingWizardContext);
+  console.log("state", wizardState);
 
-  const bookedRooms = getBookedRooms(state.formData.rooms);
-  const selectedAddOns = getSelectedAddOns(state.formData.addOns);
-
-  const subTotal = getOrderSubtotal(bookedRooms, selectedAddOns);
+  const bookedRooms = getBookedRooms(wizardState.rooms);
+  const selectedAddOns = getSelectedAddOns(wizardState.addOns);
 
   return (
     <div className="container pt-5 w-75">
@@ -20,17 +18,17 @@ const ThankYou = () => {
         <p>Your order has been received.</p>
       </div>
       <div>
-        <p className="pt-3">Hello {state.formData.fullName},</p>
+        <p className="pt-3">Hello {wizardState.formData.fullName},</p>
         <p className="pt-3">
           Your booking has been confirmed. We've sent an email to{" "}
-          <strong className={styles.bold}>{state.formData.email}</strong> with
-          your order confirmation and receipt.
+          <strong className={styles.bold}>{wizardState.formData.email}</strong>{" "}
+          with your order confirmation and receipt.
         </p>
         <br />
 
         <h3 className="fw-bold order-details">Order Details</h3>
 
-        <p>Confirmation #{state.confirmationId}</p>
+        <p>Confirmation {wizardState.confirmationId}</p>
         <br />
 
         {bookedRooms.map((room) => {
@@ -73,31 +71,35 @@ const ThankYou = () => {
           <div>
             <p className={styles.addOn}></p>
           </div>
-          <p className={styles.amount}>Sub Total</p>
-          <p className={styles.price}>${toMoney(subTotal)}</p>
-        </div>
-        <div className={styles.order}>
-          <div>
-            <p className={styles.addOn}></p>
-          </div>
-          <p className={styles.amount}>Transaction Fee</p>
-          <p className={styles.price}>${toMoney(state.TRANSACTION_FEE)}</p>
-        </div>
-        <div className={styles.order}>
-          <div>
-            <p className={styles.addOn}></p>
-          </div>
-          <p className={styles.amount}>Tax</p>
+          <p className={styles.amount}>Subtotal</p>
           <p className={styles.price}>
-            ${toMoney(subTotal * state.SALES_TAX_RATE)}
+            ${toMoney(wizardState.formData.subTotal)}
           </p>
         </div>
         <div className={styles.order}>
           <div>
             <p className={styles.addOn}></p>
           </div>
+          <p className={styles.amount}>Transaction Fee</p>
+          <p className={styles.price}>
+            ${toMoney(wizardState.formData.transactionFee)}
+          </p>
+        </div>
+        <div className={styles.order}>
+          <div>
+            <p className={styles.addOn}></p>
+          </div>
+          <p className={styles.amount}>Tax</p>
+          <p className={styles.price}>${toMoney(wizardState.formData.tax)}</p>
+        </div>
+        <div className={styles.order}>
+          <div>
+            <p className={styles.addOn}></p>
+          </div>
           <h5 className={styles.amount}>Grand Total</h5>
-          <p className={styles.price}>${toMoney(state.grandTotal)}</p>
+          <p className={styles.price}>
+            ${toMoney(wizardState.formData.grandTotal)}
+          </p>
         </div>
       </div>
     </div>
