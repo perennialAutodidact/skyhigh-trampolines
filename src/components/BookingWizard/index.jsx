@@ -18,6 +18,7 @@ import CartPreview from "./common/CartPreview";
 import ProgressBar from "./common/ProgressBar";
 import LoadingSpinner from "../LoadingSpinner";
 import { useStripeClient } from "../../hooks/useStripeClient";
+import ThankYou from "./ThankYou/ThankYou";
 
 const BookingWizard = () => {
   const [wizardState, wizardDispatch] = useReducer(wizardReducer, initialState);
@@ -51,9 +52,7 @@ const BookingWizard = () => {
   return (
     <BookingWizardContext.Provider value={[wizardState, wizardDispatch]}>
       <div className="container">
-        <h1 className="text-center">
-          {!isThankYouPage ? "Booking" : "Thank you!"}
-        </h1>
+        {!isThankYouPage && <h1 className="text-center">Booking</h1>}
         {!isThankYouPage && <ProgressBar />}
         <div className="row">
           <div
@@ -72,14 +71,7 @@ const BookingWizard = () => {
                   path="/checkout"
                   element={<Step6 stripe={stripeClient} />}
                 />
-                <Route
-                  path="thank-you"
-                  element={
-                    <div className="col-12">
-                      <p className="text-center">Booking data here...</p>
-                    </div>
-                  }
-                />
+                <Route path="/thank-you" element={<ThankYou />} />
                 <Route path="/*" element={<Navigate to="/booking" />} />
               </Routes>
             </div>

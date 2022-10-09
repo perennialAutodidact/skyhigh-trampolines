@@ -10,6 +10,13 @@ export const setProgressBarStep = (step) => ({
   },
 });
 
+export const checkoutSuccess = (confirmationId) => ({
+  type: "CHECKOUT_SUCCESS",
+  payload: {
+    confirmationId,
+  },
+});
+
 export const setInitialRoomState = (rooms) => ({
   type: "SET_INITIAL_ROOM_STATE",
   payload: { rooms },
