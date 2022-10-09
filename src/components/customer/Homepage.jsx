@@ -14,7 +14,7 @@ const Homepage = () => {
       </figure>
 
       <div
-        className={`${styled.overlay} position-absolute d-flex justify-content-center align-items-center w-100 bg-overlay bg-opacity-50`}
+        className={`${styled.overlay} position-absolute d-flex gap-3 flex-column align-items-center justify-content-center align-items-center w-100 bg-overlay bg-opacity-50`}
       >
         <button type="button" className="btn btn-light btn-lg rounded shadow">
           <Link
@@ -23,8 +23,8 @@ const Homepage = () => {
           >
             Buy Tickets
           </Link>
-          <AutoAddressInput />
         </button>
+        <AutoAddressInput />
       </div>
     </section>
   );
