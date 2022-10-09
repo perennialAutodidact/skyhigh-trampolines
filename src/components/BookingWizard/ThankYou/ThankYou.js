@@ -33,48 +33,42 @@ const ThankYou = () => {
         <p>Confirmation #{state.confirmationId}</p>
         <br />
 
-        {state.formData.rooms
-          .filter((room) => room.selectedStartTime)
-          .map((room) => {
-            return (
-              <div key={room.id}>
-                <p>{room.name}</p>
-                {room.products
-                  .filter((product) => product.quantity > 0)
-                  .map((product) => {
-                    return (
-                      <div className={styles.order} key={product.id}>
-                        <div>
-                          <p className={styles.product}>{product.name}</p>
-                          {room.selectedStartTime && (
-                            <p className={styles.bookingTime}>
-                              Booking Time {room.selectedStartTime}
-                            </p>
-                          )}
-                        </div>
-                        <p className={styles.amount}>X {product.quantity}</p>
-                        <p className={styles.price}>$ {product.price / 100}</p>
-                      </div>
-                    );
-                  })}
-                <br />
-              </div>
-            );
-          })}
+        {bookedRooms.map((room) => {
+          return (
+            <div key={room.id}>
+              <p>{room.name}</p>
+              {room.products.map((product) => {
+                return (
+                  <div className={styles.order} key={product.id}>
+                    <div>
+                      <p className={styles.product}>{product.name}</p>
+                      {room.selectedStartTime && (
+                        <p className={styles.bookingTime}>
+                          Booking Time {room.selectedStartTime}
+                        </p>
+                      )}
+                    </div>
+                    <p className={styles.amount}>X {product.quantity}</p>
+                    <p className={styles.price}>$ {product.price / 100}</p>
+                  </div>
+                );
+              })}
+              <br />
+            </div>
+          );
+        })}
 
-        {state.formData.addOns
-          .filter((addOn) => addOn.quantity > 0)
-          .map((addOn) => {
-            return (
-              <div className={styles.order} key={addOn.id}>
-                <div>
-                  <p className={styles.addOn}>{addOn.name}</p>
-                </div>
-                <p className={styles.amount}>X {addOn.quantity}</p>
-                <p className={styles.price}>$ {addOn.price / 100}</p>
+        {selectedAddOns.map((addOn) => {
+          return (
+            <div className={styles.order} key={addOn.id}>
+              <div>
+                <p className={styles.addOn}>{addOn.name}</p>
               </div>
-            );
-          })}
+              <p className={styles.amount}>X {addOn.quantity}</p>
+              <p className={styles.price}>$ {addOn.price / 100}</p>
+            </div>
+          );
+        })}
         <div className={styles.order}>
           <div>
             <p className={styles.addOn}></p>
