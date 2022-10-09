@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import { useOnClickOutside } from "../../../hooks/useOnClickOutside";
 import usePlacesAutocomplete from "use-places-autocomplete";
+import styles from "./AddressSearchInput.module.scss";
 
 const AddressSearchInput = ({ formOnChange, setFormValue }) => {
   const {
@@ -23,14 +24,18 @@ const AddressSearchInput = ({ formOnChange, setFormValue }) => {
 
   const handleInput = (e) => {
     // Update the keyword of the input element
+    console.log(e.target.value);
     setValue(e.target.value);
+    formOnChange(e.target.value);
   };
   const handleSelect =
     ({ description }) =>
     () => {
       // When user selects a place, we can replace the keyword without request data from API
       // by setting the second parameter to "false"
+      console.log(description);
       setValue(description, false);
+      formOnChange(description);
       clearSuggestions();
     };
   const renderSuggestions = () =>
@@ -41,16 +46,17 @@ const AddressSearchInput = ({ formOnChange, setFormValue }) => {
       } = suggestion;
 
       return (
-        <li key={place_id} onClick={handleSelect(suggestion)}>
+        <div
+          key={place_id}
+          onClick={handleSelect(suggestion)}
+          className={`list-group-item ${styles.suggestionListItem}`}
+        >
           <strong>{main_text}</strong> <small>{secondary_text}</small>
-        </li>
+        </div>
       );
     });
   return (
-    <div ref={autoCompleteRef} className="row mb-3">
-      <script
-        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_PLACES_API_KEY}&libraries=places`}
-      ></script>
+    <div ref={autoCompleteRef} className="row mb-3 position-relative">
       <label htmlFor="address" className="form-label p-0">
         Address <span className="text-danger">*</span>
       </label>
@@ -61,7 +67,11 @@ const AddressSearchInput = ({ formOnChange, setFormValue }) => {
         disabled={!ready}
         className="form-control"
       />
-      {status === "OK" && <ul>{renderSuggestions()}</ul>}
+      {status === "OK" && (
+        <div className="position-absolute list-group top-100 p-0">
+          {renderSuggestions()}
+        </div>
+      )}
     </div>
   );
 };
