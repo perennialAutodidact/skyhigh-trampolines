@@ -12,11 +12,19 @@ const AutoAddressInput = () => {
       isFirstRender.current = false;
       loadScript(
         `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_PLACES_API_KEY}&libraries=places`,
-        handleScriptLoad
+        () => handleScriptLoad(setQuery, autoCompleteRef)
       );
     }
   }, [isFirstRender]);
-  return <input type="text" ref={autoCompleteRef} />;
+
+  return (
+    <input
+      type="text"
+      ref={autoCompleteRef}
+      value={query}
+      onChange={(e) => setQuery(e.target.value)}
+    />
+  );
 };
 
 export default AutoAddressInput;

@@ -31,7 +31,7 @@ export const handleScriptLoad = (updateQuery, autoCompleteRef) => {
   );
 
   autoComplete.setFields(["address_components", "formatted_address"]);
-  autoComplete.addEventListener("place_changed", () =>
+  autoComplete.addListener("place_changed", () =>
     handlePlaceSelect(updateQuery, autoComplete)
   );
 };
