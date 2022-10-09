@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { BookingWizardContext } from "../context";
 import { step4Schema } from "../context/schema";
 import { updateForm, setProgressBarStep } from "../context/actions";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import AutoAddressInput from "./AutoAddressInput";
+import AddressSearchInput from "./AddressSearchInput";
 
 import FormNavButtons from "../common/FormNavButtons";
 
@@ -24,6 +24,7 @@ const Step4 = () => {
     handleSubmit,
     register,
     formState: { errors },
+    control,
   } = useForm({
     initialValues,
     defaultValues: initialValues,
@@ -46,7 +47,7 @@ const Step4 = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="container text-start">
         {/* CUSTOMER FULL NAME */}
         <div className="row mb-3">
-          <label htmlFor="fullName" className="form-label p-0">
+          <label htmlFor="fullName" className="form-label">
             Name <span className="text-danger">*</span>
           </label>
           <input
@@ -61,7 +62,7 @@ const Step4 = () => {
 
         {/* CUSTOMER EMAIL */}
         <div className="row mb-3">
-          <label htmlFor="email" className="form-label p-0">
+          <label htmlFor="email" className="form-label">
             Email <span className="text-danger">*</span>
           </label>
           <input
@@ -75,14 +76,13 @@ const Step4 = () => {
         </div>
 
         {/* CUSTOMER ADDRESS */}
-        <div className="row mb-3">
-          <label htmlFor="address" className="form-label p-0">
-            Address <span className="text-danger">*</span>
-          </label>
-          <input
-            {...register("address")}
-            id="address"
-            className={`form-control ${errors.address && "is-invalid"}`}
+        <div className="container-fluid px-0 mb-3">
+          <Controller
+            control={control}
+            name="address"
+            render={({ field }) => (
+              <AddressSearchInput formOnChange={field.onChange} />
+            )}
           />
           {errors.address && (
             <p className="text-danger">{errors.address.message}</p>
