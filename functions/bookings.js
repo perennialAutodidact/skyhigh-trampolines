@@ -14,7 +14,7 @@ sgMail.setApiKey(SENDGRID_KEY);
 
 // function to send email
 const sendEmailToUser = async (
-  paymentIntentId,
+  receiptId,
   data,
   amount,
   tax,
@@ -27,15 +27,15 @@ const sendEmailToUser = async (
   // send a post request to the sendgrid api
   const msg = {
     to: [data.customer?.email, "skaiwilliams85@gmail.com"],
-    from: "wilado9200@edxplus.com",
+    from: "lodracorte@vusra.com",
     template_id: TEMPLATE_ID,
 
     dynamic_template_data: {
       name: data.customer?.fullName,
-      subject: "Sky High Booking Confirmation",
-      idNumber: paymentIntentId,
+      subject: "Booking Confirmation",
+      idNumber: receiptId,
       currentDate: new Date().toDateString(),
-      dataDate: data.date,
+      bookingDate: data.date,
       rooms: data.rooms ? data.rooms : [],
       addOns: data.addOns ? data.addOns : [],
       subtotal: subTotal,
@@ -166,7 +166,7 @@ exports.updateBookingFromStripeEvent = functions.firestore
 
           // send email
           await sendEmailToUser(
-            paymentIntentId,
+            receiptId,
             data,
             amount,
             tax,
