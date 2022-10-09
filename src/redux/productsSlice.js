@@ -31,31 +31,37 @@ export const createProduct = createAsyncThunk(
 // fetch all products from firebase
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
-  async () => {
-    // fetch data from firebase and store in constant
-    const data = await getDocs(productsCollection)
-      .then((snapshot) => {
-        let products = [];
-        snapshot.forEach((doc) => {
-          products.push({ ...doc.data(), id: doc.id });
+  async (_, { rejectWithValue }) => {
+    try {
+      const products = await getDocs(productsCollection).then((productDocs) => {
+        let productsData = [];
+        productDocs.forEach((doc) => {
+          productsData.push({ ...doc.data(), id: doc.id });
         });
-        return products;
-      })
-      .catch((err) => console.log(err.message));
+        return productsData;
+      });
 
-    return data;
+      return products;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
   },
   thunkCondition
 );
 
-const productSlice = createSlice({
+const productsSlice = createSlice({
   name: "products",
   initialState: {
     products: [],
     loading: "idle",
     error: null,
   },
-  //reducers: {},
+  reducers: {
+    resetProductsSlice: (state, action) => {
+      state.products = [];
+      state.loading = "idle";
+    },
+  },
   extraReducers: {
     [createProduct.pending]: (state, action) => {
       state.loading = "pending";
@@ -65,20 +71,25 @@ const productSlice = createSlice({
     },
     [createProduct.rejected]: (state, action) => {
       state.loading = "rejected";
+      state.error = action.payload;
     },
 
     // fetch products
-    [fetchProducts.pending]: (state) => {
+    [fetchProducts.pending]: (state, action) => {
       state.loading = "pending";
     },
     [fetchProducts.fulfilled]: (state, action) => {
+      console.log(action.payload);
       state.loading = "fulfilled";
       state.products = action.payload;
     },
-    [fetchProducts.rejected]: (state) => {
+    [fetchProducts.rejected]: (state, action) => {
+      console.log(action.payload);
       state.loading = "rejected";
+      state.error = action.payload;
     },
   },
 });
 
-export default productSlice.reducer;
+export const { resetProductsSlice } = productsSlice.actions;
+export default productsSlice.reducer;

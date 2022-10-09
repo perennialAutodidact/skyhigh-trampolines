@@ -1,5 +1,6 @@
 @import '../../../styles/team-sapphire-variables';
 
-:export{
+// to customize the invalid state of stripe elements
+:export {
     danger: $custom-danger;
 }

@@ -2,20 +2,20 @@ import React from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../../redux/productsSlice";
+import LoadingSpinner from "../LoadingSpinner";
 
 const ProductData = () => {
   const dispatch = useDispatch();
-  const { products, loading } = useSelector((state) => state.products);
+  const { products, loading: productsLoadingStatus } = useSelector(
+    (state) => state.products
+  );
 
   // dispatch action to fetch products
   useEffect(() => {
-    const promise = dispatch(fetchProducts());
-
-    // cancel the promise if the component unmounts
-    return () => {
-      promise.abort();
-    };
-  }, [dispatch]);
+    if (!!products && productsLoadingStatus === "idle") {
+      dispatch(fetchProducts());
+    }
+  }, [dispatch, products, productsLoadingStatus]);
 
   // map over products and return a table row for each product
   const data = products?.map((product) => {
@@ -34,7 +34,7 @@ const ProductData = () => {
           </div>
         </th>
 
-        <td>{product.price / 100}</td>
+        <td>${product.price / 100}</td>
         <td>{product.productType} </td>
       </tr>
     );
@@ -42,8 +42,9 @@ const ProductData = () => {
 
   return (
     <>
-      {loading === "idle" || loading === "pending" ? (
-        <div>Loading...</div>
+      {productsLoadingStatus === "idle" ||
+      productsLoadingStatus === "pending" ? (
+        <LoadingSpinner />
       ) : (
         <table className="table table-striped">
           <thead>

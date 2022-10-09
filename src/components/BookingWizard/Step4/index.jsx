@@ -8,32 +8,36 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import AutoAddressInput from "./AutoAddressInput";
 
 import FormNavButtons from "../common/FormNavButtons";
+
 const Step4 = () => {
   const navigate = useNavigate();
-  const [state, dispatch] = useContext(BookingWizardContext);
-  const { fullName, email, address } = state.formData;
+  const [wizardState, wizardDispatch] = useContext(BookingWizardContext);
+  const { fullName, email, address } = wizardState.formData;
+
   const initialValues = {
-    fullName: "",
-    email: "",
-    address: "",
+    fullName,
+    email,
+    address,
   };
+
   const {
     handleSubmit,
     register,
     formState: { errors },
   } = useForm({
     initialValues,
+    defaultValues: initialValues,
     resolver: yupResolver(step4Schema),
   });
 
   const onSubmit = (formData) => {
-    dispatch(updateForm(formData));
-    dispatch(setProgressBarStep(5));
+    wizardDispatch(updateForm(formData));
+    wizardDispatch(setProgressBarStep(5));
     navigate("/booking/step-5");
   };
 
   const goBack = () => {
-    dispatch(setProgressBarStep(3));
+    wizardDispatch(setProgressBarStep(3));
     navigate("/booking/step-3");
   };
 
@@ -48,7 +52,6 @@ const Step4 = () => {
           <input
             {...register("fullName")}
             id="fullName"
-            value={fullName}
             className={`form-control ${errors.fullName && "is-invalid"}`}
           />
           {errors.fullName && (
@@ -64,7 +67,6 @@ const Step4 = () => {
           <input
             {...register("email")}
             id="email"
-            value={email}
             className={`form-control ${errors.email && "is-invalid"}`}
           />
           {errors.email && (
@@ -80,7 +82,6 @@ const Step4 = () => {
           <input
             {...register("address")}
             id="address"
-            value={address}
             className={`form-control ${errors.address && "is-invalid"}`}
           />
           {errors.address && (

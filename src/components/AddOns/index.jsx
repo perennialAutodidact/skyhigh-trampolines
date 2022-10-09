@@ -1,20 +1,20 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAddOnsList } from "../../redux/addOnsSlice";
+import LoadingSpinner from "../LoadingSpinner";
 
 const AllAddOns = () => {
   const dispatch = useDispatch();
-  const { addOns, loading } = useSelector((state) => state.addOns);
+  const { addOns, loading: addOnsLoadingStatus } = useSelector(
+    (state) => state.addOns
+  );
 
   // dispatch action to fetch addOns
   useEffect(() => {
-    const promise = dispatch(getAddOnsList());
-
-    // cancel the promise if the component unmounts
-    return () => {
-      promise.abort();
-    };
-  }, [dispatch]);
+    if (!!addOns && addOnsLoadingStatus === "idle") {
+      dispatch(getAddOnsList());
+    }
+  }, [addOns, addOnsLoadingStatus, dispatch]);
 
   const data = addOns?.map((product) => {
     return (
@@ -37,22 +37,20 @@ const AllAddOns = () => {
     );
   });
 
+  if (addOnsLoadingStatus === "pending") {
+    return <LoadingSpinner />;
+  }
+
   return (
-    <div>
-      {loading === "idle" || loading === "pending" ? (
-        <div>Loading...</div>
-      ) : (
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th scope="col">Add On</th>
-              <th scope="col">Price</th>
-            </tr>
-          </thead>
-          <tbody>{data}</tbody>
-        </table>
-      )}
-    </div>
+    <table className="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Add On</th>
+          <th scope="col">Price</th>
+        </tr>
+      </thead>
+      <tbody>{data}</tbody>
+    </table>
   );
 };
 

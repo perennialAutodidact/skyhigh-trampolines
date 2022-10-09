@@ -28,12 +28,13 @@ const functions = getFunctions(app);
 
 // run the following command before changing .env value to true:
 // firebase emulators:start
-process.env.EMULATE_FUNCTIONS && connectFunctionsEmulator(functions, "localhost", 5001)
+process.env.EMULATE_FUNCTIONS &&
+  connectFunctionsEmulator(functions, "localhost", 5001);
 
 const productsCollection = collection(db, "products");
 const roomsCollection = collection(db, "rooms");
 const addOnsCollection = collection(db, "addOns");
-
+const bookingsCollection = collection(db, "bookings");
 
 export {
   db,
@@ -43,4 +44,5 @@ export {
   productsCollection,
   roomsCollection,
   addOnsCollection,
+  bookingsCollection,
 };

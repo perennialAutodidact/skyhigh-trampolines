@@ -20,6 +20,16 @@ export const setInitialAddOnState = (addOns) => ({
   payload: { addOns },
 });
 
+export const updateBookedRooms = (bookedRooms) => ({
+  type: "UPDATE_BOOKED_ROOMS",
+  payload: { bookedRooms },
+});
+
+export const updateSelectedAddOns = (selectedAddOns) => ({
+  type: "UPDATED_SELECTED_ADDONS",
+  payload: { selectedAddOns },
+});
+
 export const setSelectedStartTime = (roomId, selectedStartTime) => ({
   type: "SET_SELECTED_START_TIME",
   payload: {
@@ -45,7 +55,22 @@ export const setAddOnQuantity = (addOnId, quantity) => ({
   },
 });
 
+export const updateSubtotal = (subTotal) => ({
+  type: "UPDATE_SUBTOTAL",
+  payload: { subTotal },
+});
+
+export const updateTax = (tax) => ({
+  type: "UPDATE_TAX",
+  payload: { tax },
+});
+
 export const updateGrandTotal = (grandTotal) => ({
   type: "UPDATE_GRAND_TOTAL",
   payload: { grandTotal },
+});
+
+export const updatePaymentStatus = (paymentStatus) => ({
+  type: "updatePaymentStatus",
+  payload: { paymentStatus },
 });

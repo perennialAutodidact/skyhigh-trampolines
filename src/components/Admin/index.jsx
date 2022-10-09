@@ -2,9 +2,10 @@ import React from "react";
 import styled from "./Admin.module.scss";
 import { auth } from "../../firebase/client";
 import { useAuthState } from "react-firebase-hooks/auth";
-import Sidebar from "./nav/Sidebar";
+import Sidebar from "./Sidebar";
 import { Outlet } from "react-router-dom";
 import { useEffect } from "react";
+import LoadingSpinner from "../LoadingSpinner";
 
 const Admin = (props) => {
   const { toggleSidebar } = props;
@@ -21,7 +22,7 @@ const Admin = (props) => {
     <div>
       {loading ? (
         <div className="text-center pt-3">
-          <p>Loading...please wait</p>
+          <LoadingSpinner />
         </div>
       ) : (
         <main className="d-flex">
