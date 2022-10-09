@@ -6,6 +6,57 @@ if (admin.apps.length === 0) {
 }
 const db = admin.firestore();
 
+//sendgrid
+const sgMail = require("@sendgrid/mail");
+const SENDGRID_KEY = functions.config().sendgrid.key;
+const TEMPLATE_ID = functions.config().sendgrid.template;
+sgMail.setApiKey(SENDGRID_KEY);
+
+// function to send email
+const sendEmailToUser = async (
+  paymentIntentId,
+  data,
+  amount,
+  tax,
+  subTotal,
+  transactionFee
+) => {
+  console.log(data);
+  functions.logger.log(data);
+
+  // send a post request to the sendgrid api
+  const msg = {
+    to: [data.customer?.email, "skaiwilliams85@gmail.com"],
+    from: "wilado9200@edxplus.com",
+    template_id: TEMPLATE_ID,
+
+    dynamic_template_data: {
+      name: data.customer?.fullName,
+      subject: "Sky High Booking Confirmation",
+      idNumber: paymentIntentId,
+      currentDate: new Date().toDateString(),
+      dataDate: data.date,
+      rooms: data.rooms ? data.rooms : [],
+      addOns: data.addOns ? data.addOns : [],
+      subtotal: subTotal,
+      fee: transactionFee,
+      tax: tax,
+      total: amount,
+    },
+  };
+
+  try {
+    await sgMail.send(msg);
+    console.log("email sent");
+    functions.logger.log("email sent");
+    return { success: true };
+  } catch (error) {
+    console.log(error);
+    functions.logger.log(error);
+    return { success: false, error };
+  }
+};
+
 exports.createBooking = functions.https.onCall(async (bookingData, context) => {
   try {
     const dateCreated = admin.firestore.Timestamp.now();
@@ -108,6 +159,20 @@ exports.updateBookingFromStripeEvent = functions.firestore
           //
           // SEND RECEIPT EMAIL
           //
+          const data = await booking.get().then((doc) => doc.data());
+          //log data
+          console.log(data);
+          functions.logger.log(data);
+
+          // send email
+          await sendEmailToUser(
+            paymentIntentId,
+            data,
+            amount,
+            tax,
+            subTotal,
+            transactionFee
+          );
 
           break;
         case "payment_intent.cancelled":
