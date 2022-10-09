@@ -14,6 +14,7 @@ import {
   setStripeLoadingStatus,
   setStripeError,
 } from "../../../redux/stripeSlice";
+import { checkoutSuccess } from "../context/actions";
 
 const CheckoutForm = ({ goBack, setError }) => {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ const CheckoutForm = ({ goBack, setError }) => {
     (appState) => appState.stripe
   );
   const { bookingInProgress } = useSelector((appState) => appState.bookings);
-  const [wizardState] = useContext(BookingWizardContext);
+  const [wizardState, wizardDispatch] = useContext(BookingWizardContext);
   const { signatureImageData } = wizardState.formData;
 
   const bookingData = useMemo(
@@ -52,6 +53,7 @@ const CheckoutForm = ({ goBack, setError }) => {
       appDispatch(setStripeError({ error: result.error.message }));
     } else {
       appDispatch(setStripeLoadingStatus("succeeded"));
+      wizardDispatch(checkoutSuccess(result.paymentIntent.id));
       navigate("/booking/thank-you");
     }
   };
