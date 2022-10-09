@@ -51,6 +51,7 @@ const Step2 = () => {
       date: wizardState.formData.date,
       rooms: getBookedRooms(wizardState.rooms).map((room) => ({
         id: room.id,
+        name: room.name,
         startTime: room.selectedStartTime,
         products: room.products.map((product) => ({
           id: product.id,
