@@ -51,8 +51,14 @@ const addOnsSlice = createSlice({
   initialState: {
     addOns: [],
     loading: "idle",
+    error: null,
   },
-  //reducers: {},
+  reducers: {
+    resetAddOnsSlice: (state, action) => {
+      state.addOns = [];
+      state.loading = "idle";
+    },
+  },
   extraReducers: {
     [createAddOn.pending]: (state, action) => {
       state.loading = "pending";
@@ -62,6 +68,7 @@ const addOnsSlice = createSlice({
     },
     [createAddOn.rejected]: (state, action) => {
       state.loading = "rejected";
+      state.error = action.payload;
     },
 
     [getAddOnsList.pending]: (state, action) => {
@@ -73,8 +80,11 @@ const addOnsSlice = createSlice({
     },
     [getAddOnsList.rejected]: (state, action) => {
       state.loading = "rejected";
+      state.error = action.payload;
     },
   },
 });
+
+export const {resetAddOnsSlice} = addOnsSlice.actions;
 
 export default addOnsSlice.reducer;
