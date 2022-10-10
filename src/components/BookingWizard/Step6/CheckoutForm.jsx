@@ -68,16 +68,13 @@ const CheckoutForm = ({ goBack, setError }) => {
     <form onSubmit={onSubmit}>
       <PaymentElement />
       <div className="container px-0 px-lg-3">
-        <FormNavButtons
-          goBack={goBack}
-          submitButtonText={
-            stripeLoadingStatus === "pending" ? (
-              <LoadingSpinner color={"light"} />
-            ) : (
-              "Submit"
-            )
-          }
-        />
+        {stripeLoadingStatus === "pending" ? (
+          <div className="my-3">
+            <LoadingSpinner color={"primary"} />
+          </div>
+        ) : (
+          <FormNavButtons goBack={goBack} submitButtonText={"Submit"} />
+        )}
       </div>
     </form>
   );
