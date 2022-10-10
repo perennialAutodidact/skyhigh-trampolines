@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { cancelPaymentIntent } from "../../../redux/stripeSlice";
 import { cancelBooking } from "../../../redux/bookingsSlice";
@@ -8,33 +8,30 @@ import { resetProductsSlice } from "../../../redux/productsSlice";
 import { resetAddOnsSlice } from "../../../redux/addOnsSlice";
 
 const FormNavButtons = ({ submitButtonText, goBack }) => {
-  const navigate = useNavigate();
   const appDispatch = useDispatch();
   const { paymentIntent } = useSelector((appState) => appState.stripe);
   const { bookingInProgress } = useSelector((appState) => appState.bookings);
 
   const cancelBookingInProgress = useCallback(
     (paymentIntent, bookingInProgress) => {
-      console.log({ paymentIntent, bookingInProgress });
       const cancelCalls = [];
-      if (paymentIntent.id) {
+      if (paymentIntent?.id) {
         cancelCalls.push(appDispatch(cancelPaymentIntent(paymentIntent.id)));
       }
-      if (bookingInProgress.id) {
+      if (bookingInProgress?.id) {
         cancelCalls.push(appDispatch(cancelBooking(bookingInProgress.id)));
       }
 
       Promise.all(cancelCalls).then((res) => {
         appDispatch(resetRoomsSlice());
         appDispatch(resetProductsSlice());
-        appDispatch(resetAddOnsSlice())
-        navigate("/");
+        appDispatch(resetAddOnsSlice());
       });
     },
-    [appDispatch, navigate]
+    [appDispatch]
   );
   return (
-    <div className="row my-3 g-2 px-2 d-flex align-items-end">
+    <div className="row my-3 g-2 d-flex align-items-end">
       <div className="col-12 col-lg-6 order-2 order-lg-1">
         <button onClick={goBack} className="btn btn-outline-dark w-100">
           Back
@@ -47,10 +44,11 @@ const FormNavButtons = ({ submitButtonText, goBack }) => {
       </div>
       <div className="col-10 order-3">
         <Link
+          to={"/"}
           className="link-dark text-decoration-none"
-          onClick={() =>
-            cancelBookingInProgress(paymentIntent, bookingInProgress)
-          }
+          onClick={() => {
+            cancelBookingInProgress(paymentIntent, bookingInProgress);
+          }}
         >
           Cancel
         </Link>

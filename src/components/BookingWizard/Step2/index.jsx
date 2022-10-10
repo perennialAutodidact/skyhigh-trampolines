@@ -83,7 +83,7 @@ const Step2 = () => {
   };
 
   const goBack = () => {
-    navigate("/booking");
+    navigate("/booking/step-1");
     wizardDispatch(setProgressBarStep(1));
   };
 
@@ -96,12 +96,6 @@ const Step2 = () => {
       ),
     [wizardState.rooms]
   );
-
-  //   useEffect(() => {
-  //     if (bookingData) {
-  //       appDispatch(clearBookingData());
-  //     }
-  //   }, [bookingData]);
 
   useEffect(() => {
     setValue("productDataExists", roomDataIsValid());
@@ -126,42 +120,43 @@ const Step2 = () => {
     );
   }
   return (
-    <div className="container px-0 pt-3">
+    <div className="container-fluid px-0 pt-3">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="container-fluid px-0 text-start"
+        className="container-fluid  px-0 text-start"
       >
         {/* PRODUCT SELECT */}
-        <div className="row px-2 mb-3">
-          <div className="col-12 col-lg-6 p-2 px-lg-2">
+        <div className="row px-0 mb-3">
+          <div className="col-12 col-lg-6 ">
             <label htmlFor="date" className="form-label p-0 d-flex gap-1">
               <h3>Select Products</h3> <span className="text-danger">*</span>
             </label>
           </div>
+
+          {/* hidden input field to handle errors if no products are selected */}
+          <input type="hidden" {...register("productDataExists")} />
+
+          <Accordion>
+            {wizardState.rooms.map((room, index) => (
+              <AccordionItem item={room} headerText={room.name} key={room.id}>
+                <AccordionCollapse collapseId={room.id}>
+                  <StartTimeList room={room} />
+
+                  <ProductList products={room.products} roomId={room.id} />
+                </AccordionCollapse>
+              </AccordionItem>
+            ))}
+          </Accordion>
+
+          {errors.productDataExists && (
+            <p className="text-danger text-center">
+              {errors.productDataExists.message}
+            </p>
+          )}
         </div>
-
-        {/* hidden input field to handle errors if no products are selected */}
-        <input type="hidden" {...register("productDataExists")} />
-
-        <Accordion>
-          {wizardState.rooms.map((room, index) => (
-            <AccordionItem item={room} headerText={room.name} key={room.id}>
-              <AccordionCollapse collapseId={room.id}>
-                <StartTimeList room={room} />
-
-                <ProductList products={room.products} roomId={room.id} />
-              </AccordionCollapse>
-            </AccordionItem>
-          ))}
-        </Accordion>
-
-        {errors.productDataExists && (
-          <p className="text-danger text-center">
-            {errors.productDataExists.message}
-          </p>
-        )}
-
-        <FormNavButtons goBack={goBack} submitButtonText={"Next"} />
+        <div className="container px-0 px-lg-4">
+          <FormNavButtons goBack={goBack} submitButtonText={"Next"} />
+        </div>
       </form>
     </div>
   );

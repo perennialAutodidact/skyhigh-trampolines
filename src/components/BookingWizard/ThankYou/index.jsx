@@ -5,17 +5,15 @@ import { toMoney, getBookedRooms, getSelectedAddOns } from "../context/utils";
 
 const ThankYou = () => {
   const [wizardState] = useContext(BookingWizardContext);
-  console.log("state", wizardState);
 
   const bookedRooms = getBookedRooms(wizardState.rooms);
   const selectedAddOns = getSelectedAddOns(wizardState.addOns);
 
   return (
-    <div className="container pt-5 w-75">
-      <p className={styles.bold}>ORDER CONFIRMATION</p>
+    <div className="container pt-3 pb-5 w-75 mb-5">
       <div className="text-center">
-        <h3 className="pt-5">Thank You</h3>
-        <p>Your order has been received.</p>
+        <h1>Thank You!</h1>
+        <h3>Your order has been received.</h3>
       </div>
       <div>
         <p className="pt-3">Hello {wizardState.formData.fullName},</p>
