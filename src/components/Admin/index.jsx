@@ -1,12 +1,10 @@
-import { Outlet } from "react-router-dom";
-import React from "react";
+import React, { useEffect } from "react";
 import { auth } from "../../firebase/client";
-import styled from "./Admin.module.scss";
 import { useAuthState } from "react-firebase-hooks/auth";
-import Sidebar from "./Sidebar";
 import { Outlet } from "react-router-dom";
-import { useEffect } from "react";
+import Sidebar from "./Sidebar";
 import LoadingSpinner from "../LoadingSpinner";
+import styled from "./Admin.module.scss";
 
 const Admin = (props) => {
   const { toggleSidebar } = props;
