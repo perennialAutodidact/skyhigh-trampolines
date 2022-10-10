@@ -83,7 +83,7 @@ const Step2 = () => {
   };
 
   const goBack = () => {
-    navigate("/booking");
+    navigate("/booking/step-1");
     wizardDispatch(setProgressBarStep(1));
   };
 
@@ -138,7 +138,12 @@ const Step2 = () => {
 
           <Accordion>
             {wizardState.rooms.map((room, index) => (
-              <AccordionItem item={room} headerText={room.name} key={room.id}>
+              <AccordionItem
+                item={room}
+                headerText={room.name}
+                expanded={false}
+                key={room.id}
+              >
                 <AccordionCollapse collapseId={room.id}>
                   <StartTimeList room={room} />
 
