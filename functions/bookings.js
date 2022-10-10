@@ -15,44 +15,37 @@ sgMail.setApiKey(SENDGRID_KEY);
 // function to send email
 const sendEmailToUser = async (
   receiptId,
-  data,
+  booking,
   amount,
   tax,
   subTotal,
   transactionFee
 ) => {
-  console.log(data);
-  functions.logger.log(data);
-
   // send a post request to the sendgrid api
   const msg = {
-    to: [data.customer?.email, "skaiwilliams85@gmail.com"],
+    to: [booking.customer?.email],
     from: "lodracorte@vusra.com",
     template_id: TEMPLATE_ID,
 
     dynamic_template_data: {
-      name: data.customer?.fullName,
+      name: booking.customer?.fullName,
       subject: "Booking Confirmation",
       idNumber: receiptId,
       currentDate: new Date().toDateString(),
-      bookingDate: data.date,
-      rooms: data.rooms ? data.rooms : [],
-      addOns: data.addOns ? data.addOns : [],
-      subtotal: subTotal,
-      fee: transactionFee,
-      tax: tax,
-      total: amount,
+      bookingDate: booking.date,
+      rooms: booking.rooms ? booking.rooms : [],
+      addOns: booking.addOns ? booking.addOns : [],
+      subtotal: subTotal / 100,
+      fee: transactionFee / 100,
+      tax: tax / 100,
+      total: amount / 100,
     },
   };
 
   try {
     await sgMail.send(msg);
-    console.log("email sent");
-    functions.logger.log("email sent");
     return { success: true };
   } catch (error) {
-    console.log(error);
-    functions.logger.log(error);
     return { success: false, error };
   }
 };
@@ -125,11 +118,11 @@ exports.updateBookingFromStripeEvent = functions.firestore
         metadata: { bookingId, tax, subTotal, transactionFee },
       } = paymentIntent;
 
-      const booking = db.collection("bookings").doc(bookingId);
+      const bookingRef = db.collection("bookings").doc(bookingId);
 
       switch (eventData.type) {
         case "payment_intent.created":
-          await booking.update({
+          await bookingRef.update({
             paymentIntentId,
           });
           break;
@@ -151,23 +144,17 @@ exports.updateBookingFromStripeEvent = functions.firestore
               transactionFee,
             });
 
-          await booking.update({
+          await bookingRef.update({
             status: "complete",
             receiptId: receiptId,
           });
 
-          //
-          // SEND RECEIPT EMAIL
-          //
-          const data = await booking.get().then((doc) => doc.data());
-          //log data
-          console.log(data);
-          functions.logger.log(data);
+          const booking = await bookingRef.get().then((doc) => doc.data());
 
           // send email
           await sendEmailToUser(
             receiptId,
-            data,
+            booking,
             amount,
             tax,
             subTotal,
