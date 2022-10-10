@@ -1,4 +1,5 @@
-
+const functions = require("firebase-functions");
+const admin = require("firebase-admin");
 const sgMail = require("@sendgrid/mail");
 const SENDGRID_KEY = functions.config().sendgrid.key;
 const TEMPLATE_ID = functions.config().sendgrid.template;

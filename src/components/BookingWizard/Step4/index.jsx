@@ -3,82 +3,90 @@ import { useNavigate } from "react-router-dom";
 import { BookingWizardContext } from "../context";
 import { step4Schema } from "../context/schema";
 import { updateForm, setProgressBarStep } from "../context/actions";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import AddressSearchInput from "./AddressSearchInput";
+
 import FormNavButtons from "../common/FormNavButtons";
+
 const Step4 = () => {
   const navigate = useNavigate();
-  const [state, dispatch] = useContext(BookingWizardContext);
- const {fullName, email, address} = state.formData
+  const [wizardState, wizardDispatch] = useContext(BookingWizardContext);
+  const { fullName, email, address } = wizardState.formData;
+
   const initialValues = {
-    fullName: "",
-    email: "",
-    address: "",
+    fullName,
+    email,
+    address,
   };
+
   const {
     handleSubmit,
     register,
     formState: { errors },
+    control,
   } = useForm({
     initialValues,
+    defaultValues: initialValues,
     resolver: yupResolver(step4Schema),
   });
 
   const onSubmit = (formData) => {
-    dispatch(updateForm(formData));
-    dispatch(setProgressBarStep(5));
+    wizardDispatch(updateForm(formData));
+    wizardDispatch(setProgressBarStep(5));
     navigate("/booking/step-5");
   };
 
   const goBack = () => {
-    dispatch(setProgressBarStep(3));
+    wizardDispatch(setProgressBarStep(3));
     navigate("/booking/step-3");
   };
 
   return (
     <div className="container pt-3">
       <form onSubmit={handleSubmit(onSubmit)} className="container text-start">
-
         {/* CUSTOMER FULL NAME */}
         <div className="row mb-3">
-          <label htmlFor="fullName" className="form-label p-0">
+          <label htmlFor="fullName" className="form-label">
             Name <span className="text-danger">*</span>
           </label>
           <input
             {...register("fullName")}
             id="fullName"
-            value={fullName }
             className={`form-control ${errors.fullName && "is-invalid"}`}
           />
-          {errors.fullName && <p className="text-danger">{errors.fullName.message}</p>}
+          {errors.fullName && (
+            <p className="text-danger">{errors.fullName.message}</p>
+          )}
         </div>
 
         {/* CUSTOMER EMAIL */}
         <div className="row mb-3">
-          <label htmlFor="email" className="form-label p-0">
+          <label htmlFor="email" className="form-label">
             Email <span className="text-danger">*</span>
           </label>
           <input
             {...register("email")}
             id="email"
-            value={email}
             className={`form-control ${errors.email && "is-invalid"}`}
           />
-          {errors.email && <p className="text-danger">{errors.email.message}</p>}
+          {errors.email && (
+            <p className="text-danger">{errors.email.message}</p>
+          )}
         </div>
 
         {/* CUSTOMER ADDRESS */}
-        <div className="row mb-3">
-          <label htmlFor="address" className="form-label p-0">
-            Address <span className="text-danger">*</span>
-          </label>
-          <input
-            {...register("address")}
-            id="address"
-            value={address}
-            className={`form-control ${errors.address && "is-invalid"}`}
+        <div className="container-fluid px-0 mb-3">
+          <Controller
+            control={control}
+            name="address"
+            render={({ field }) => (
+              <AddressSearchInput formOnChange={field.onChange} />
+            )}
           />
-          {errors.address && <p className="text-danger">{errors.address.message}</p>}
+          {errors.address && (
+            <p className="text-danger">{errors.address.message}</p>
+          )}
         </div>
 
         <FormNavButtons submitButtonText={"Next"} goBack={goBack} />

@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "./Homepage.module.scss";
-
+import AutoAddressInput from "../BookingWizard/Step4/AutoAddressInput";
 const Homepage = () => {
   return (
     <section className={`${styled.homepage} position-relative`}>
@@ -14,13 +14,17 @@ const Homepage = () => {
       </figure>
 
       <div
-        className={`${styled.overlay} position-absolute d-flex justify-content-center align-items-center w-100 bg-overlay bg-opacity-50`}
+        className={`${styled.overlay} position-absolute d-flex gap-3 flex-column align-items-center justify-content-center align-items-center w-100 bg-overlay bg-opacity-50`}
       >
         <button type="button" className="btn btn-light btn-lg rounded shadow">
-          <Link to="/booking" className="text-decoration-none link-dark fs-5 fw-bold">
+          <Link
+            to="/booking"
+            className="text-decoration-none link-dark fs-5 fw-bold"
+          >
             Buy Tickets
           </Link>
         </button>
+        <AutoAddressInput />
       </div>
     </section>
   );

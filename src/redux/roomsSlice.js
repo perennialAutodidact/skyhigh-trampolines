@@ -49,7 +49,7 @@ const getRoomProducts = async (roomId) => {
   return products;
 };
 
-export const getRoomList = createAsyncThunk(
+export const getRoomsList = createAsyncThunk(
   "rooms/getRoomList",
   async (_, { fulfillWithValue, rejectWithValue }) => {
     try {
@@ -82,6 +82,13 @@ const roomsSlice = createSlice({
   initialState: {
     rooms: [],
     loading: "idle",
+    error: null,
+  },
+  reducers: {
+    resetRoomsSlice: (state, action) => {
+      state.rooms = [];
+      state.loading = "idle";
+    },
   },
   extraReducers: {
     [createRoom.pending]: (state, action) => {
@@ -92,21 +99,24 @@ const roomsSlice = createSlice({
     },
     [createRoom.rejected]: (state, action) => {
       state.loading = "rejected";
+      state.error = action.payload;
     },
 
-    [getRoomList.pending]: (state, action) => {
+    [getRoomsList.pending]: (state, action) => {
       state.loading = "pending";
     },
-    [getRoomList.fulfilled]: (state, action) => {
+    [getRoomsList.fulfilled]: (state, action) => {
       state.loading = "fulfilled";
       state.rooms = action.payload;
     },
-    [getRoomList.rejected]: (state, action) => {
+    [getRoomsList.rejected]: (state, action) => {
       state.loading = "rejected";
-      console.log(action.error);
+      state.error = action.payload;
     },
   },
 });
+
+export const { resetRoomsSlice } = roomsSlice.actions;
 
 export default roomsSlice.reducer;
 

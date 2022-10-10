@@ -1,5 +1,4 @@
 import React from "react";
-import { getBookedRooms } from "./utils";
 
 const BookedRooms = ({ rooms }) => {
   return (

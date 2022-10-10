@@ -1,27 +1,29 @@
-import React, { useContext, useMemo, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { BookingWizardContext } from "../../context";
-import { updateGrandTotal } from "../../context/actions";
-import { toMoney } from "../../context/utils";
-import { getOrderSubtotal } from "./utils";
+import {
+  updateSubtotal,
+  updateTax,
+  updateGrandTotal,
+} from "../../context/actions";
+import { toMoney, getOrderSubtotal } from "../../context/utils";
 
 const TotalPriceDisplay = ({ rooms, addOns }) => {
   const [state, dispatch] = useContext(BookingWizardContext);
-  const { SALES_TAX_RATE, TRANSACTION_FEE, grandTotal } = state;
-  const subTotal = useMemo(
-    () => getOrderSubtotal(rooms, addOns),
-    [rooms, addOns]
-  );
-  const tax = useMemo(
-    () => subTotal * SALES_TAX_RATE,
-    [subTotal, SALES_TAX_RATE]
-  );
+  const {
+    formData: { grandTotal, tax, subTotal, salesTaxRate, transactionFee },
+  } = state;
 
   useEffect(() => {
-    if (subTotal) {
-      dispatch(updateGrandTotal(subTotal + tax + TRANSACTION_FEE));
+    const newSubtotal = getOrderSubtotal(rooms, addOns);
+    if (subTotal !== newSubtotal) {
+      dispatch(updateSubtotal(newSubtotal));
     }
-  }, [dispatch, subTotal, tax, TRANSACTION_FEE]);
+  }, [dispatch, rooms, addOns, subTotal]);
 
+  useEffect(() => {
+    dispatch(updateGrandTotal(subTotal + tax + transactionFee));
+    dispatch(updateTax(subTotal * salesTaxRate));
+  }, [dispatch, subTotal, tax, transactionFee, salesTaxRate]);
 
   return (
     <div className="container p-0">
@@ -34,10 +36,10 @@ const TotalPriceDisplay = ({ rooms, addOns }) => {
           </div>
           <div className="d-flex justify-content-between">
             <span>Transaction Fee</span>
-            <span>${toMoney(TRANSACTION_FEE)}</span>
+            <span>${toMoney(transactionFee)}</span>
           </div>
           <div className=" d-flex justify-content-between">
-            <span>Tax ({SALES_TAX_RATE * 100}%)</span>
+            <span>Tax ({salesTaxRate * 100}%)</span>
             <span>${toMoney(tax)}</span>
           </div>
         </div>

@@ -1,0 +1,31 @@
+@import "../../../styles/team-sapphire-variables";
+
+.order {
+  gap: 1rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-bottom: 1rem;
+}
+.order p {
+  margin: 0;
+}
+.amount,
+.price {
+  text-align: end;
+  width: 100%;
+}
+
+.bold {
+  font-weight: 700;
+  font-family: $heading;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.bookingTime {
+  color: rgb(165, 163, 163);
+}

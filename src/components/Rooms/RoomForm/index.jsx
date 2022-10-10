@@ -1,28 +1,28 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import { createAddOn } from "../../redux/addOnsSlice";
 import { useForm, useController } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { addOnSchema } from "./schema";
+import { roomSchema } from "./roomSchema";
 
-const AddOnForm = () => {
+import { createRoom } from "../../../redux/roomsSlice";
+import { useDispatch } from "react-redux";
+
+const RoomForm = () => {
   const dispatch = useDispatch();
 
   const defaultValues = {
     name: "",
-    price: "",
+    capacity: 0,
   };
 
   const {
     register, // provides onChange, onBlur, name and ref
+    handleSubmit,
     control,
     setValue,
-    handleSubmit,
-
     formState: { errors },
   } = useForm({
     defaultValues,
-    resolver: yupResolver(addOnSchema), // handles form validation
+    resolver: yupResolver(roomSchema), // handles form validation
   });
 
   const imageField = useController({ control, name: "photo" });
@@ -32,13 +32,17 @@ const AddOnForm = () => {
   };
 
   const onSubmit = (formData) => {
-    dispatch(createAddOn(formData));
+    dispatch(createRoom(formData))
+      .unwrap()
+      .then((res) => console.log("res", res))
+      .catch((err) => console.log("createRoomError", err));
   };
+
   return (
     <div className="container">
-      <h1>Add an add-on</h1>
+      <h1 className="text-start">Add a room</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="container text-start">
-        {/* ADDON NAME */}
+        {/* ROOM NAME */}
         <div className="row mb-3">
           <label htmlFor="name" className="form-label p-0">
             Name <span className="text-danger">*</span>
@@ -51,22 +55,18 @@ const AddOnForm = () => {
           {errors.name && <p className="text-danger">{errors.name.message}</p>}
         </div>
 
-        {/* ADDON PRICE */}
+        {/* ROOM CAPACITY */}
         <div className="row mb-3">
-          <label htmlFor="price" className="form-label p-0">
-            Price <span className="text-danger">*</span>
+          <label htmlFor="capacity" className="form-label p-0">
+            Capacity <span className="text-danger">*</span>
           </label>
-          <div className="input-group p-0">
-            <div className="input-group-text">$</div>
-            <input
-              {...register("price")}
-              id="price"
-              className={`form-control ${errors.price && "is-invalid"}`}
-              placeholder="e.g. 12.99"
-            />
-          </div>
-          {errors.price && (
-            <p className="text-danger">{errors.price.message}</p>
+          <input
+            {...register("capacity")}
+            id="capacity"
+            className={`form-control ${errors.capacity && "is-invalid"}`}
+          />
+          {errors.capacity && (
+            <p className="text-danger">{errors.capacity.message}</p>
           )}
         </div>
 
@@ -99,4 +99,4 @@ const AddOnForm = () => {
   );
 };
 
-export default AddOnForm;
+export default RoomForm;

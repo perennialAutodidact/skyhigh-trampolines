@@ -7,13 +7,14 @@ import { BookingWizardContext } from "../../context";
 import { updateForm } from "../../context/actions";
 
 const CalendarRow = ({ dates }) => {
-  const [wizardState, wizardDispatch] = useContext(BookingWizardContext)
+  // eslint-disable-next-line
+  const [wizardState, wizardDispatch] = useContext(BookingWizardContext);
   const [state, dispatch] = useContext(CalendarDatePickerContext);
   const { currentPage, selectedDate } = state;
 
   const handleDateSelect = (date) => {
     if (dateIsSelectable(currentPage.date, selectedDate, date)) {
-      wizardDispatch(updateForm({date}))
+      wizardDispatch(updateForm({ date }));
       dispatch(setSelectedDate(date));
     }
   };

@@ -10,6 +10,13 @@ export const setProgressBarStep = (step) => ({
   },
 });
 
+export const checkoutSuccess = (confirmationId) => ({
+  type: "CHECKOUT_SUCCESS",
+  payload: {
+    confirmationId,
+  },
+});
+
 export const setInitialRoomState = (rooms) => ({
   type: "SET_INITIAL_ROOM_STATE",
   payload: { rooms },
@@ -18,6 +25,16 @@ export const setInitialRoomState = (rooms) => ({
 export const setInitialAddOnState = (addOns) => ({
   type: "SET_INITIAL_ADDON_STATE",
   payload: { addOns },
+});
+
+export const updateBookedRooms = (bookedRooms) => ({
+  type: "UPDATE_BOOKED_ROOMS",
+  payload: { bookedRooms },
+});
+
+export const updateSelectedAddOns = (selectedAddOns) => ({
+  type: "UPDATED_SELECTED_ADDONS",
+  payload: { selectedAddOns },
 });
 
 export const setSelectedStartTime = (roomId, selectedStartTime) => ({
@@ -45,7 +62,22 @@ export const setAddOnQuantity = (addOnId, quantity) => ({
   },
 });
 
+export const updateSubtotal = (subTotal) => ({
+  type: "UPDATE_SUBTOTAL",
+  payload: { subTotal },
+});
+
+export const updateTax = (tax) => ({
+  type: "UPDATE_TAX",
+  payload: { tax },
+});
+
 export const updateGrandTotal = (grandTotal) => ({
   type: "UPDATE_GRAND_TOTAL",
   payload: { grandTotal },
+});
+
+export const updatePaymentStatus = (paymentStatus) => ({
+  type: "updatePaymentStatus",
+  payload: { paymentStatus },
 });

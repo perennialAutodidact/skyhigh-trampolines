@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { loadStripe } from "@stripe/stripe-js";
 import { httpsCallable } from "firebase/functions";
 import { functions } from "../firebase/client";
 import { createThunkCondition } from "./utils";
@@ -16,6 +15,23 @@ export const createPaymentIntent = createAsyncThunk(
 
     try {
       return await callCreatePaymentIntent(data).then((res) => res.data);
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  },
+  thunkCondition
+);
+
+export const updatePaymentIntent = createAsyncThunk(
+  "stripe/updatePaymentIntent",
+  async ({ id, data }, { rejectWithValue }) => {
+    const callUpdatePaymentIntent = httpsCallable(
+      functions,
+      "updatePaymentIntent"
+    );
+
+    try {
+      return await callUpdatePaymentIntent({ id, data });
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -46,11 +62,20 @@ const initialState = {
     id: null,
   },
   loading: "idle",
+  error: null,
 };
 
 export const stripeSlice = createSlice({
   name: "stripe",
   initialState,
+  reducers: {
+    setStripeLoadingStatus: (state, action) => {
+      state.loading = action.payload;
+    },
+    setStripeError: (state, action) => {
+      state.error = action.payload.error;
+    },
+  },
   extraReducers: {
     [createPaymentIntent.pending]: (state, action) => {
       state.loading = "pending";
@@ -66,6 +91,7 @@ export const stripeSlice = createSlice({
         clientSecret: null,
         id: null,
       };
+      state.error = action.payload;
     },
 
     [cancelPaymentIntent.pending]: (state, action) => {
@@ -80,12 +106,11 @@ export const stripeSlice = createSlice({
     },
     [cancelPaymentIntent.rejected]: (state, action) => {
       state.loading = "rejected";
-      state.paymentIntent = {
-        clientSecret: null,
-        id: null,
-      };
+      state.error = action.payload;
     },
   },
 });
+
+export const { setStripeLoadingStatus, setStripeError } = stripeSlice.actions;
 
 export default stripeSlice.reducer;

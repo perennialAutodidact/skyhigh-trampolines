@@ -4,7 +4,8 @@ import { setAddOnQuantity } from "../../context/actions";
 import { BsPlusLg, BsDashLg } from "react-icons/bs";
 
 const AddOnListItem = ({ addOn }) => {
-  const [state, dispatch] = useContext(BookingWizardContext);
+  // eslint-disable-next-line
+  const [_, dispatch] = useContext(BookingWizardContext);
 
   const onChange = (e) => {
     dispatch(setAddOnQuantity(addOn.id, e.target.value));

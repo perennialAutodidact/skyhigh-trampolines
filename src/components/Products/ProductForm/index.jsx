@@ -1,40 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { productSchema } from "./schema";
 import { useForm, useController } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useDispatch } from "react-redux";
-import { createProduct } from "../../redux/productsSlice";
-//import { useEffect } from 'react'
-//import { doc, addDoc, collection } from 'firebase/firestore'
-//import { db } from '../../firebase/client'
+import { createProduct } from "../../../redux/productsSlice";
+import { getRoomsList } from "../../../redux/roomsSlice";
 
 //import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
-const ProductForm = ({ headerText, rooms, productTypes, durations }) => {
+const ProductForm = ({ productTypes, durations }) => {
+  const appDispatch = useDispatch();
   // this data will come from props
-  rooms = [
-    {
-      name: "Room 1",
-      id: "000001",
-    },
-    {
-      name: "Room 2",
-      id: "000002",
-    },
-    {
-      name: "Room 3",
-      id: "000003",
-    },
-  ];
+  const { rooms, loading: roomsLoadingStatus } = useSelector(
+    (appState) => appState.rooms
+  );
+
+  const roomOptions = rooms.map((room) => ({
+    name: room.name,
+    id: room.id,
+  }));
 
   // this data will come from props
   productTypes = [
     {
-      name: "First Product Type",
-      id: "000001",
-    },
-    {
-      name: "Second Product Type",
-      id: "000002",
+      name: "Ticket",
+      id: "ticket",
     },
   ];
 
@@ -84,8 +73,13 @@ const ProductForm = ({ headerText, rooms, productTypes, durations }) => {
     setValue("photo", e.target.files[0]);
   };
 
-  const dispatch = useDispatch();
-  const onSubmit = (formData) => dispatch(createProduct(formData));
+  const onSubmit = (formData) => appDispatch(createProduct(formData));
+
+  useEffect(() => {
+    if (!!rooms && roomsLoadingStatus === "idle") {
+      appDispatch(getRoomsList());
+    }
+  }, [rooms, roomsLoadingStatus, appDispatch]);
 
   return (
     <div className="container text-start">
@@ -174,7 +168,7 @@ const ProductForm = ({ headerText, rooms, productTypes, durations }) => {
             className={`form-select ${errors.room && "is-invalid"}`}
           >
             <option value="">Select a room</option>
-            {rooms.map((room) => (
+            {roomOptions.map((room) => (
               <option value={room.id} key={room.id}>
                 {room.name}
               </option>

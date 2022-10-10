@@ -1,13 +1,11 @@
-import React, { useReducer, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useReducer, useEffect, useMemo } from "react";
 import {
   Routes,
   Route,
-  Navigate,
   useLocation,
   useNavigate,
+  Navigate,
 } from "react-router-dom";
-import { cancelPaymentIntent } from "../../redux/stripeSlice";
 import { BookingWizardContext, initialState } from "./context";
 import { wizardReducer } from "./context/reducer";
 import Step1 from "./Step1";
@@ -19,47 +17,35 @@ import Step6 from "./Step6";
 import CartPreview from "./common/CartPreview";
 import ProgressBar from "./common/ProgressBar";
 import LoadingSpinner from "../LoadingSpinner";
-import { loadStripe } from "@stripe/stripe-js";
+import { useStripeClient } from "../../hooks/useStripeClient";
+import ThankYou from "./ThankYou";
 
 const BookingWizard = () => {
-  const [stripeClient, setStripeClient] = useState(null);
-  const [loadingStripe, setLoadingStripe] = useState(false);
-  const appDispatch = useDispatch();
-  const {
-    paymentIntent: { id: paymentIntentId },
-  } = useSelector((state) => state.stripe);
-  const [state, dispatch] = useReducer(wizardReducer, initialState);
+  const [wizardState, wizardDispatch] = useReducer(wizardReducer, initialState);
   const location = useLocation();
   const navigate = useNavigate();
+  const [stripeClient, stripeLoading] = useStripeClient();
 
+  const currentPath = useMemo(() => location.pathname.split("/"), [location]);
+  const isThankYouPage = useMemo(
+    () =>
+      currentPath.length > 1 &&
+      currentPath[currentPath.length - 1] === "thank-you",
+    [currentPath]
+  );
+
+  //   redirect to step 1 if the page is reloaded and the formData is reset
   useEffect(() => {
-    const pathChunks = location.pathname.split("/");
-    if (pathChunks.length > 2 && state.currentStep === 1) {
+    if (
+      currentPath.length > 2 &&
+      currentPath[currentPath.length - 1] !== "booking" &&
+      wizardState.currentStep === 1
+    ) {
       navigate("/booking");
     }
-  }, [location, state.currentStep, navigate, appDispatch, paymentIntentId]);
+  }, [currentPath, wizardState.currentStep, navigate]);
 
-  useEffect(() => {
-    if (!stripeClient) {
-      setLoadingStripe(true);
-      {
-        (async () => {
-          try {
-            const stripe = await loadStripe(
-              process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY
-            );
-            setStripeClient(stripe);
-            setLoadingStripe(false);
-          } catch (error) {
-            console.log(error);
-            setLoadingStripe(false);
-          }
-        })();
-      }
-    }
-  }, [stripeClient]);
-
-  if (!stripeClient && loadingStripe) {
+  if (!stripeClient && stripeLoading) {
     return (
       <div className="my-5">
         <LoadingSpinner />
@@ -68,30 +54,43 @@ const BookingWizard = () => {
   }
 
   return (
-    <BookingWizardContext.Provider value={[state, dispatch]}>
+    <BookingWizardContext.Provider value={[wizardState, wizardDispatch]}>
       <div className="container">
-        <h1 className="text-center">Booking</h1>
-        <ProgressBar />
+        {!isThankYouPage && <h1 className="text-center">Booking</h1>}
+        {!isThankYouPage && <ProgressBar />}
         <div className="row">
-          <div className="col-12 col-lg-6 offset-lg-1">
+          <div
+            className={`col-12 ${
+              !isThankYouPage ? "col-lg-6 offset-lg-1" : ""
+            }`}
+          >
             <div className="border border-grey rounded mt-3">
               <Routes>
                 <Route exact path="/" element={<Step1 />} />
-                <Route path="/step-2" element={<Step2 />} />
-                <Route path="/step-3" element={<Step3 />} />
-                <Route path="/step-4" element={<Step4 />} />
-                <Route path="/step-5" element={<Step5 />} />
+                <Route exact path="/step-2" element={<Step2 />} />
+                <Route exact path="/step-3" element={<Step3 />} />
+                <Route exact path="/step-4" element={<Step4 />} />
+                <Route exact path="/step-5" element={<Step5 />} />
                 <Route
+                  exact
                   path="/checkout"
-                  element={<Step6 stripe={stripeClient} />}
+                  element={
+                    <Step6
+                      stripe={stripeClient}
+                      stripeLoading={stripeLoading}
+                    />
+                  }
                 />
+                <Route exact path="/thank-you" element={<ThankYou />} />
                 <Route path="/*" element={<Navigate to="/booking" />} />
               </Routes>
             </div>
           </div>
-          <div className="d-none d-lg-flex align-items-start flex-column col-lg-4">
-            <CartPreview />
-          </div>
+          {!isThankYouPage && (
+            <div className="d-none d-lg-flex align-items-start flex-column col-lg-4">
+              <CartPreview />
+            </div>
+          )}
         </div>
       </div>
     </BookingWizardContext.Provider>

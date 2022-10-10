@@ -1,5 +1,7 @@
-import React, { useContext, useEffect, useCallback } from "react";
+import React, { useContext, useEffect, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { getAddOnsList } from "../../../redux/addOnsSlice";
 import { useNavigate } from "react-router-dom";
 import { BookingWizardContext } from "../context";
@@ -9,14 +11,14 @@ import {
   setProgressBarStep,
   updateForm,
 } from "../context/actions";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { getSelectedAddOns } from "../context/utils";
 import LoadingSpinner from "../../LoadingSpinner";
 import FormNavButtons from "../common/FormNavButtons";
 import Accordion from "../common/Accordion";
 import AccordionItem from "../common/Accordion/AccordionItem";
 import AccordionCollapse from "../common/Accordion/AccordionCollapse";
 import AddOnsList from "./AddOnsList";
+import { updateBooking } from "../../../redux/bookingsSlice";
 
 const Step3 = () => {
   const navigate = useNavigate();
@@ -24,8 +26,8 @@ const Step3 = () => {
   const { addOns, loading: addOnsLoadingState } = useSelector(
     (appState) => appState.addOns
   );
-  const [state, dispatch] = useContext(BookingWizardContext);
-
+  const [wizardState, wizardDispatch] = useContext(BookingWizardContext);
+  const { bookingInProgress } = useSelector((appState) => appState.bookings);
   const initialValues = {
     addOnsDataExists: false,
   };
@@ -40,20 +42,33 @@ const Step3 = () => {
     resolver: yupResolver(step3Schema),
   });
 
+  const bookingData = useMemo(
+    () => ({
+      addOns: getSelectedAddOns(wizardState.addOns).map((addOn) => {
+        const { id, name, quantity, price, totalPrice } = addOn;
+        return { id, name, quantity, price, totalPrice };
+      }),
+    }),
+    [wizardState.addOns]
+  );
   const addOnsDataIsValid = useCallback(
-    () => state.formData.addOns.some((addOn) => addOn.quantity > 0),
-    [state.formData.addOns]
+    () => wizardState.addOns.some((addOn) => addOn.quantity > 0),
+    [wizardState.addOns]
   );
 
   const onSubmit = (formData) => {
-    dispatch(updateForm(formData));
-    dispatch(setProgressBarStep(4));
+    wizardDispatch(updateForm(formData));
+    wizardDispatch(setProgressBarStep(4));
     navigate("/booking/step-4");
+    appDispatch(
+      updateBooking({ bookingId: bookingInProgress?.id, ...bookingData })
+    );
   };
 
   const goBack = () => {
-    navigate('/booking/step-2')
-    dispatch(setProgressBarStep(2))};
+    navigate("/booking/step-2");
+    wizardDispatch(setProgressBarStep(2));
+  };
 
   useEffect(() => {
     setValue("addOnsDataExists", addOnsDataIsValid());
@@ -65,10 +80,10 @@ const Step3 = () => {
       appDispatch(getAddOnsList())
         .unwrap()
         .then((addOns) => {
-          dispatch(setInitialAddOnState(addOns));
+          wizardDispatch(setInitialAddOnState(addOns));
         });
     }
-  }, [addOns, addOnsLoadingState, appDispatch, dispatch]);
+  }, [addOns, addOnsLoadingState, appDispatch, wizardDispatch]);
 
   if (addOnsLoadingState === "pending") {
     return (
@@ -78,13 +93,16 @@ const Step3 = () => {
     );
   }
   return (
-    <div className="container pt-3">
-      <form onSubmit={handleSubmit(onSubmit)} className="container text-start">
+    <div className="container px-0 pt-3">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="container px-0 text-start"
+      >
         {/* PRODUCT SELECT */}
-        <div className="row px-2 mb-3">
-          <div className="col-12 col-lg-6 p-2 px-lg-2">
+        <div className="row px-0 mb-3">
+          <div className="col-12 col-lg-6">
             <label htmlFor="date" className="form-label p-0 d-flex gap-1">
-              <h3>Select Products</h3> <span className="text-danger">*</span>
+              <h3>Select Add-Ons</h3> <span className="text-danger">*</span>
             </label>
           </div>
         </div>
@@ -99,13 +117,12 @@ const Step3 = () => {
             item={{
               id: 1,
               photo:
-                state.formData.addOns.length > 0 &&
-                state.formData.addOns[0].photo,
+                wizardState.addOns.length > 0 && wizardState.addOns[0].photo,
             }}
             headerText={"Jump Socks"}
           >
             <AccordionCollapse collapseId={1}>
-              <AddOnsList addOns={state.formData.addOns} />
+              <AddOnsList addOns={wizardState.addOns} />
             </AccordionCollapse>
           </AccordionItem>
         </Accordion>
@@ -116,10 +133,9 @@ const Step3 = () => {
           </p>
         )}
 
-        <FormNavButtons
-          goBack={goBack}
-          submitButtonText={"Next"}
-        />
+        <div className="container px-0 px-lg-4">
+          <FormNavButtons goBack={goBack} submitButtonText={"Next"} />
+        </div>
       </form>
     </div>
   );
