@@ -6,29 +6,29 @@ export const sidebarData = [
   // products
   {
     id: 0,
-    title: "Product",
+    title: "Products",
     icon: <IoCartSharp size={22} />,
     iconOpened: <MdKeyboardArrowUp size={25} />,
     iconClosed: <MdKeyboardArrowDown size={25} />,
     subNav: [
       {
         id: 0.1,
-        title: "All Products",
-        path: "/all-products",
+        title: "Products List",
+        path: "/products",
       },
       {
         id: 0.2,
-        title: "Add Products",
-        path: "/add-products",
+        title: "Add a product",
+        path: "/products/add",
       },
       {
         id: 0.3,
-        title: "All Add Ons",
-        path: "/all-add-ons",
+        title: "Add-ons List",
+        path: "/add-ons/add",
       },
       {
         id: 0.4,
-        title: "Add Ons",
+        title: "Add an add-on",
         path: "/add-ons",
       },
     ],
@@ -45,8 +45,8 @@ export const sidebarData = [
     subNav: [
       {
         id: 1.1,
-        title: "All Bookings",
-        path: "/all-bookings",
+        title: "Bookings List",
+        path: "/bookings",
       },
       {
         id: 1.2,
@@ -67,13 +67,13 @@ export const sidebarData = [
     subNav: [
       {
         id: 2.1,
-        title: "All Rooms",
-        path: "/all-rooms",
+        title: "Rooms List",
+        path: "/rooms",
       },
       {
         id: 2.2,
-        title: "Add Rooms",
-        path: "/add-rooms",
+        title: "Add a Room",
+        path: "/rooms/add",
       },
     ],
   },

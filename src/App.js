@@ -5,7 +5,7 @@ import { Route, Routes } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./firebase/client";
 import "./App.scss";
-import { AllBookings } from "./components/Booking/AllBookings";
+import BookingsList from "./components/Admin/Bookings";
 import { ProtectedRoute } from "./components/Admin/ProtectedRoute";
 
 import Admin from "./components/Admin";
@@ -41,19 +41,19 @@ function App() {
             }
           >
             {/* products */}
-            <Route path="all-products" element={<ProductData />} />
-            <Route path="add-products" element={<ProductForm />} />
-            <Route path="add-ons" element={<AddOnForm />} />
-            <Route path="all-add-ons" element={<AllAddOns />} />
+            <Route path="products" element={<ProductData />} />
+            <Route path="products/create" element={<ProductForm />} />
+            <Route path="add-ons" element={<AllAddOns />} />
+            <Route path="add-ons/create" element={<AddOnForm />} />
 
             {/* bookings */}
 
-            <Route path="all-bookings" element={<AllBookings />} />
+            <Route path="bookings" element={<BookingsList />} />
             <Route path="daily-capacity" element={<p>Daily Capacity</p>} />
 
             {/* rooms */}
-            <Route path="all-rooms" element={<RoomsList />} />
-            <Route path="add-rooms" element={<RoomForm />} />
+            <Route path="rooms" element={<RoomsList />} />
+            <Route path="rooms/create" element={<RoomForm />} />
           </Route>
 
           <Route path="/" element={<Homepage />} />
