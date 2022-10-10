@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { createThunkCondition } from "./utils";
+import { getDocs, query, orderBy, limit } from "firebase/firestore";
 import { httpsCallable } from "firebase/functions";
 import { bookingsCollection, functions } from "../firebase/client";
 
@@ -9,15 +10,29 @@ export const getBookingsList = createAsyncThunk(
   "bookings/getBookingsList",
   async (_, { rejectWithValue }) => {
     try {
-      const bookings = await getDocs(bookingsCollection).then((bookingDocs) => {
+      const bookingsQuery = query(
+        bookingsCollection,
+        // orderBy("dateCreated.seconds", "desc")
+        limit(1)
+      );
+      return await getDocs(bookingsQuery).then((bookingDocs) => {
         let bookingsData = [];
         bookingDocs.forEach((doc) => {
-          bookingDocs.push({ ...doc.data(), id: doc.id });
-        });
-        return bookingsData;
-      });
+          let { dateCreated, ...bookingData } = doc.data();
+          const { seconds, nanoseconds } = dateCreated;
+          dateCreated = seconds + nanoseconds * 1e9;
+          console.log({ bookingData });
+          console.log(dateCreated);
+          bookingsData.push({
+            dateCreated: dateCreated,
+            id: doc.id,
+            ...bookingData,
+          });
+          console.log(bookingsData);
 
-      return bookings;
+          return bookingsData;
+        });
+      });
     } catch (error) {
       return rejectWithValue(error);
     }

@@ -8,6 +8,7 @@ import {
 import { Header } from "./Header";
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { getBookingsList } from "../../../redux/bookingsSlice";
 
 const defaultData = [
   {
@@ -77,6 +78,10 @@ const columns = [
 ];
 
 const BookingsList = () => {
+  const appDispatch = useDispatch();
+  const { bookings, loading: bookingsLoadingStatus } = useSelector(
+    (appState) => appState.bookings
+  );
   const [data, setData] = useState(() => [...defaultData]);
 
   const table = useReactTable({
@@ -85,8 +90,15 @@ const BookingsList = () => {
     getCoreRowModel: getCoreRowModel(),
   });
 
+  useEffect(() => {
+    if (!!bookings && bookingsLoadingStatus === "idle") {
+      appDispatch(getBookingsList());
+    }
+  }, [bookings, bookingsLoadingStatus, appDispatch]);
+
   return (
     <div className="container">
+      {bookings && JSON.stringify(bookings)}
       <div className="row">
         <Header />
       </div>
