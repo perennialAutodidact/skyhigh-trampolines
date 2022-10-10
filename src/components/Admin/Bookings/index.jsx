@@ -6,7 +6,8 @@ import {
 } from "@tanstack/react-table";
 
 import { Header } from "./Header";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 const defaultData = [
   {
@@ -75,7 +76,7 @@ const columns = [
   }),
 ];
 
-export const AllBookings = () => {
+const BookingsList = () => {
   const [data, setData] = useState(() => [...defaultData]);
 
   const table = useReactTable({
@@ -121,3 +122,4 @@ export const AllBookings = () => {
     </div>
   );
 };
+export default BookingsList;
