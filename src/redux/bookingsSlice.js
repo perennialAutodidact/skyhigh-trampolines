@@ -12,7 +12,6 @@ export const createBooking = createAsyncThunk(
 
     try {
       const booking = await callCreateBooking(bookingData);
-      console.log("booking", booking.data.bookingId);
       return booking;
     } catch (error) {
       return rejectWithValue(error);
