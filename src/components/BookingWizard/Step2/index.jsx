@@ -138,12 +138,7 @@ const Step2 = () => {
 
           <Accordion>
             {wizardState.rooms.map((room, index) => (
-              <AccordionItem
-                item={room}
-                headerText={room.name}
-                expanded={false}
-                key={room.id}
-              >
+              <AccordionItem item={room} headerText={room.name} key={room.id}>
                 <AccordionCollapse collapseId={room.id}>
                   <StartTimeList room={room} />
 
