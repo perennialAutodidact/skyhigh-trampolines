@@ -1,9 +1,29 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { createThunkCondition } from "./utils";
 import { httpsCallable } from "firebase/functions";
-import { functions } from "../firebase/client";
+import { bookingsCollection, functions } from "../firebase/client";
 
 const thunkCondition = createThunkCondition("bookings");
+
+export const getBookingsList = createAsyncThunk(
+  "bookings/getBookingsList",
+  async (_, { rejectWithValue }) => {
+    try {
+      const bookings = await getDocs(bookingsCollection).then((bookingDocs) => {
+        let bookingsData = [];
+        bookingDocs.forEach((doc) => {
+          bookingDocs.push({ ...doc.data(), id: doc.id });
+        });
+        return bookingsData;
+      });
+
+      return bookings;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  },
+  thunkCondition
+);
 
 export const createBooking = createAsyncThunk(
   "bookings/createBooking",
@@ -55,6 +75,18 @@ const bookingsSlice = createSlice({
   },
   reducers: {},
   extraReducers: {
+    [getBookingsList.pending]: (state, action) => {
+      state.loading = "pending";
+    },
+    [getBookingsList.fulfilled]: (state, action) => {
+      state.loading = "fulfilled";
+      state.bookings = action.payload;
+    },
+    [getBookingsList.rejected]: (state, action) => {
+      state.loading = "rejected";
+      state.error = action.payload;
+    },
+
     [createBooking.pending]: (state, action) => {
       state.loading = "pending";
     },
