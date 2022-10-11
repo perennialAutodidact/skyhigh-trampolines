@@ -1,94 +1,44 @@
-import {
-  createColumnHelper,
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-
-import { Header } from "./Header";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getBookingsList } from "../../../redux/bookingsSlice";
-
-const defaultData = [
-  {
-    "Booking Date": `30 August 2022`,
-    "Confirmation ID": 1231435345341,
-    "Session Times": `12:30`,
-    HeadCount: 10,
-    Amount: 84.5,
-    "Booking Name": "John Doe",
-    "Contact Details": `654-342-1111`,
-  },
-  {
-    "Booking Date": `27 August 2022`,
-    "Confirmation ID": 345345345,
-    "Session Times": `3:00`,
-    HeadCount: 122,
-    Amount: 222.5,
-    "Booking Name": "John Doe",
-    "Contact Details": `654-333-2413`,
-  },
-  {
-    "Booking Date": `24 August 2022`,
-    "Confirmation ID": 789756758990,
-    "Session Times": `11:00`,
-    HeadCount: 2,
-    Amount: 220.5,
-    "Booking Name": "John Doe",
-    "Contact Details": `654-675-6655`,
-  },
+import { Link } from "react-router-dom";
+import {
+  getBookingsList,
+  getPrevBookingPage,
+  getNextBookingPage,
+} from "../../../redux/bookingsSlice";
+import { getTotalHeadCount } from "../../BookingWizard/context/utils";
+import LoadingSpinner from "../../LoadingSpinner";
+import { useCallback } from "react";
+const headerNames = [
+  "Booking Date",
+  "Receipt #",
+  "Start Time / Room Name",
+  "Head Count",
+  "Total",
+  "Customer Name",
+  "Customer Email",
 ];
-
-const columnHelper = createColumnHelper();
-const columns = [
-  columnHelper.accessor("Booking Date", {
-    cell: (info) => info.renderValue(),
-  }),
-  columnHelper.accessor(`Confirmation ID`, {
-    header: () => <span>Confirmation ID</span>,
-    cell: (info) => (
-      <a href="/" className="text-muted">
-        {info.renderValue()}
-      </a>
-    ),
-  }),
-  columnHelper.accessor("Session Times", {
-    header: () => "Session Times",
-    cell: (info) => (
-      <span className="badge bg-secondary">{info.renderValue()}</span>
-    ),
-  }),
-  columnHelper.accessor("HeadCount", {
-    header: () => <span>HeadCount</span>,
-    cell: (info) => info.renderValue(),
-  }),
-  columnHelper.accessor("Amount", {
-    header: "Amount",
-    cell: (info) => info.renderValue(),
-  }),
-  columnHelper.accessor("Booking Name", {
-    header: "Booking Name",
-    cell: (info) => info.renderValue(),
-  }),
-  columnHelper.accessor("Contact Details", {
-    header: "Contact Details",
-    cell: (info) => info.renderValue(),
-  }),
-];
-
 const BookingsList = () => {
   const appDispatch = useDispatch();
-  const { bookings, loading: bookingsLoadingStatus } = useSelector(
-    (appState) => appState.bookings
-  );
-  const [data, setData] = useState(() => [...defaultData]);
+  let {
+    bookings,
+    loading: bookingsLoadingStatus,
+    page,
+    isLastPage,
+  } = useSelector((appState) => appState.bookings);
 
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
+  const nextPage = (newPage) => {
+    appDispatch(getNextBookingPage());
+  };
+
+  const prevPage = useCallback(
+    (newPage) => {
+      if (page > 1) {
+        appDispatch(getPrevBookingPage());
+      }
+    },
+    [page]
+  );
 
   useEffect(() => {
     if (!!bookings && bookingsLoadingStatus === "idle") {
@@ -98,39 +48,71 @@ const BookingsList = () => {
 
   return (
     <div className="container">
-      {bookings && JSON.stringify(bookings)}
       <div className="row">
-        <Header />
+        <div className="col-12">
+          <div className="d-flex justify-content-between">
+            <button
+              className="btn btn-outline-dark"
+              onClick={() => prevPage(page - 1)}
+              disabled={page === 1}
+            >
+              Previous
+            </button>
+            <button
+              className="btn btn-outline-dark"
+              onClick={() => nextPage(page + 1)}
+              disabled={isLastPage}
+            >
+              Next
+            </button>
+          </div>
+        </div>
       </div>
-      <table className="table w-100 mt-5">
-        <thead className="bg-light">
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                </th>
+      {bookingsLoadingStatus === "pending" ? (
+        <div className="my-5">
+          <LoadingSpinner />
+        </div>
+      ) : (
+        <table className="table mt-4">
+          <thead>
+            <tr>
+              {headerNames.map((headerName) => (
+                <th>{headerName}</th>
               ))}
             </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <td key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+          </thead>
+          <tbody>
+            {bookings.map((booking) => (
+              <tr>
+                <td>{booking.date}</td>
+                <td>
+                  {booking.receiptId ? (
+                    <Link className="link-dark">{booking.receiptId}</Link>
+                  ) : (
+                    <span className="text-muted">{booking.status}</span>
+                  )}
                 </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                <td>
+                  <div className="d-flex flex-column gap-2">
+                    {booking.rooms.map((room) => (
+                      <div className="d-flex gap-2">
+                        <div className="badge bg-info d-flex align-items-center">
+                          {room.startTime}
+                        </div>
+                        <div>{room.name}</div>
+                      </div>
+                    ))}
+                  </div>
+                </td>
+                <td>{getTotalHeadCount(booking.rooms)}</td>
+                <td>{booking.total ? `$${booking.total / 100}` : "N/A"}</td>
+                <td>{booking.customer?.fullName || "N/A"}</td>
+                <td>{booking.customer?.email || "N/A"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 };
