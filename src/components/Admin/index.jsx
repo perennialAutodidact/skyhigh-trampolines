@@ -1,11 +1,10 @@
-import React from "react";
-import styled from "./Admin.module.scss";
+import React, { useEffect } from "react";
 import { auth } from "../../firebase/client";
 import { useAuthState } from "react-firebase-hooks/auth";
-import Sidebar from "./Sidebar";
 import { Outlet } from "react-router-dom";
-import { useEffect } from "react";
+import Sidebar from "./Sidebar";
 import LoadingSpinner from "../LoadingSpinner";
+import styled from "./Admin.module.scss";
 
 const Admin = (props) => {
   const { toggleSidebar } = props;
@@ -14,7 +13,7 @@ const Admin = (props) => {
   // if user is logged in and the route is /admin, redirect to /admin/all-products
   useEffect(() => {
     if (user?.email && window.location.pathname === "/admin") {
-      window.location.pathname = "/admin/all-products";
+      window.location.pathname = "/admin/bookings";
     }
   }, [user]);
 
@@ -32,7 +31,7 @@ const Admin = (props) => {
 
           <div className={`container-fluid pt-3 ${styled.content}`}>
             <div className="row">
-              <div className="pt-1 col-lg-6 mx-auto">
+              <div className="pt-1 pb-1 pr-1 pl-1 col-lg-12 mx-auto">
                 {/* outlet to display nested routes */}
                 <Outlet />
               </div>

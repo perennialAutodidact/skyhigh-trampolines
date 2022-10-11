@@ -149,6 +149,17 @@ export const getHeadCount = (room) =>
 /**
  *
  * @param {room[]} rooms Array of rooms from the database
+ * @returns The total head count of all rooms
+ */
+export const getTotalHeadCount = (rooms) =>
+  rooms.reduce(
+    (totalHeadCount, room) => totalHeadCount + getHeadCount(room),
+    0
+  );
+
+/**
+ *
+ * @param {room[]} rooms Array of rooms from the database
  * @param {addOn[]} addOns Array of addOns from the database
  * @returns Sum of the total price of the booked rooms and selected addOns
  */
