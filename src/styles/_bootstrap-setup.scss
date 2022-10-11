@@ -30,7 +30,7 @@ $primary: $custom-primary;
 $secondary: $custom-secondary;
 $info: $custom-info;
 // $warning: $custom-warning;
-// $danger: $custom-danger;
+$danger: $custom-danger;
 // $success: $custom-success;
 $light: $custom-light;
 // $dark: $custom-dark;
@@ -38,6 +38,13 @@ $light: $custom-light;
 // override default fonts
 $font-family-base: $text;
 $headings-font-family: $heading;
+
+$accordion-button-focus-border-color: none;
+$component-active-bg: $info;
+$accordion-color: $secondary;
+$accordion-button-active-color: $secondary;
+$accordion-inner-border-radius:  none;
+$input-btn-focus-width: 1px;
 
 // 3. Include remainder of required Bootstrap stylesheets
 @import "../../node_modules/bootstrap/scss/variables";
@@ -51,6 +58,8 @@ $headings-font-family: $heading;
 @import "../../node_modules/bootstrap/scss/type";
 @import "../../node_modules/bootstrap/scss/images";
 @import "../../node_modules/bootstrap/scss/containers";
+@import "../../node_modules/bootstrap/scss/forms";
+@import "../../node_modules/bootstrap/scss/utilities";
 
 // 5. Add additional custom code here
 

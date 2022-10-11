@@ -40,6 +40,23 @@ We are using "yarn" instead of "npm" in this project.
 8. You can check if the user is signed in by checking the state of the 'authSlice'. If user is false (empty), the user isn't signed in.
 9. You are free to style the buttons or the login component as you see fit. You can (probably a good idea) move the log out button somewhere else. As long as you import all the necessary things and don't change the function/logic, it should work.
 
+### To trigger a cloud functions
+
+```javascript
+const callFirebase = () => {
+  //this url is the 'trigger url' of the function you want to call
+  const url = 'https://us-central1-team-sapphire.cloudfunctions.net/helloWorld';
+  fetch(url)
+    .then((response) => response.json())
+    .then((result) => {
+      console.log(result);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+```
+
 ### Redux
 
 The "redux" folder contains two example reducers with explanation on how they work and links to relevant documentation:

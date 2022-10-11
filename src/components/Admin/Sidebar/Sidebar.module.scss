@@ -1,0 +1,32 @@
+.sidebar {
+  height: calc(100vh - 8vh);
+  overflow: hidden;
+
+  &__icon {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+  }
+
+  &__show {
+    width: 250px;
+    position: fixed;
+    top: 8vh;
+    left: 0;
+    z-index: 2;
+  }
+
+  &__hide {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .sidebar {
+    position: fixed;
+    // top: 8vh;
+    left: 0;
+    display: block;
+    z-index: 0;
+    width: 250px;
+  }
+}
