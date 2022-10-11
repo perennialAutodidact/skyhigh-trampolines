@@ -13,7 +13,7 @@ const Admin = (props) => {
   // if user is logged in and the route is /admin, redirect to /admin/all-products
   useEffect(() => {
     if (user?.email && window.location.pathname === "/admin") {
-      window.location.pathname = "/admin/all-products";
+      window.location.pathname = "/admin/bookings";
     }
   }, [user]);
 
