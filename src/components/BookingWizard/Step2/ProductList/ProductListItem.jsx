@@ -3,7 +3,7 @@ import { BookingWizardContext } from "../../context";
 import { setProductQuantity } from "../../context/actions";
 import { BsPlusLg, BsDashLg } from "react-icons/bs";
 
-const ProductListItem = ({ product, roomId }) => {
+const ProductListItem = ({ product, roomId, availableQuantity }) => {
   // eslint-disable-next-line
   const [state, dispatch] = useContext(BookingWizardContext);
 
@@ -26,7 +26,7 @@ const ProductListItem = ({ product, roomId }) => {
 
   return (
     <div className="row g-0 gy-1">
-      <div className="col-5 col-lg-4 offset-lg-2">{product.name}</div>
+      <div className="col-5 col-lg-4 offset-lg-2">{product.name} ({availableQuantity})</div>
       <div className="col-4 col-lg-2 text-center text-lg-start">
         ${product.price / 100}
       </div>
