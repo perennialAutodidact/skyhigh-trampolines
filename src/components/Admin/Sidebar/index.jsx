@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useRef, useMemo } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../../firebase/client";
 import styled from "./Sidebar.module.scss";
@@ -18,14 +18,19 @@ const Sidebar = (props) => {
   const clickOutsideHandler = useCallback(() => {
     if (!["md", "lg"].includes(breakpoint)) {
       setToggleSidebar(false);
+      console.log("clicked outside sidebar");
     }
   }, [breakpoint, setToggleSidebar]);
 
   useOnClickOutside(sidebarRef, () => {
     clickOutsideHandler();
   });
+
   // apply styles to sidebar based on showSidebar state
-  const visibility = toggleSidebar ? "sidebar__show" : "sidebar__hide";
+  const visibility = useMemo(
+    () => (toggleSidebar ? "sidebar__show" : "sidebar__hide"),
+    [toggleSidebar]
+  );
 
   return (
     <>
@@ -49,6 +54,7 @@ const Sidebar = (props) => {
               item={item}
               toggleSidebar={toggleSidebar}
               setToggleSidebar={setToggleSidebar}
+              breakpoint={breakpoint}
             />
           ))}
         </div>
