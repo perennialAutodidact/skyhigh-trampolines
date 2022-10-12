@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import { PRODUCT_DISPLAY_ORDER } from "../../../constants";
 dayjs.extend(isSameOrBefore);
 /**
  *
@@ -21,12 +22,18 @@ export const formatPercent = (x, y) => Math.round((x / y) * 100);
 export const createInitialRoomState = (rooms) =>
   rooms.map((room) => ({
     ...room,
-    products: room.products.map((product) => ({
-      ...product,
-      quantity: 0,
-    })),
+    products: room.products
+      .map((product) => ({
+        ...product,
+        quantity: 0,
+      }))
+      .sort(
+        (p1, p2) =>
+          PRODUCT_DISPLAY_ORDER[p1.duration] -
+          PRODUCT_DISPLAY_ORDER[p2.duration]
+      ),
     selectedStartTime: "",
-    disabledStartTimes: ["9:00", "9:30", "16:00"],
+    disabledStartTimes: [],
   }));
 
 /**
@@ -179,14 +186,14 @@ export const getOrderSubtotal = (rooms, addOns) =>
   );
 
 /**
- * 
+ *
  * @param {roomAvailability[]} roomAvailabilities Array of objects indicating the number of available tickets at a particular time for the room
  * @returns {string[]} Array of time strings indicating which time slots have no available tickets e.g. ["9:00", "11:30", "12:00", ...]
  */
 export const getDisabledTimes = (roomAvailabilities) => {
   return Object.keys(roomAvailabilities).filter((time) =>
-    Object.keys(roomAvailabilities[time]).some((ticketName) =>
-      roomAvailabilities[time][ticketName] === 0
+    Object.keys(roomAvailabilities[time]).some(
+      (ticketName) => roomAvailabilities[time][ticketName] === 0
     )
   );
 };
