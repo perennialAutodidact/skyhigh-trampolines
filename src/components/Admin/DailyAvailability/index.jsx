@@ -38,10 +38,6 @@ const DailyAvailability = () => {
   }, [rooms, roomsLoadingStatus, appDispatch]);
 
   useEffect(() => {
-    console.log(
-      !bookingsByDate[selectedDate],
-      bookingsLoadingStatus !== "pending"
-    );
     if (!bookingsByDate[selectedDate] && bookingsLoadingStatus !== "pending") {
       appDispatch(getBookingsByDate(selectedDate));
     }

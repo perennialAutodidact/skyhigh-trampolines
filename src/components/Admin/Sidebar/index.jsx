@@ -18,7 +18,6 @@ const Sidebar = (props) => {
   const clickOutsideHandler = useCallback(() => {
     if (!["md", "lg"].includes(breakpoint)) {
       setToggleSidebar(false);
-      console.log("clicked outside sidebar");
     }
   }, [breakpoint, setToggleSidebar]);
 
