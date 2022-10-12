@@ -18,14 +18,18 @@ const StartTimeList = ({ room }) => {
     }
   };
 
+  const isAtLeastAnHourBeforeClose = (time) => startTimes.indexOf(time) < startTimes.length - 2
+
   return (
     <>
       <div className="text-center pt-3">Start time</div>
-      <div className="row gy-1 px-5">
-        {startTimes.map((time) => (
-          <div className="col-3 col-lg-2 p-1" key={`${roomId}-${time}`}>
-            <div
-              className={`
+      <div className="row gy-1 px-3 px-lg-5">
+        {startTimes.map(
+          (time, index) =>
+             isAtLeastAnHourBeforeClose(time) && (
+              <div className="col-3 col-lg-2 p-1" key={`${roomId}-${time}`}>
+                <div
+                  className={`
                 py-1 border text-center
                 ${time === selectedStartTime ? "bg-info" : ""}
                 ${
@@ -34,12 +38,13 @@ const StartTimeList = ({ room }) => {
                     : styles.startTimeButton
                 }
                 `}
-              onClick={() => changeSelectedStartTime(time)}
-            >
-              {time}
-            </div>
-          </div>
-        ))}
+                  onClick={() => changeSelectedStartTime(time)}
+                >
+                  {time}
+                </div>
+              </div>
+            )
+        )}
       </div>
     </>
   );

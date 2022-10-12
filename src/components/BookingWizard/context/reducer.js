@@ -12,6 +12,7 @@ export const wizardReducer = (state, action) => {
     selectedStartTime,
     selectedAddOns,
     bookedRooms,
+    disabledStartTimes,
     quantity,
     addOns,
     addOnId,
@@ -45,6 +46,21 @@ export const wizardReducer = (state, action) => {
       return {
         ...state,
         rooms: createInitialRoomState(rooms),
+      };
+
+    // sets the disabled times for a room
+    case "SET_DISABLED_TIMES":
+      console.log(roomId, disabledStartTimes)
+      return {
+        ...state,
+        rooms: state.rooms.map((room) =>
+          room.id !== roomId
+            ? room
+            : {
+                ...room,
+                disabledStartTimes,
+              }
+        ),
       };
 
     // sets the selected start time for the room

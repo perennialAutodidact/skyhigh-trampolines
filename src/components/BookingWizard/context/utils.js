@@ -177,3 +177,16 @@ export const getOrderSubtotal = (rooms, addOns) =>
     (total, addOn) => total + addOn.totalPrice,
     0
   );
+
+/**
+ * 
+ * @param {roomAvailability[]} roomAvailabilities Array of objects indicating the number of available tickets at a particular time for the room
+ * @returns {string[]} Array of time strings indicating which time slots have no available tickets e.g. ["9:00", "11:30", "12:00", ...]
+ */
+export const getDisabledTimes = (roomAvailabilities) => {
+  return Object.keys(roomAvailabilities).filter((time) =>
+    Object.keys(roomAvailabilities[time]).some((ticketName) =>
+      roomAvailabilities[time][ticketName] === 0
+    )
+  );
+};

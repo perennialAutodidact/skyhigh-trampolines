@@ -12,6 +12,7 @@ import {
   updateForm,
   setProgressBarStep,
   setInitialRoomState,
+  setDisabledTimes,
 } from "../context/actions";
 import { step2Schema } from "../context/schema";
 import { useForm } from "react-hook-form";
@@ -23,17 +24,19 @@ import StartTimeList from "./StartTimeList";
 import AccordionCollapse from "../common/Accordion/AccordionCollapse";
 import ProductList from "./ProductList";
 import AccordionItem from "../common/Accordion/AccordionItem";
-import { getBookedRooms } from "../context/utils";
-import { sortBookingsByRoom } from "../../../utils";
+import { getBookedRooms, getDisabledTimes } from "../context/utils";
+import { getRoomAvailabilities } from "../../../utils";
 
 const Step2 = () => {
   const appDispatch = useDispatch();
   const { rooms, loading: roomsLoadingState } = useSelector(
     (appState) => appState.rooms
   );
-  const { bookingInProgress, loading: bookingLoading } = useSelector(
-    (appState) => appState.bookings
-  );
+  const {
+    bookingInProgress,
+    loading: bookingLoading,
+    bookingsByDate,
+  } = useSelector((appState) => appState.bookings);
   const navigate = useNavigate();
   const [wizardState, wizardDispatch] = useContext(BookingWizardContext);
 
@@ -108,15 +111,48 @@ const Step2 = () => {
     clearErrors();
   }, [setValue, roomDataIsValid, clearErrors]);
 
-  useEffect(async () => {
+  useEffect(() => {
     if (!!rooms && roomsLoadingState === "idle") {
-      const roomData = await appDispatch(getRoomsList()).unwrap();
-      const bookings = await appDispatch(
-        getBookingsByDate(wizardState.formData.date)
-      );
-      wizardDispatch(setInitialRoomState(rooms));
+      (async () => {
+        const roomData = await appDispatch(getRoomsList()).unwrap();
+        await appDispatch(getBookingsByDate(wizardState.formData.date));
+
+        wizardDispatch(setInitialRoomState(roomData));
+      })();
     }
-  }, [rooms, roomsLoadingState, appDispatch, wizardDispatch]);
+  }, [
+    rooms,
+    roomsLoadingState,
+    appDispatch,
+    wizardDispatch,
+    wizardState.formData.date,
+  ]);
+
+  useEffect(() => {
+    if (!bookingsByDate["2022-10-11"] && bookingLoading !== "pending") {
+      // if(!bookingsByDate[wizardState.formData.date] && bookingLoading !== "pending"){
+      // appDispatch(getBookingsByDate(wizardState.formData.date))
+      appDispatch(getBookingsByDate("2022-10-11"));
+    } else {
+      if (bookingsByDate["2022-10-11"]) {
+        bookingsByDate["2022-10-11"].forEach((room) => {
+          let availabilities = getRoomAvailabilities(
+            room,
+            wizardState.startTimes
+          );
+          let disabledTimes = getDisabledTimes(availabilities);
+          wizardDispatch(setDisabledTimes(room.id, disabledTimes));
+        });
+      }
+    }
+  }, [
+    bookingsByDate,
+    bookingLoading,
+    wizardState.formData.date,
+    appDispatch,
+    wizardState.startTimes,
+    wizardDispatch,
+  ]);
 
   if (roomsLoadingState === "pending") {
     return (
@@ -160,7 +196,7 @@ const Step2 = () => {
             </p>
           )}
         </div>
-        <div className="container px-0 px-lg-4">
+        <div className="container px-4">
           <FormNavButtons goBack={goBack} submitButtonText={"Next"} />
         </div>
       </form>

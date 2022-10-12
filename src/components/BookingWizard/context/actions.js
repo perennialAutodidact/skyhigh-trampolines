@@ -45,6 +45,11 @@ export const setSelectedStartTime = (roomId, selectedStartTime) => ({
   },
 });
 
+export const setDisabledTimes = (roomId, disabledStartTimes) => ({
+  type: "SET_DISABLED_TIMES",
+  payload: { roomId, disabledStartTimes },
+});
+
 export const setProductQuantity = (roomId, productId, quantity) => ({
   type: "SET_PRODUCT_QUANTITY",
   payload: {
