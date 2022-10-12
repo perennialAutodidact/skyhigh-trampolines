@@ -26,7 +26,10 @@ const ProductListItem = ({ product, roomId, availableQuantity }) => {
 
   return (
     <div className="row g-0 gy-1">
-      <div className="col-5 col-lg-4 offset-lg-2">{product.name} ({availableQuantity})</div>
+      <div className="col-5 col-lg-4 offset-lg-2 d-flex flex-column">
+        <span>{product.name}</span>
+        <span className="text-muted">{availableQuantity} available</span>
+      </div>
       <div className="col-4 col-lg-2 text-center text-lg-start">
         ${product.price / 100}
       </div>
