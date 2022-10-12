@@ -1,7 +1,11 @@
 import React, { useCallback, useMemo, useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getRoomsList } from "../../../redux/roomsSlice";
-import { createBooking, updateBooking } from "../../../redux/bookingsSlice";
+import {
+  createBooking,
+  updateBooking,
+  getBookingsByDate,
+} from "../../../redux/bookingsSlice";
 import { useNavigate } from "react-router-dom";
 import { BookingWizardContext } from "../context";
 import {
@@ -20,6 +24,7 @@ import AccordionCollapse from "../common/Accordion/AccordionCollapse";
 import ProductList from "./ProductList";
 import AccordionItem from "../common/Accordion/AccordionItem";
 import { getBookedRooms } from "../context/utils";
+import { sortBookingsByRoom } from "../../../utils";
 
 const Step2 = () => {
   const appDispatch = useDispatch();
@@ -103,13 +108,13 @@ const Step2 = () => {
     clearErrors();
   }, [setValue, roomDataIsValid, clearErrors]);
 
-  useEffect(() => {
+  useEffect(async () => {
     if (!!rooms && roomsLoadingState === "idle") {
-      appDispatch(getRoomsList())
-        .unwrap()
-        .then((rooms) => {
-          wizardDispatch(setInitialRoomState(rooms));
-        });
+      const roomData = await appDispatch(getRoomsList()).unwrap();
+      const bookings = await appDispatch(
+        getBookingsByDate(wizardState.formData.date)
+      );
+      wizardDispatch(setInitialRoomState(rooms));
     }
   }, [rooms, roomsLoadingState, appDispatch, wizardDispatch]);
 

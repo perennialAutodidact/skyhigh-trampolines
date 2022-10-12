@@ -23,7 +23,7 @@ const DailyAvailability = () => {
   );
 
   const [selectedDate, setSelectedDate] = useState(
-    dayjs().subtract(3, "days").format("YYYY-MM-DD")
+    dayjs().format("YYYY-MM-DD")
   );
 
   const bookings = useMemo(

@@ -8,8 +8,8 @@ const db = admin.firestore();
 
 //sendgrid
 const sgMail = require("@sendgrid/mail");
-const SENDGRID_KEY = functions.config().sendgrid.key;
-const TEMPLATE_ID = functions.config().sendgrid.template;
+const SENDGRID_KEY = process.env.SENDGRID_KEY;
+const TEMPLATE_ID = process.env.SENDGRID_TEMPLATE_ID;
 sgMail.setApiKey(SENDGRID_KEY);
 
 // function to send email
