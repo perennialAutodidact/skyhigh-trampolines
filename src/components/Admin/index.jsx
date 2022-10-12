@@ -1,22 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { auth } from "../../firebase/client";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { Outlet } from "react-router-dom";
+import { useLocation, useNavigate, Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import LoadingSpinner from "../LoadingSpinner";
 import styled from "./Admin.module.scss";
-
 const Admin = (props) => {
-  const { toggleSidebar } = props;
+  const { toggleSidebar, setToggleSidebar } = props;
   const [user, loading] = useAuthState(auth);
-
-  // if user is logged in and the route is /admin, redirect to /admin/all-products
-  useEffect(() => {
-    if (user?.email && window.location.pathname === "/admin") {
-      window.location.pathname = "/admin/bookings";
-    }
-  }, [user]);
-
   return (
     <div>
       {loading ? (
@@ -26,7 +17,10 @@ const Admin = (props) => {
       ) : (
         <main className="d-flex">
           <div>
-            <Sidebar toggleSidebar={toggleSidebar} />
+            <Sidebar
+              toggleSidebar={toggleSidebar}
+              setToggleSidebar={setToggleSidebar}
+            />
           </div>
 
           <div className={`container-fluid pt-3 ${styled.content}`}>

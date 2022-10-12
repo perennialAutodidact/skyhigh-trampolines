@@ -1,6 +1,6 @@
 import "./App.scss";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./firebase/client";
@@ -17,8 +17,10 @@ import ProductData from "./components/Products";
 import ProductForm from "./components/Products/ProductForm";
 import RoomsList from "./components/Rooms";
 import RoomForm from "./components/Rooms/RoomForm";
-import AllAddOns from "./components/AddOns";
+import AddOnsList from "./components/AddOns";
 import AddOnForm from "./components/AddOns/AddOnForm";
+import DailyAvailability from "./components/Admin/DailyAvailability";
+import { useBreakpoint } from "./hooks/useBreakpoint";
 
 function App() {
   const [user, loading] = useAuthState(auth);
@@ -27,8 +29,16 @@ function App() {
   const [toggleSidebar, setToggleSidebar] = useState(false);
   //
 
+  const breakpoint = useBreakpoint();
+  useEffect(() => {
+    if (["md", "lg"].includes(breakpoint)) {
+      setToggleSidebar(true);
+    } else {
+      setToggleSidebar(false);
+    }
+  }, [breakpoint]);
   return (
-    <div className="container-fluid p-0">
+    <div className="container-fluid p-0 overflow-hidden">
       <Navbar setToggleSidebar={setToggleSidebar} />
       <div style={{ paddingTop: "8vh" }}>
         <Routes>
@@ -36,24 +46,30 @@ function App() {
             path="/admin"
             element={
               <ProtectedRoute isAllowed={!!user} loading={loading}>
-                <Admin toggleSidebar={toggleSidebar} />
+                <Admin
+                  toggleSidebar={toggleSidebar}
+                  setToggleSidebar={setToggleSidebar}
+                />
               </ProtectedRoute>
             }
           >
             {/* products */}
-            <Route path="products" element={<ProductData />} />
-            <Route path="products/create" element={<ProductForm />} />
-            <Route path="add-ons" element={<AllAddOns />} />
-            <Route path="add-ons/create" element={<AddOnForm />} />
+            <Route path="/admin/products" element={<ProductData />} />
+            <Route path="/admin/products/add" element={<ProductForm />} />
+            <Route path="/admin/add-ons" element={<AddOnsList />} />
+            <Route path="/admin/add-ons/add" element={<AddOnForm />} />
 
             {/* bookings */}
 
-            <Route path="bookings" element={<BookingsList />} />
-            <Route path="daily-capacity" element={<p>Daily Capacity</p>} />
+            <Route path="/admin" element={<BookingsList />} />
+            <Route
+              path="/admin/daily-capacity"
+              element={<DailyAvailability />}
+            />
 
             {/* rooms */}
-            <Route path="rooms" element={<RoomsList />} />
-            <Route path="rooms/create" element={<RoomForm />} />
+            <Route path="/admin/rooms" element={<RoomsList />} />
+            <Route path="/admin/rooms/add" element={<RoomForm />} />
           </Route>
 
           <Route path="/" element={<Homepage />} />

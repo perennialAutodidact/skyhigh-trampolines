@@ -3,6 +3,26 @@ import { AiFillHome } from "react-icons/ai";
 import { IoBookmarkSharp, IoCartSharp } from "react-icons/io5";
 
 export const sidebarData = [
+  {
+    id: 1,
+    title: "Bookings",
+    icon: <IoBookmarkSharp size={20} />,
+    iconOpened: <MdKeyboardArrowUp size={25} />,
+    iconClosed: <MdKeyboardArrowDown size={25} />,
+    subNav: [
+      {
+        id: 1.1,
+        title: "Bookings List",
+        path: "/admin",
+      },
+      {
+        id: 1.2,
+        title: "Daily Capacity",
+        path: "/admin/daily-capacity",
+      },
+    ],
+  },
+
   // products
   {
     id: 0,
@@ -14,47 +34,27 @@ export const sidebarData = [
       {
         id: 0.1,
         title: "Products List",
-        path: "/products",
+        path: "/admin/products",
       },
       {
         id: 0.2,
         title: "Add a product",
-        path: "/products/add",
+        path: "/admin/products/add",
       },
       {
         id: 0.3,
         title: "Add-ons List",
-        path: "/add-ons/add",
+        path: "/admin/add-ons/add",
       },
       {
         id: 0.4,
         title: "Add an add-on",
-        path: "/add-ons",
+        path: "/admin/add-ons",
       },
     ],
   },
 
   // bookings
-
-  {
-    id: 1,
-    title: "Bookings",
-    icon: <IoBookmarkSharp size={20} />,
-    iconOpened: <MdKeyboardArrowUp size={25} />,
-    iconClosed: <MdKeyboardArrowDown size={25} />,
-    subNav: [
-      {
-        id: 1.1,
-        title: "Bookings List",
-        path: "/bookings",
-      },
-      {
-        id: 1.2,
-        title: "Daily Capacity",
-        path: "/daily-capacity",
-      },
-    ],
-  },
 
   //   rooms
 
@@ -68,12 +68,12 @@ export const sidebarData = [
       {
         id: 2.1,
         title: "Rooms List",
-        path: "/rooms",
+        path: "/admin/rooms",
       },
       {
         id: 2.2,
         title: "Add a Room",
-        path: "/rooms/add",
+        path: "/admin/rooms/add",
       },
     ],
   },

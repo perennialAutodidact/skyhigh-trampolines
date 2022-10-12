@@ -5,7 +5,7 @@ export const createThunkCondition = (sliceName) => ({
 
     const fetchStatus = slice.loading;
     const error = slice.error;
-    if (fetchStatus !== "idle" && !error) {
+    if (fetchStatus !== "idle" && fetchStatus !== "succeeded" && !error) {
       // Already fetched or in progress, don't need to re-fetch
       return false;
     }
