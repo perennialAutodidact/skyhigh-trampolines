@@ -20,9 +20,11 @@ const Step5 = () => {
 
   const bookingData = useMemo(
     () => ({
-      fullName,
-      email,
-      address,
+      customer: {
+        fullName,
+        email,
+        address,
+      },
     }),
     [fullName, email, address]
   );

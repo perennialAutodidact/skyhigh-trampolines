@@ -40,3 +40,41 @@ exports.sendEmail = functions.https.onCall(async (data, context) => {
     throw new functions.https.HttpsError("unknown", error);
   }
 });
+
+// send email when new booking is created in firestore
+exports.sendEmailToCustomer = functions.firestore
+  .document("bookings/{bookingId}")
+  .onCreate(async (snap, context) => {
+    //retrieve data from firestore
+    const booking = snap.data();
+
+    //log data
+    functions.logger.log("booking", booking);
+
+    // send a post request to the sendgrid api
+    const msg = {
+      to: booking.email,
+      from: "wilado9200@edxplus.com",
+      template_id: TEMPLATE_ID,
+
+      dynamic_template_data: {
+        name: booking.fullName,
+        subject: "Booking Confirmation",
+        idNumber: booking.paymentIntentId,
+        currentDate: new Date().toDateString(),
+        bookingDate: booking.date,
+        rooms: booking.rooms ? booking.rooms : [],
+        addOns: booking.addOns ? booking.addOns : [],
+        subtotal: booking.subTotal,
+        fee: booking.transactionFee,
+        tax: booking.tax,
+        total: booking.amount,
+      },
+    };
+    try {
+      await sgMail.send(msg);
+      return { success: true };
+    } catch (error) {
+      throw new functions.https.HttpsError("unknown", error);
+    }
+  });

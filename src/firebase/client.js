@@ -35,6 +35,8 @@ const productsCollection = collection(db, "products");
 const roomsCollection = collection(db, "rooms");
 const addOnsCollection = collection(db, "addOns");
 const bookingsCollection = collection(db, "bookings");
+const receiptsCollection = collection(db, "reciepts");
+const waiversCollection = collection(db, "waivers");
 
 export {
   db,
@@ -45,4 +47,6 @@ export {
   roomsCollection,
   addOnsCollection,
   bookingsCollection,
+  receiptsCollection,
+  waiversCollection,
 };

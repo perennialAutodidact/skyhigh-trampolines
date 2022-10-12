@@ -1,4 +1,3 @@
-
 // @import './team-sapphire-variables';
 
 // $font-family-base: $text;
@@ -43,12 +42,16 @@ $accordion-button-focus-border-color: none;
 $component-active-bg: $info;
 $accordion-color: $secondary;
 $accordion-button-active-color: $secondary;
-$accordion-inner-border-radius:  none;
+$accordion-inner-border-radius: none;
 $input-btn-focus-width: 1px;
 
 // 3. Include remainder of required Bootstrap stylesheets
 @import "../../node_modules/bootstrap/scss/variables";
 @import "../../node_modules/bootstrap/scss/mixins";
+
+// add in custom colors from team-sapphire-variables.scss
+$theme-colors: map-merge($theme-colors, $custom-colors);
+$theme-colors-rgb: map-loop($theme-colors, to-rgb, "$value");
 
 // 4. Include any optional Bootstrap components as you like
 @import "../../node_modules//bootstrap/scss/maps";
@@ -62,8 +65,3 @@ $input-btn-focus-width: 1px;
 @import "../../node_modules/bootstrap/scss/utilities";
 
 // 5. Add additional custom code here
-
-// add in custom colors from team-sapphire-variables.scss
-$theme-colors: map-merge($theme-colors, $custom-colors);
-$theme-colors-rgb: map-loop($theme-colors, to-rgb, "$value");
-

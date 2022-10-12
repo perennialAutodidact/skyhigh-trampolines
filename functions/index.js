@@ -20,3 +20,4 @@ exports.updateBooking = bookings.updateBooking;
 exports.cancelBooking = bookings.cancelBooking;
 
 exports.sendEmail = sendGrid.sendEmail;
+exports.sendEmailToCustomer = sendGrid.sendEmailToCustomer;

@@ -1,60 +1,50 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import styled from "./SidebarItem.module.scss";
 
 const SidebarItem = (props) => {
-  const [subNav, setSubNav] = useState(false);
-  const { item, toggleSidebar } = props;
+  const { item, setToggleSidebar } = props;
   const navigate = useNavigate();
-
-  // toggle icon and subnav and open sidebar
-  const showSubNav = () => {
-    setSubNav((state) => !state);
-  };
-
-  // when sidebar is closed, close subnav
-  useEffect(() => {
-    if (!toggleSidebar) setSubNav(false);
-  }, [toggleSidebar]);
+  const location = useLocation();
 
   return (
-    <>
+    <div className="nav-item">
       {/* //todo change section to different tag */}
-      <section
-        className={`${styled.item} py-2 px-3 m-0 d-flex align-items-center justify-content-between gap-1`}
-        onClick={item.subNav && showSubNav}
-      >
+      <div className={`py-2 px-3 m-0 d-flex align-items-center gap-1 bg-light`}>
         <p className="p-0 m-0 d-flex align-items-center gap-2">
           <span className="p-0 m-0 d-flex align-items-center ">
             {item.icon}
           </span>
           {item.title}
         </p>
+      </div>
 
-        <div>
-          {/* determine what icon to show */}
-          {item.subNav && subNav
-            ? item.iconOpened
-            : item.subNav
-            ? item.iconClosed
-            : null}
-        </div>
-      </section>
-
-      {subNav &&
-        item.subNav.map((menu) => {
+      <div className="flex flex-column mb-2">
+        {item.subNav.map((menu) => {
           return (
             //todo change to link and add to routes
             <div
-              className={`${styled.link} ps-5 py-2`}
+              className="nav-item"
               key={menu.id}
-              onClick={() => navigate(`/admin${menu.path}`)}
+              onClick={() => {
+                navigate(`${menu.path}`);
+                setToggleSidebar(false);
+              }}
             >
-              <p className="p-0 m-0">{menu.title}</p>
+              <Link
+                className={`nav-link link-dark ${
+                  location.pathname === menu.path
+                    ? "fw-bolder ms-3 border-start border-5 border-primary"
+                    : ""
+                }`}
+              >
+                {menu.title}
+              </Link>
             </div>
           );
         })}
-    </>
+      </div>
+    </div>
   );
 };
 
