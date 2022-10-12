@@ -1,11 +1,27 @@
-import React from "react";
+import React, { useMemo } from "react";
 import ProductListItem from "./ProductListItem";
 
-const ProductList = ({ products, roomId }) => {
+const ProductList = ({ room }) => {
+  const availableProducts = useMemo(
+    () =>
+      room.products.filter(
+        (product) =>
+          room.availabilities[room.selectedStartTime][product.duration] > 0
+      ),
+    [room]
+  );
+
   return (
     <div className="row g-0">
-      {products.map((product) => (
-        <ProductListItem product={product} roomId={roomId} key={product.id} />
+      {availableProducts?.map((product) => (
+        <ProductListItem
+          product={product}
+          roomId={room.id}
+          key={product.id}
+          availableQuantity={
+            room.availabilities[room.selectedStartTime][product.duration]
+          }
+        />
       ))}
     </div>
   );
