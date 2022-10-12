@@ -133,7 +133,7 @@ const Step3 = () => {
           </p>
         )}
 
-        <div className="container px-0 px-lg-4">
+        <div className="container px-4">
           <FormNavButtons goBack={goBack} submitButtonText={"Next"} />
         </div>
       </form>
