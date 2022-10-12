@@ -13,6 +13,7 @@ export const wizardReducer = (state, action) => {
     selectedAddOns,
     bookedRooms,
     disabledStartTimes,
+    roomAvailabilities,
     quantity,
     addOns,
     addOnId,
@@ -48,9 +49,23 @@ export const wizardReducer = (state, action) => {
         rooms: createInitialRoomState(rooms),
       };
 
+    // sets the available ticket counts for each time for each room
+    case "SET_ROOM_AVAILABILITIES":
+      return {
+        ...state,
+        rooms: state.rooms.map((room) =>
+          room.id !== roomId
+            ? room
+            : {
+                ...room,
+                availabilities: roomAvailabilities,
+              }
+        ),
+      };
+
     // sets the disabled times for a room
     case "SET_DISABLED_TIMES":
-      console.log(roomId, disabledStartTimes)
+      console.log(roomId, disabledStartTimes);
       return {
         ...state,
         rooms: state.rooms.map((room) =>

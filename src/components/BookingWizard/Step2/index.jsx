@@ -12,6 +12,7 @@ import {
   updateForm,
   setProgressBarStep,
   setInitialRoomState,
+  setRoomAvailabilities,
   setDisabledTimes,
 } from "../context/actions";
 import { step2Schema } from "../context/schema";
@@ -140,6 +141,8 @@ const Step2 = () => {
             room,
             wizardState.startTimes
           );
+          wizardDispatch(setRoomAvailabilities(room.id, availabilities));
+
           let disabledTimes = getDisabledTimes(availabilities);
           wizardDispatch(setDisabledTimes(room.id, disabledTimes));
         });
@@ -184,7 +187,9 @@ const Step2 = () => {
                 <AccordionCollapse collapseId={room.id}>
                   <StartTimeList room={room} />
 
-                  <ProductList products={room.products} roomId={room.id} />
+                  {room.selectedStartTime && room.availabilities && (
+                    <ProductList room={room} />
+                  )}
                 </AccordionCollapse>
               </AccordionItem>
             ))}
