@@ -3,8 +3,9 @@ export const sortBookingsByRoom = (bookings, allRooms) => {
 
   for (let room of allRooms) {
     bookingsByRoom[room.id] = {
-      capacity: room.capacity,
+      id: room.id,
       name: room.name,
+      capacity: room.capacity,
       bookings: [],
     };
   }
@@ -57,12 +58,9 @@ export const getRoomAvailabilities = (room, times) => {
     bookingIndex++;
   }
 
-  console.log(ticketCounts);
-
   let allAvailableTickets = {};
   let ticketsAvailableAtCurrentTime = {};
-  let currentTime, currentTicketCount, duration, futureTimeIndex;
-  let isTooLateForAllDay, ticketsAreAvailable, futureTime;
+  let currentTime, currentTicketCount, futureTimeIndex;
   let ticketNames = ["60min", "90min", "120min", "allDay"];
 
   let i = 0;
@@ -81,18 +79,9 @@ export const getRoomAvailabilities = (room, times) => {
         continue;
       }
 
-      // ticketsAreAvailable =
-      //   currentTicketCount > 0 && ticketCounts[futureTimeIndex] > 0;
-      ticketsAreAvailable = ticketCounts[futureTimeIndex] > 0;
-      isTooLateForAllDay = i > Math.floor(times.length / 2) && j === 3;
-
       let ticketName = ticketNames[j];
 
-      // if (!isTooLateForAllDay) {
-      ticketsAvailableAtCurrentTime[ticketName] = ticketCounts[i];
-      // } else {
-      // break;
-      // }
+      ticketsAvailableAtCurrentTime[ticketName] = currentTicketCount;
       j++;
     }
 
@@ -102,6 +91,5 @@ export const getRoomAvailabilities = (room, times) => {
     };
     i++;
   }
-  console.log({ allAvailableTickets });
   return allAvailableTickets;
 };
