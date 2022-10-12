@@ -28,10 +28,10 @@ const functions = getFunctions(app);
 
 // run the following command before changing .env value to true:
 // firebase emulators:start
-// if (process.env.CONNECT_EMULATOR) {
-connectFirestoreEmulator(db, "localhost", 8080);
-connectFunctionsEmulator(functions, "localhost", 5001);
-// }
+if (process.env.CONNECT_EMULATOR) {
+  connectFirestoreEmulator(db, "localhost", 8080);
+  connectFunctionsEmulator(functions, "localhost", 5001);
+}
 
 const productsCollection = collection(db, "products");
 const roomsCollection = collection(db, "rooms");
