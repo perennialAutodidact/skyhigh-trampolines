@@ -130,13 +130,12 @@ const Step2 = () => {
   ]);
 
   useEffect(() => {
-    if (!bookingsByDate["2022-10-11"] && bookingLoading !== "pending") {
-      // if(!bookingsByDate[wizardState.formData.date] && bookingLoading !== "pending"){
-      // appDispatch(getBookingsByDate(wizardState.formData.date))
-      appDispatch(getBookingsByDate("2022-10-11"));
+      const date = wizardState.formData.date;
+      if(!bookingsByDate[date] && bookingLoading !== "pending"){
+      appDispatch(getBookingsByDate(date))
     } else {
-      if (bookingsByDate["2022-10-11"]) {
-        bookingsByDate["2022-10-11"].forEach((room) => {
+      if (bookingsByDate[date]) {
+        bookingsByDate[date].forEach((room) => {
           let availabilities = getRoomAvailabilities(
             room,
             wizardState.startTimes
