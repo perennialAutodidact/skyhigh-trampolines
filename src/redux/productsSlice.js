@@ -71,7 +71,7 @@ const productsSlice = createSlice({
     },
     [createProduct.rejected]: (state, action) => {
       state.loading = "rejected";
-      state.error = action.payload;
+      state.error = action.payload.message;
     },
 
     // fetch products
@@ -86,7 +86,7 @@ const productsSlice = createSlice({
     [fetchProducts.rejected]: (state, action) => {
       console.log(action.payload);
       state.loading = "rejected";
-      state.error = action.payload;
+      state.error = action.payload.message;
     },
   },
 });
