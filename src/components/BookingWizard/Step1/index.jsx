@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { BookingWizardContext } from "../context";
 import { step1Schema } from "../context/schema";
@@ -31,15 +31,15 @@ const Step1 = () => {
     navigate("/booking/step-2");
   };
 
-  const setDate = (date) => {
-    setValue("date", date);
-    wizardDispatch(updateForm({ date }));
-  };
-
   const goBack = () => {
     navigate("/");
     wizardDispatch(setProgressBarStep(1));
   };
+
+  useEffect(() => {
+    setValue("date", wizardState.formData.date);
+  }, [wizardState.formData.date, setValue]);
+
   return (
     <div className="container pt-3">
       <form onSubmit={handleSubmit(onSubmit)} className="container text-start">
@@ -54,7 +54,7 @@ const Step1 = () => {
               {...register("date")}
               value={initialValues.date}
             />
-            <CalendarDatePicker setFormDate={setDate} />
+            <CalendarDatePicker selectedDate={wizardState.formData.date} />
             {errors.date && (
               <p className="text-danger">{errors.date.message}</p>
             )}
