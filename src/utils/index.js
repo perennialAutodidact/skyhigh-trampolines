@@ -57,10 +57,13 @@ export const getRoomAvailabilities = (room, times) => {
     }
     bookingIndex++;
   }
-
   let allAvailableTickets = {};
   let ticketsAvailableAtCurrentTime = {};
-  let currentTime, currentTicketCount, futureTimeIndex;
+  let currentTime,
+    currentTicketCount,
+    futureTimeIndex,
+    shouldSkipOtherTimes,
+    ticketsAreAvailable;
   let ticketNames = ["60min", "90min", "120min", "allDay"];
 
   let i = 0;
@@ -68,20 +71,30 @@ export const getRoomAvailabilities = (room, times) => {
     ticketsAvailableAtCurrentTime = {};
     currentTime = times[i];
     currentTicketCount = ticketCounts[i];
+    shouldSkipOtherTimes = false;
 
     let j = 0;
     while (j < ticketNames.length) {
       futureTimeIndex = i + j + 1;
       let isValidTimeIndex = futureTimeIndex < times.length - 1;
+      let ticketName = ticketNames[j];
+      ticketsAreAvailable =
+        currentTicketCount > 0 && ticketCounts[futureTimeIndex] > 0;
 
       if (!isValidTimeIndex) {
         j++;
         continue;
       }
 
-      let ticketName = ticketNames[j];
+      if (shouldSkipOtherTimes) {
+        ticketsAvailableAtCurrentTime[ticketName] = 0;
+      } else if (ticketsAreAvailable) {
+        ticketsAvailableAtCurrentTime[ticketName] = currentTicketCount;
+      } else {
+        ticketsAvailableAtCurrentTime[ticketName] = 0;
+        shouldSkipOtherTimes = true;
+      }
 
-      ticketsAvailableAtCurrentTime[ticketName] = currentTicketCount;
       j++;
     }
 

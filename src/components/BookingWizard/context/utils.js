@@ -192,7 +192,7 @@ export const getOrderSubtotal = (rooms, addOns) =>
  */
 export const getDisabledTimes = (roomAvailabilities) => {
   return Object.keys(roomAvailabilities).filter((time) =>
-    Object.keys(roomAvailabilities[time]).some(
+    Object.keys(roomAvailabilities[time]).every(
       (ticketName) => roomAvailabilities[time][ticketName] === 0
     )
   );
