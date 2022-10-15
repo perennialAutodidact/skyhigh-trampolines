@@ -23,7 +23,7 @@ const DailyAvailability = () => {
   );
 
   const [selectedDate, setSelectedDate] = useState(
-    dayjs().subtract(3, "days").format("YYYY-MM-DD")
+    dayjs().format("YYYY-MM-DD")
   );
 
   const bookings = useMemo(
@@ -38,10 +38,6 @@ const DailyAvailability = () => {
   }, [rooms, roomsLoadingStatus, appDispatch]);
 
   useEffect(() => {
-    console.log(
-      !bookingsByDate[selectedDate],
-      bookingsLoadingStatus !== "pending"
-    );
     if (!bookingsByDate[selectedDate] && bookingsLoadingStatus !== "pending") {
       appDispatch(getBookingsByDate(selectedDate));
     }

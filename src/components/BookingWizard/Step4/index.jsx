@@ -47,7 +47,7 @@ const Step4 = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="container text-start">
         {/* CUSTOMER FULL NAME */}
         <div className="row mb-3">
-          <label htmlFor="fullName" className="form-label">
+          <label htmlFor="fullName" className="form-label px-0">
             Name <span className="text-danger">*</span>
           </label>
           <input
@@ -62,7 +62,7 @@ const Step4 = () => {
 
         {/* CUSTOMER EMAIL */}
         <div className="row mb-3">
-          <label htmlFor="email" className="form-label">
+          <label htmlFor="email" className="form-label px-0">
             Email <span className="text-danger">*</span>
           </label>
           <input

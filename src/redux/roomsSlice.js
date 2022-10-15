@@ -99,7 +99,7 @@ const roomsSlice = createSlice({
     },
     [createRoom.rejected]: (state, action) => {
       state.loading = "rejected";
-      state.error = action.payload;
+      state.error = action.payload.message;
     },
 
     [getRoomsList.pending]: (state, action) => {
@@ -111,7 +111,7 @@ const roomsSlice = createSlice({
     },
     [getRoomsList.rejected]: (state, action) => {
       state.loading = "rejected";
-      state.error = action.payload;
+      state.error = action.payload.message;
     },
   },
 });

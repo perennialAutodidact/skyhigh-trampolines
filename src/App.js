@@ -36,7 +36,7 @@ function App() {
     } else {
       setToggleSidebar(false);
     }
-  }, [breakpoint]);
+  }, [breakpoint, setToggleSidebar]);
   return (
     <div className="container-fluid p-0 overflow-hidden">
       <Navbar setToggleSidebar={setToggleSidebar} />

@@ -14,7 +14,7 @@ const CalendarRow = ({ dates }) => {
 
   const handleDateSelect = (date) => {
     if (dateIsSelectable(currentPage.date, selectedDate, date)) {
-      wizardDispatch(updateForm({ date }));
+      wizardDispatch(updateForm({ date: date.format("YYYY-MM-DD") }));
       dispatch(setSelectedDate(date));
     }
   };

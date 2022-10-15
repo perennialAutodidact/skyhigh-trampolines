@@ -5,6 +5,7 @@ import { useLocation, useNavigate, Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import LoadingSpinner from "../LoadingSpinner";
 import styled from "./Admin.module.scss";
+
 const Admin = (props) => {
   const { toggleSidebar, setToggleSidebar } = props;
   const [user, loading] = useAuthState(auth);

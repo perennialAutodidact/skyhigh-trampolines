@@ -73,7 +73,9 @@ const CheckoutForm = ({ goBack, setError }) => {
             <LoadingSpinner color={"primary"} />
           </div>
         ) : (
-          <FormNavButtons goBack={goBack} submitButtonText={"Submit"} />
+          <div className="container">
+            <FormNavButtons goBack={goBack} submitButtonText={"Submit"} />
+          </div>
         )}
       </div>
     </form>

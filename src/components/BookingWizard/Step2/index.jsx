@@ -1,13 +1,19 @@
 import React, { useCallback, useMemo, useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getRoomsList } from "../../../redux/roomsSlice";
-import { createBooking, updateBooking } from "../../../redux/bookingsSlice";
+import {
+  createBooking,
+  updateBooking,
+  getBookingsByDate,
+} from "../../../redux/bookingsSlice";
 import { useNavigate } from "react-router-dom";
 import { BookingWizardContext } from "../context";
 import {
   updateForm,
   setProgressBarStep,
   setInitialRoomState,
+  setRoomAvailabilities,
+  setDisabledTimes,
 } from "../context/actions";
 import { step2Schema } from "../context/schema";
 import { useForm } from "react-hook-form";
@@ -19,16 +25,19 @@ import StartTimeList from "./StartTimeList";
 import AccordionCollapse from "../common/Accordion/AccordionCollapse";
 import ProductList from "./ProductList";
 import AccordionItem from "../common/Accordion/AccordionItem";
-import { getBookedRooms } from "../context/utils";
+import { getBookedRooms, getDisabledTimes } from "../context/utils";
+import { getRoomAvailabilities } from "../../../utils";
 
 const Step2 = () => {
   const appDispatch = useDispatch();
   const { rooms, loading: roomsLoadingState } = useSelector(
     (appState) => appState.rooms
   );
-  const { bookingInProgress, loading: bookingLoading } = useSelector(
-    (appState) => appState.bookings
-  );
+  const {
+    bookingInProgress,
+    loading: bookingLoading,
+    bookingsByDate,
+  } = useSelector((appState) => appState.bookings);
   const navigate = useNavigate();
   const [wizardState, wizardDispatch] = useContext(BookingWizardContext);
 
@@ -105,13 +114,47 @@ const Step2 = () => {
 
   useEffect(() => {
     if (!!rooms && roomsLoadingState === "idle") {
-      appDispatch(getRoomsList())
-        .unwrap()
-        .then((rooms) => {
-          wizardDispatch(setInitialRoomState(rooms));
-        });
+      (async () => {
+        const roomData = await appDispatch(getRoomsList()).unwrap();
+        await appDispatch(getBookingsByDate(wizardState.formData.date));
+
+        wizardDispatch(setInitialRoomState(roomData));
+      })();
     }
-  }, [rooms, roomsLoadingState, appDispatch, wizardDispatch]);
+  }, [
+    rooms,
+    roomsLoadingState,
+    appDispatch,
+    wizardDispatch,
+    wizardState.formData.date,
+  ]);
+
+  useEffect(() => {
+      const date = wizardState.formData.date;
+      if(!bookingsByDate[date] && bookingLoading !== "pending"){
+      appDispatch(getBookingsByDate(date))
+    } else {
+      if (bookingsByDate[date]) {
+        bookingsByDate[date].forEach((room) => {
+          let availabilities = getRoomAvailabilities(
+            room,
+            wizardState.startTimes
+          );
+          wizardDispatch(setRoomAvailabilities(room.id, availabilities));
+
+          let disabledTimes = getDisabledTimes(availabilities);
+          wizardDispatch(setDisabledTimes(room.id, disabledTimes));
+        });
+      }
+    }
+  }, [
+    bookingsByDate,
+    bookingLoading,
+    wizardState.formData.date,
+    appDispatch,
+    wizardState.startTimes,
+    wizardDispatch,
+  ]);
 
   if (roomsLoadingState === "pending") {
     return (
@@ -143,7 +186,9 @@ const Step2 = () => {
                 <AccordionCollapse collapseId={room.id}>
                   <StartTimeList room={room} />
 
-                  <ProductList products={room.products} roomId={room.id} />
+                  {room.selectedStartTime && room.availabilities && (
+                    <ProductList room={room} />
+                  )}
                 </AccordionCollapse>
               </AccordionItem>
             ))}
@@ -155,7 +200,7 @@ const Step2 = () => {
             </p>
           )}
         </div>
-        <div className="container px-0 px-lg-4">
+        <div className="container px-4">
           <FormNavButtons goBack={goBack} submitButtonText={"Next"} />
         </div>
       </form>

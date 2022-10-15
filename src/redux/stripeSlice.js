@@ -73,7 +73,7 @@ export const stripeSlice = createSlice({
       state.loading = action.payload;
     },
     setStripeError: (state, action) => {
-      state.error = action.payload.error;
+      state.error = action.payload.message.error;
     },
   },
   extraReducers: {
@@ -91,7 +91,7 @@ export const stripeSlice = createSlice({
         clientSecret: null,
         id: null,
       };
-      state.error = action.payload;
+      state.error = action.payload.message;
     },
 
     [cancelPaymentIntent.pending]: (state, action) => {
@@ -106,7 +106,7 @@ export const stripeSlice = createSlice({
     },
     [cancelPaymentIntent.rejected]: (state, action) => {
       state.loading = "rejected";
-      state.error = action.payload;
+      state.error = action.payload.message;
     },
   },
 });
