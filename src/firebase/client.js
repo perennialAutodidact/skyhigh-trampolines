@@ -28,7 +28,7 @@ const functions = getFunctions(app);
 
 // run the following command before changing .env value to true:
 // firebase emulators:start
-if (process.env.CONNECT_EMULATOR) {
+if (process.env.NODE_ENV==='development') {
   connectFirestoreEmulator(db, "localhost", 8080);
   connectFunctionsEmulator(functions, "localhost", 5001);
 }
