@@ -6,6 +6,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./firebase/client";
 import "./App.scss";
 import BookingsList from "./components/Admin/Bookings";
+import BookingDetail from "./components/Admin/Bookings/BookingDetail";
 import { ProtectedRoute } from "./components/Admin/ProtectedRoute";
 
 import Admin from "./components/Admin";
@@ -61,6 +62,7 @@ function App() {
 
             {/* bookings */}
 
+            <Route path="/admin/bookings/:id" element={<BookingDetail />} />
             <Route path="/admin" element={<BookingsList />} />
             <Route
               path="/admin/daily-capacity"

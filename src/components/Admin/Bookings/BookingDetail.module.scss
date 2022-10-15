@@ -1,0 +1,56 @@
+@import "../../../styles/team-sapphire-variables";
+
+.container {
+  margin: 0 50px;
+  padding: 40px 0;
+}
+
+.confirmId {
+  padding: 30px 0;
+}
+
+.orderDetails {
+  padding: 10px 0;
+  font-family: $heading;
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+p {
+  font-family: $heading;
+  font-weight: 700;
+  padding: 30px 0 0 0;
+}
+
+.signature {
+  border-style: dotted;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.productList {
+  width: 600px;
+}
+
+h4 {
+  padding: 30px 0 0 0;
+}
+
+.sign {
+  padding: 10px 0 0 0;
+}
+
+.totalPrice {
+  font-family: $heading;
+  font-weight: 700;
+}
+
+.productId {
+  padding: 10px 0 10px 0;
+}
+
+h1 {
+  margin-top: 10px;
+}

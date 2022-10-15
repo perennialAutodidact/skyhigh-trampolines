@@ -78,6 +78,37 @@ const getRooms = () => {
   }
 };
 
+export const getBookingById = createAsyncThunk(
+  "bookings/getBookingsById",
+  async (id, { rejectWithValue }) => {
+    try {
+      let booking = await getDoc(doc(db, "bookings", id)).then((doc) => {
+        let { dateCreated, ...data } = doc.data();
+        dateCreated = dayjs.unix(dateCreated.seconds).format();
+        return {
+          id: doc.id,
+          dateCreated,
+          ...data,
+        };
+      });
+
+      if (booking.waiverId) {
+        const { signature } = await getDoc(
+          doc(db, "waivers", booking.waiverId)
+        ).then((doc) => doc.data());
+
+        booking.signature = signature;
+      }
+
+      return {
+        booking,
+      };
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
 export const getFirstBookingPage = createAsyncThunk(
   "bookings/getBookingsList",
   async (_, { getState, rejectWithValue }) => {
@@ -204,6 +235,7 @@ const bookingsSlice = createSlice({
     bookingsPage: [],
     allBookings: [],
     pageStartIds: [],
+    booking: {},
     page: 1,
     perPage: 10,
     isLastPage: false,
@@ -334,6 +366,18 @@ const bookingsSlice = createSlice({
     [cancelBooking.rejected]: (state, action) => {
       state.loading = "rejected";
       state.error = action.payload.message;
+    },
+
+    [getBookingById.pending]: (state, action) => {
+      state.loading = "pending";
+    },
+    [getBookingById.fulfilled]: (state, action) => {
+      state.loading = "idle";
+      state.booking = action.payload.booking;
+    },
+    [getBookingById.rejected]: (state, action) => {
+      state.loading = "rejected";
+      state.error = action.payload;
     },
   },
 });
