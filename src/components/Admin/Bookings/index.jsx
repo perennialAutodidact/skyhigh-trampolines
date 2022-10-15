@@ -86,7 +86,12 @@ const BookingsList = () => {
                   <td>{booking.date}</td>
                   <td>
                     {booking.receiptId ? (
-                      <Link className="link-dark">{booking.receiptId}</Link>
+                      <Link
+                        to={`/admin/bookings/${booking.id}`}
+                        className="link-dark"
+                      >
+                        {booking.receiptId}
+                      </Link>
                     ) : (
                       <span className="text-muted">{booking.status}</span>
                     )}
