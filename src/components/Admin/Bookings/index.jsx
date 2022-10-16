@@ -39,7 +39,7 @@ const BookingsList = () => {
   }, [page]);
 
   useEffect(() => {
-    if (!!bookingsPage && bookingsLoadingStatus === "idle") {
+    if (bookingsPage.length === 0 && bookingsLoadingStatus === "idle") {
       appDispatch(getFirstBookingPage());
     }
   }, [bookingsPage, bookingsLoadingStatus, appDispatch]);

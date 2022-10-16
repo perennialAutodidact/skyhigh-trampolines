@@ -32,7 +32,7 @@ const DailyAvailability = () => {
   );
 
   useEffect(() => {
-    if (!!rooms && roomsLoadingStatus === "idle") {
+    if (rooms.length === 0 && roomsLoadingStatus === "idle") {
       appDispatch(getRoomsList());
     }
   }, [rooms, roomsLoadingStatus, appDispatch]);
