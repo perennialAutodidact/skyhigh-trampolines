@@ -11,3 +11,16 @@ export const createThunkCondition = (sliceName) => ({
     }
   },
 });
+
+export const parseError = (error, fallbackMessaage) => {
+  const { code, message } = error;
+
+  if (code && message) {
+    error = { code, message };
+  } else if (error) {
+    error = { message: error };
+  } else {
+    error = { message: "An error occurred." };
+  }
+  return error;
+};
