@@ -2,53 +2,61 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getRoomsList } from "../../redux/roomsSlice";
 import LoadingSpinner from "../LoadingSpinner";
+import styles from "./RoomsList.module.scss";
 
 const RoomsList = () => {
   const appDispatch = useDispatch();
-  const { rooms, loading } = useSelector((state) => state.rooms);
+  const { rooms, loading: roomsLoadingStatus } = useSelector(
+    (state) => state.rooms
+  );
 
   // dispatch action to fetch addOns
   useEffect(() => {
-    if (!!rooms && loading === "idle") {
-      appDispatch(getRoomsList());
+    if (rooms.length === 0) {
+      if (roomsLoadingStatus === "idle") {
+        appDispatch(getRoomsList());
+      }
     }
-  }, [rooms, loading, appDispatch]);
+  }, [rooms, roomsLoadingStatus, appDispatch]);
 
-  if (loading === "pending") {
+  if (roomsLoadingStatus === "pending") {
     return <LoadingSpinner />;
   }
 
   return (
-    <table className="table table-striped">
-      <thead>
-        <tr>
-          <h1>Rooms</h1>
-        </tr>
-      </thead>
-      <tbody>
-        {rooms.map((room) => (
-          <tr key={room.id}>
-            <th scope="row">
-              <div className="d-flex gap-3">
-                <figure className="w-25">
-                  <img
-                    src={room.photo}
-                    alt={room.name}
-                    className="img-fluid img-thumbnail"
-                  />
-                </figure>
-                <div>
-                  <h3>{room.name}</h3>
-                  <div className="d-flex gap-2">
-                    <h5>Capacity:</h5> {room.capacity}
+    <div className="container">
+      <div className="row">
+        <h1 className="text-center">Rooms</h1>
+        <div className="col-12">
+          {rooms.length === 0 ? (
+            "No rooms found."
+          ) : (
+            <div className="row border-bottom pt-3 pb-5 d-flex justify-content-center gap-3">
+              {rooms.map((room) => (
+                <div className="col-12 col-lg-4 p-3 border rounded shadow">
+                  <div className="row">
+                    <div className="col-4">
+                      <img
+                        src={room.photo}
+                        alt={room.name}
+                        className={`img-fluid img-thumbnail ${styles.roomThumbnail}`}
+                      />
+                    </div>
+
+                    <div className="col-8">
+                      <h3>{room.name}</h3>
+                      <div className="d-flex gap-2">
+                        <h5>Capacity:</h5> {room.capacity}
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </th>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
   );
 };
 

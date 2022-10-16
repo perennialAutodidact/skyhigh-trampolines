@@ -1,8 +1,12 @@
 import React from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "../../redux/productsSlice";
+import {
+  fetchProducts,
+  resetProductsLoadingStatus,
+} from "../../redux/productsSlice";
 import LoadingSpinner from "../LoadingSpinner";
+import styles from "./ProductList.module.scss";
 
 const ProductData = () => {
   const dispatch = useDispatch();
@@ -12,50 +16,53 @@ const ProductData = () => {
 
   // dispatch action to fetch products
   useEffect(() => {
-    if (!!products && productsLoadingStatus === "idle") {
-      dispatch(fetchProducts());
+    if (products.length === 0) {
+      if (productsLoadingStatus === "idle") {
+        dispatch(fetchProducts());
+      }
     }
   }, [dispatch, products, productsLoadingStatus]);
 
-  // map over products and return a table row for each product
-  const data = products?.map((product) => {
-    return (
-      <tr key={product.id}>
-        <th scope="row">
-          <div className="d-flex align-items-start gap-3">
-            <figure className="w-25">
-              <img
-                src={product.photo}
-                alt={product.name}
-                className="img-fluid img-thumbnail"
-              />
-            </figure>
-            {product.name}
-          </div>
-        </th>
-
-        <td>${product.price / 100}</td>
-        <td>{product.productType} </td>
-      </tr>
-    );
-  });
-
   return (
     <>
-      {productsLoadingStatus === "idle" ||
-      productsLoadingStatus === "pending" ? (
+      {productsLoadingStatus === "pending" ? (
         <LoadingSpinner />
       ) : (
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th scope="col">Product</th>
-              <th scope="col">Price</th>
-              <th scope="col">Type</th>
-            </tr>
-          </thead>
-          <tbody>{data}</tbody>
-        </table>
+        <div className="container">
+          <div className="row">
+            <h1 className="text-center">Products</h1>
+            <div className="col-12">
+              {products.length === 0 ? (
+                "No products found."
+              ) : (
+                <div className="row border-bottom pt-3 pb-5 gap-4 d-flex justify-content-center">
+                  {products.map((product) => (
+                    <div className="col-12 col-lg-3 p-3 border rounded shadow">
+                      <div className="row">
+                        <div className="col-4">
+                          <img
+                            src={product.photo}
+                            alt={product.name}
+                            className={`img-fluid img-thumbnail ${styles.productThumbnail}`}
+                          />
+                        </div>
+
+                        <div className="col-8 text-end">
+                          <h5 className="m-0 p-0">{product.name}</h5>
+                          <div className="fs-5 p-0">${product.price / 100}</div>
+                        </div>
+                        <div className="col-12 mt-3">
+                          <p className="m-0 p-0">{product.room.name}</p>
+                          <div className="py-2 m-0">{product.description}</div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       )}
     </>
   );
