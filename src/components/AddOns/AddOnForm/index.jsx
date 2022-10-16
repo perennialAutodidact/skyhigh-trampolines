@@ -5,8 +5,10 @@ import { useForm, useController } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { addOnSchema } from "./schema";
 import LoadingSpinner from "../../LoadingSpinner";
+import { useNavigate } from "react-router-dom";
 
 const AddOnForm = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loading: addOnsLoadingStatus } = useSelector(
     (appState) => appState.addOns
@@ -36,7 +38,13 @@ const AddOnForm = () => {
   };
 
   const onSubmit = (formData) => {
-    dispatch(createAddOn(formData));
+    formData = {
+      ...formData,
+      price: parseInt((parseFloat(formData.price) * 100).toFixed(0)),
+    };
+    dispatch(createAddOn(formData)).then(() => {
+      navigate("/admin/add-ons");
+    });
   };
   return (
     <div className="container">

@@ -10,6 +10,7 @@ import {
 } from "../../../redux/productsSlice";
 import { getRoomsList } from "../../../redux/roomsSlice";
 import LoadingSpinner from "../../LoadingSpinner";
+import { toMoney } from "../../BookingWizard/context/utils";
 
 //import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 const ProductForm = ({ productTypes, durations }) => {
@@ -88,7 +89,7 @@ const ProductForm = ({ productTypes, durations }) => {
   const onSubmit = (formData) => {
     formData = {
       ...formData,
-      price: parseFloat(formData.price) * 100,
+      price: parseInt((parseFloat(formData.price) * 100).toFixed(0)),
       room: {
         id: formData.room,
         name: rooms.filter((room) => room.id === formData.room)[0].name,
