@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import { getStorage } from "firebase/storage";
+import { getStorage, connectStorageEmulator } from "firebase/storage";
 import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
 
 import "@firebase/auth";
@@ -26,11 +26,11 @@ const auth = getAuth(app);
 const storage = getStorage(app);
 const functions = getFunctions(app);
 
-// run the following command before changing .env value to true:
-// firebase emulators:start
-if (process.env.NODE_ENV==='development') {
+// connect emulators in developement
+if (window.location.hostname === "localhost") {
   connectFirestoreEmulator(db, "localhost", 8080);
   connectFunctionsEmulator(functions, "localhost", 5001);
+  connectStorageEmulator(storage, "localhost", 9199);
 }
 
 const productsCollection = collection(db, "products");
