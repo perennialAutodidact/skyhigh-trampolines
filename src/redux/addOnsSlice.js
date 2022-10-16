@@ -71,6 +71,7 @@ const addOnsSlice = createSlice({
     },
     [createAddOn.fulfilled]: (state, action) => {
       state.loading = "succeeded";
+      state.addOns = state.addOns.concat(action.payload.newAddOn);
     },
     [createAddOn.rejected]: (state, action) => {
       state.loading = "rejected";

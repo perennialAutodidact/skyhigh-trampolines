@@ -84,7 +84,9 @@ const productsSlice = createSlice({
     },
     [fetchProducts.fulfilled]: (state, action) => {
       state.loading = "succeeded";
-      state.products = action.payload;
+      if (action.payload.length > 0) {
+        state.products = action.payload;
+      }
     },
     [fetchProducts.rejected]: (state, action) => {
       state.loading = "rejected";
