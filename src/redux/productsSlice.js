@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { addDoc, getDocs } from "firebase/firestore";
+import { addDoc, getDocs, getDoc } from "firebase/firestore";
 import { storage, productsCollection } from "../firebase/client";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { createThunkCondition } from "./utils";
+import { createThunkCondition, parseError } from "./utils";
 
 const thunkCondition = createThunkCondition("products");
 
@@ -17,15 +17,17 @@ export const createProduct = createAsyncThunk(
 
       const photoLink = await getDownloadURL(snapshot.ref);
 
-      return await addDoc(
-        productsCollection,
-        Object.assign(data, { photo: photoLink })
-      );
+      const newProductRef = await addDoc(productsCollection, {
+        ...data,
+        photo: photoLink,
+      });
+      const newProduct = await getDoc(newProductRef);
+
+      return { newProduct: { id: newProduct.id, ...newProduct.data() } };
     } catch (error) {
-      return rejectWithValue(error);
+      return rejectWithValue(parseError(error));
     }
-  },
-  thunkCondition
+  }
 );
 
 // fetch all products from firebase
@@ -43,7 +45,7 @@ export const fetchProducts = createAsyncThunk(
 
       return products;
     } catch (error) {
-      return rejectWithValue(error);
+      return rejectWithValue(parseError(error));
     }
   },
   thunkCondition
@@ -57,17 +59,18 @@ const productsSlice = createSlice({
     error: null,
   },
   reducers: {
-    resetProductsSlice: (state, action) => {
-      state.products = [];
+    resetProductsLoadingStatus: (state, action) => {
       state.loading = "idle";
     },
   },
   extraReducers: {
     [createProduct.pending]: (state, action) => {
       state.loading = "pending";
+      state.error = null;
     },
     [createProduct.fulfilled]: (state, action) => {
-      state.loading = "fulfilled";
+      state.loading = "succeeded";
+      state.products = state.products.concat(action.payload.newProduct);
     },
     [createProduct.rejected]: (state, action) => {
       state.loading = "rejected";
@@ -77,19 +80,18 @@ const productsSlice = createSlice({
     // fetch products
     [fetchProducts.pending]: (state, action) => {
       state.loading = "pending";
+      state.error = null;
     },
     [fetchProducts.fulfilled]: (state, action) => {
-      console.log(action.payload);
-      state.loading = "fulfilled";
+      state.loading = "succeeded";
       state.products = action.payload;
     },
     [fetchProducts.rejected]: (state, action) => {
-      console.log(action.payload);
       state.loading = "rejected";
       state.error = action.payload.message;
     },
   },
 });
 
-export const { resetProductsSlice } = productsSlice.actions;
+export const { resetProductsLoadingStatus } = productsSlice.actions;
 export default productsSlice.reducer;

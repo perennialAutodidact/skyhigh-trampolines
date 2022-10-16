@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { addDoc, getDocs, query, where } from "firebase/firestore";
+import { addDoc, getDoc, getDocs, query, where } from "firebase/firestore";
 import {
   storage,
   roomsCollection,
@@ -21,11 +21,13 @@ export const createRoom = createAsyncThunk(
       const snapshot = await uploadBytes(roomsRef, photo);
       const photoLink = await getDownloadURL(snapshot.ref);
 
-      return await addDoc(roomsCollection, {
+      const newRoomDoc = await addDoc(roomsCollection, {
         name,
         capacity,
         photo: photoLink,
       });
+      const newRoom = await getDoc(newRoomDoc);
+      return { newRoom: { id: newRoom.id, ...newRoom.data() } };
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -71,7 +73,7 @@ export const getRoomsList = createAsyncThunk(
 
       return fulfillWithValue(rooms);
     } catch (error) {
-      return rejectWithValue(error);
+      return rejectWithValue(error.payload);
     }
   },
   thunkCondition
@@ -85,17 +87,18 @@ const roomsSlice = createSlice({
     error: null,
   },
   reducers: {
-    resetRoomsSlice: (state, action) => {
-      state.rooms = [];
+    resetRoomsLoadingStatus: (state, action) => {
       state.loading = "idle";
     },
   },
   extraReducers: {
     [createRoom.pending]: (state, action) => {
       state.loading = "pending";
+      state.error = null;
     },
     [createRoom.fulfilled]: (state, action) => {
-      state.loading = "fulfilled";
+      state.loading = "succeeded";
+      state.rooms = state.rooms.concat(action.payload.newRoom);
     },
     [createRoom.rejected]: (state, action) => {
       state.loading = "rejected";
@@ -104,10 +107,11 @@ const roomsSlice = createSlice({
 
     [getRoomsList.pending]: (state, action) => {
       state.loading = "pending";
+      state.error = null;
     },
     [getRoomsList.fulfilled]: (state, action) => {
-      state.loading = "fulfilled";
       state.rooms = action.payload;
+      state.loading = "succeeded";
     },
     [getRoomsList.rejected]: (state, action) => {
       state.loading = "rejected";
@@ -116,7 +120,7 @@ const roomsSlice = createSlice({
   },
 });
 
-export const { resetRoomsSlice } = roomsSlice.actions;
+export const { resetRoomsLoadingStatus } = roomsSlice.actions;
 
 export default roomsSlice.reducer;
 

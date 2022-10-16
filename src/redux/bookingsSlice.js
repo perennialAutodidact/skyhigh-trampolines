@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { createThunkCondition } from "./utils";
+import { createThunkCondition, parseError } from "./utils";
 import {
   getDocs,
   query,
@@ -41,7 +41,9 @@ const getBookings = async (pageQuery) => {
 
       return bookingsData;
     });
-  } catch (error) {}
+  } catch (error) {
+    return error;
+  }
 };
 
 const getReceipts = async (bookings) => {
@@ -104,7 +106,7 @@ export const getBookingById = createAsyncThunk(
         booking,
       };
     } catch (error) {
-      return rejectWithValue(error);
+      return rejectWithValue(parseError(error));
     }
   }
 );
@@ -127,7 +129,7 @@ export const getFirstBookingPage = createAsyncThunk(
 
       return { bookingsPage };
     } catch (error) {
-      return rejectWithValue(error);
+      return rejectWithValue(parseError(error));
     }
   },
   thunkCondition
@@ -163,7 +165,7 @@ export const getNextBookingPage = createAsyncThunk(
       }
       return { fetchedBookings };
     } catch (error) {
-      return rejectWithValue(error);
+      return rejectWithValue(parseError(error));
     }
   }
 );
@@ -185,7 +187,7 @@ export const getBookingsByDate = createAsyncThunk(
       return fulfillWithValue({ date, bookings });
     } catch (error) {
       // console.log(error);
-      return rejectWithValue(error);
+      return rejectWithValue(parseError(error));
     }
   },
   thunkCondition
@@ -200,7 +202,7 @@ export const createBooking = createAsyncThunk(
       const booking = await callCreateBooking(bookingData);
       return booking;
     } catch (error) {
-      return rejectWithValue(error);
+      return rejectWithValue(parseError(error));
     }
   }
 );
@@ -212,7 +214,7 @@ export const updateBooking = createAsyncThunk(
     try {
       return await callUpdateBooking(bookingData);
     } catch (error) {
-      return rejectWithValue(error);
+      return rejectWithValue(parseError(error));
     }
   }
 );
@@ -224,7 +226,7 @@ export const cancelBooking = createAsyncThunk(
     try {
       return await callCancelBooking({ bookingId });
     } catch (error) {
-      return rejectWithValue(error);
+      return rejectWithValue(parseError(error));
     }
   }
 );
@@ -249,15 +251,18 @@ const bookingsSlice = createSlice({
     // GET FIRST BOOKING PAGE
     [getFirstBookingPage.pending]: (state, action) => {
       state.loading = "pending";
+      state.error = null;
     },
     [getFirstBookingPage.fulfilled]: (state, action) => {
       let { bookingsPage } = action.payload;
       state.loading = "succeeded";
       state.allBookings = state.allBookings.concat(bookingsPage);
       state.bookingsPage = bookingsPage;
-      state.pageStartIds = state.pageStartIds.concat(
-        bookingsPage[bookingsPage.length - 1].id
-      );
+      if (bookingsPage.length > 0) {
+        state.pageStartIds = state.pageStartIds.concat(
+          bookingsPage[bookingsPage.length - 1].id
+        );
+      }
     },
     [getFirstBookingPage.rejected]: (state, action) => {
       state.loading = "rejected";
@@ -267,6 +272,7 @@ const bookingsSlice = createSlice({
     // GET PREV BOOKING PAGE
     [getPrevBookingPage.pending]: (state, action) => {
       state.loading = "pending";
+      state.error = null;
     },
     [getPrevBookingPage.fulfilled]: (state, action) => {
       let { page, perPage } = state;
@@ -285,6 +291,7 @@ const bookingsSlice = createSlice({
     // GET NEXT BOOKING PAGE
     [getNextBookingPage.pending]: (state, action) => {
       state.loading = "pending";
+      state.error = null;
     },
     [getNextBookingPage.fulfilled]: (state, action) => {
       let { fetchedBookings } = action.payload;
@@ -316,6 +323,7 @@ const bookingsSlice = createSlice({
     // GET BOOKINGS BY DATE
     [getBookingsByDate.pending]: (state, action) => {
       state.loading = "pending";
+      state.error = null;
     },
     [getBookingsByDate.fulfilled]: (state, action) => {
       let { date, bookings } = action.payload;
@@ -323,7 +331,7 @@ const bookingsSlice = createSlice({
         ...state.bookingsByDate,
         [date]: bookings,
       };
-      state.loading = "idle";
+      state.loading = "succeeded";
     },
     [getBookingsByDate.rejected]: (state, action) => {
       console.log("FAILED");
@@ -333,9 +341,10 @@ const bookingsSlice = createSlice({
 
     [createBooking.pending]: (state, action) => {
       state.loading = "pending";
+      state.error = null;
     },
     [createBooking.fulfilled]: (state, action) => {
-      state.loading = "fulfilled";
+      state.loading = "succeeded";
       state.bookingInProgress = {
         id: action.payload.data.bookingId,
       };
@@ -347,9 +356,10 @@ const bookingsSlice = createSlice({
 
     [updateBooking.pending]: (state, action) => {
       state.loading = "pending";
+      state.error = null;
     },
     [updateBooking.fulfilled]: (state, action) => {
-      state.loading = "fulfilled";
+      state.loading = "succeeded";
     },
     [updateBooking.rejected]: (state, action) => {
       state.loading = "rejected";
@@ -358,6 +368,7 @@ const bookingsSlice = createSlice({
 
     [cancelBooking.pending]: (state, action) => {
       state.loading = "pending";
+      state.error = null;
     },
     [cancelBooking.fulfilled]: (state, action) => {
       state.loading = "idle";
@@ -370,14 +381,15 @@ const bookingsSlice = createSlice({
 
     [getBookingById.pending]: (state, action) => {
       state.loading = "pending";
+      state.error = null;
     },
     [getBookingById.fulfilled]: (state, action) => {
-      state.loading = "idle";
+      state.loading = "succeeded";
       state.booking = action.payload.booking;
     },
     [getBookingById.rejected]: (state, action) => {
       state.loading = "rejected";
-      state.error = action.payload;
+      state.error = action.payload.message;
     },
   },
 });
