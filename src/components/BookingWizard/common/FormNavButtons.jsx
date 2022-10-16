@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { cancelPaymentIntent } from "../../../redux/stripeSlice";
 import { cancelBooking } from "../../../redux/bookingsSlice";
-import { resetRoomsSlice } from "../../../redux/roomsSlice";
-import { resetProductsSlice } from "../../../redux/productsSlice";
-import { resetAddOnsSlice } from "../../../redux/addOnsSlice";
+import { resetRoomsLoadingStatus } from "../../../redux/roomsSlice";
+import { resetProductsLoadingStatus } from "../../../redux/productsSlice";
+import { resetAddOnsLoadingStatus } from "../../../redux/addOnsSlice";
 
 const FormNavButtons = ({ submitButtonText, goBack }) => {
   const appDispatch = useDispatch();
@@ -23,9 +23,9 @@ const FormNavButtons = ({ submitButtonText, goBack }) => {
       }
 
       Promise.all(cancelCalls).then((res) => {
-        appDispatch(resetRoomsSlice());
-        appDispatch(resetProductsSlice());
-        appDispatch(resetAddOnsSlice());
+        appDispatch(resetRoomsLoadingStatus());
+        appDispatch(resetProductsLoadingStatus());
+        appDispatch(resetAddOnsLoadingStatus());
       });
     },
     [appDispatch]
