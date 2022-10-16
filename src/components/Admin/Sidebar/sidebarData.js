@@ -44,12 +44,12 @@ export const sidebarData = [
       {
         id: 0.3,
         title: "Add-ons List",
-        path: "/admin/add-ons/add",
+        path: "/admin/add-ons",
       },
       {
         id: 0.4,
         title: "Add an add-on",
-        path: "/admin/add-ons",
+        path: "/admin/add-ons/add",
       },
     ],
   },
