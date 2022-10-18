@@ -186,7 +186,6 @@ export const getBookingsByDate = createAsyncThunk(
       console.log({ date, bookings });
       return fulfillWithValue({ date, bookings });
     } catch (error) {
-      // console.log(error);
       return rejectWithValue(parseError(error));
     }
   },
