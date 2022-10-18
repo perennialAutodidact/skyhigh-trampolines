@@ -19,10 +19,11 @@ const ProductListItem = ({ product, roomId, availableQuantity }) => {
     dispatch(setProductQuantity(roomId, product.id, value));
   };
 
-  const incrementQuantity = (product) => {
+  const incrementQuantity = (product, max) => {
     const quantity = parseInt(product.quantity);
-
-    dispatch(setProductQuantity(roomId, product.id, quantity + 1));
+    if (quantity < max) {
+      dispatch(setProductQuantity(roomId, product.id, quantity + 1));
+    }
   };
 
   const decrementQuantity = (product) => {
@@ -59,7 +60,7 @@ const ProductListItem = ({ product, roomId, availableQuantity }) => {
             pattern={"[0-9]+"}
           />
           <div
-            onClick={() => incrementQuantity(product)}
+            onClick={() => incrementQuantity(product, availableQuantity)}
             className="btn btn-outline-secondary d-flex justify-content-center align-items-center p-1"
           >
             <BsPlusLg />
