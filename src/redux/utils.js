@@ -12,7 +12,7 @@ export const createThunkCondition = (sliceName) => ({
   },
 });
 
-export const parseError = (error, fallbackMessaage) => {
+export const parseError = (error, fallbackMessage = "An error occured.") => {
   const { code, message } = error;
 
   if (code && message) {
@@ -20,7 +20,7 @@ export const parseError = (error, fallbackMessaage) => {
   } else if (error) {
     error = { message: error };
   } else {
-    error = { message: "An error occurred." };
+    error = { message: fallbackMessage };
   }
   return error;
 };
