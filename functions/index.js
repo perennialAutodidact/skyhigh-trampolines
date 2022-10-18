@@ -6,7 +6,6 @@ admin.initializeApp();
 const stripeConfig = require("./stripeConfig");
 const payments = require("./payments");
 const bookings = require("./bookings");
-const products = require("./products");
 const sendGrid = require("./sendGrid");
 
 exports.createPaymentIntent = payments.createPaymentIntent;
@@ -19,7 +18,3 @@ exports.updateBookingFromStripeEvent = bookings.updateBookingFromStripeEvent;
 exports.createBooking = bookings.createBooking;
 exports.updateBooking = bookings.updateBooking;
 exports.cancelBooking = bookings.cancelBooking;
-
-exports.addProductToRoom = products.addProductToRoom;
-// exports.sendEmail = sendGrid.sendEmail;
-// exports.sendEmailToCustomer = sendGrid.sendEmailToCustomer;
