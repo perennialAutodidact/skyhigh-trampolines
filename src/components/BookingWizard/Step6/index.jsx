@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from "react";
+import { v4 as uuidv4 } from "uuid";
 import { useDispatch, useSelector } from "react-redux";
 import {
   createPaymentIntent,
@@ -8,18 +9,16 @@ import { useNavigate } from "react-router-dom";
 import { Elements } from "@stripe/react-stripe-js";
 import { toMoney } from "../context/utils";
 import { BookingWizardContext } from "../context";
-import { setProgressBarStep } from "../context/actions";
+import { setProgressBarStep, updateForm } from "../context/actions";
 import styles from "./CheckoutForm.module.scss";
-import { httpsCallable } from "firebase/functions";
-import { functions } from "../../../firebase/client";
 import LoadingSpinner from "../../LoadingSpinner";
 import CheckoutForm from "./CheckoutForm";
 
 const Step6 = ({ stripe }) => {
   const appDispatch = useDispatch();
   const navigate = useNavigate();
-  const [state, dispatch] = useContext(BookingWizardContext);
-  const { formData } = state;
+  const [wizardState, wizardDispatch] = useContext(BookingWizardContext);
+  const { formData } = wizardState;
   const { grandTotal, tax, subTotal, transactionFee } = formData;
   const {
     paymentIntent: { clientSecret, id: paymentIntentId },
@@ -29,20 +28,24 @@ const Step6 = ({ stripe }) => {
 
   const goBack = () => {
     navigate("/booking/step-5");
-    dispatch(setProgressBarStep(5));
+    wizardDispatch(setProgressBarStep(5));
   };
 
   useEffect(() => {
     if (bookingInProgress) {
+      const receiptId = uuidv4().toUpperCase();
+
       const paymentIntentData = {
-        amount: toMoney(grandTotal) * 100,
+        amount: (toMoney(grandTotal) * 100).toFixed(0),
         metadata: {
           bookingId: bookingInProgress.id,
           tax: (toMoney(tax) * 100).toFixed(0),
           subTotal: (toMoney(subTotal) * 100).toFixed(0),
           transactionFee,
+          receiptId,
         },
       };
+      wizardDispatch(updateForm({ receiptId }));
       if (paymentIntentId) {
         appDispatch(
           updatePaymentIntent({
@@ -71,8 +74,6 @@ const Step6 = ({ stripe }) => {
       </div>
     );
   }
-
-  
 
   return (
     <div className="container pt-3">
