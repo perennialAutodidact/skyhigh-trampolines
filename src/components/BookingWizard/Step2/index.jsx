@@ -76,9 +76,9 @@ const Step2 = () => {
   );
 
   const createOrUpdateBooking = useCallback(() => {
-    if (!bookingInProgress && bookingLoading === "idle") {
+    if (!bookingInProgress) {
       appDispatch(createBooking(bookingData));
-    } else if (bookingInProgress && bookingLoading === "fulfilled") {
+    } else if (bookingInProgress) {
       appDispatch(
         updateBooking({ bookingId: bookingInProgress.id, ...bookingData })
       );
@@ -113,7 +113,7 @@ const Step2 = () => {
   }, [setValue, roomDataIsValid, clearErrors]);
 
   useEffect(() => {
-    if (!!rooms && roomsLoadingState === "idle") {
+    if (rooms.length === 0 && roomsLoadingState === "idle") {
       (async () => {
         const roomData = await appDispatch(getRoomsList()).unwrap();
         await appDispatch(getBookingsByDate(wizardState.formData.date));
@@ -130,9 +130,9 @@ const Step2 = () => {
   ]);
 
   useEffect(() => {
-      const date = wizardState.formData.date;
-      if(!bookingsByDate[date] && bookingLoading !== "pending"){
-      appDispatch(getBookingsByDate(date))
+    const date = wizardState.formData.date;
+    if (!bookingsByDate[date]) {
+      appDispatch(getBookingsByDate(date));
     } else {
       if (bookingsByDate[date]) {
         bookingsByDate[date].forEach((room) => {
@@ -185,9 +185,10 @@ const Step2 = () => {
               <AccordionItem item={room} headerText={room.name} key={room.id}>
                 <AccordionCollapse collapseId={room.id}>
                   <StartTimeList room={room} />
-
-                  {room.selectedStartTime && room.availabilities && (
+                  {room.selectedStartTime && room.availabilities ? (
                     <ProductList room={room} />
+                  ) : (
+                    ""
                   )}
                 </AccordionCollapse>
               </AccordionItem>

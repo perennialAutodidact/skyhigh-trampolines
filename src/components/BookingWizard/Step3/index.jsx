@@ -23,11 +23,13 @@ import { updateBooking } from "../../../redux/bookingsSlice";
 const Step3 = () => {
   const navigate = useNavigate();
   const appDispatch = useDispatch();
-  const { addOns, loading: addOnsLoadingState } = useSelector(
+  const { addOns, loading: addOnsLoadingStatus } = useSelector(
     (appState) => appState.addOns
   );
   const [wizardState, wizardDispatch] = useContext(BookingWizardContext);
-  const { bookingInProgress } = useSelector((appState) => appState.bookings);
+  const { bookingInProgress, loading: bookingsLoadingStatus } = useSelector(
+    (appState) => appState.bookings
+  );
   const initialValues = {
     addOnsDataExists: false,
   };
@@ -76,16 +78,19 @@ const Step3 = () => {
   }, [setValue, addOnsDataIsValid, clearErrors]);
 
   useEffect(() => {
-    if (!!addOns && addOnsLoadingState === "idle") {
+    if (!!addOns && addOnsLoadingStatus === "idle") {
       appDispatch(getAddOnsList())
         .unwrap()
         .then((addOns) => {
           wizardDispatch(setInitialAddOnState(addOns));
         });
     }
-  }, [addOns, addOnsLoadingState, appDispatch, wizardDispatch]);
+  }, [addOns, addOnsLoadingStatus, appDispatch, wizardDispatch]);
 
-  if (addOnsLoadingState === "pending") {
+  if (
+    addOnsLoadingStatus === "pending" ||
+    bookingsLoadingStatus === "pending"
+  ) {
     return (
       <div className="conatiner text-center p-5">
         <LoadingSpinner />
