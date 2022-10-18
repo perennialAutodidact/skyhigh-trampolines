@@ -1,12 +1,20 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { addDoc, getDoc, getDocs, query, where } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  collectionGroup,
+  getDoc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import {
   storage,
   roomsCollection,
   productsCollection,
 } from "../firebase/client";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { createThunkCondition } from "./utils";
+import { createThunkCondition, parseError } from "./utils";
 
 const thunkCondition = createThunkCondition("rooms");
 
@@ -29,14 +37,17 @@ export const createRoom = createAsyncThunk(
       const newRoom = await getDoc(newRoomDoc);
       return { newRoom: { id: newRoom.id, ...newRoom.data() } };
     } catch (error) {
-      return rejectWithValue(error);
+      return rejectWithValue(parseError(error));
     }
   },
   thunkCondition
 );
 
 const getRoomProducts = async (roomId) => {
-  const productsQuery = query(productsCollection, where("room", "==", roomId));
+  const productsQuery = query(
+    productsCollection,
+    where("room.id", "==", roomId)
+  );
 
   const products = await getDocs(productsQuery).then((productDocs) => {
     let productData = [];
@@ -73,7 +84,7 @@ export const getRoomsList = createAsyncThunk(
 
       return fulfillWithValue(rooms);
     } catch (error) {
-      return rejectWithValue(error.payload);
+      return rejectWithValue(parseError(error));
     }
   },
   thunkCondition
