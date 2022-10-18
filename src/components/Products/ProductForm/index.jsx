@@ -44,19 +44,19 @@ const ProductForm = ({ productTypes, durations }) => {
   durations = [
     {
       name: "60 minutes",
-      value: "60",
+      value: "60min",
     },
     {
       name: "90 minutes",
-      value: "90",
+      value: "90min",
     },
     {
       name: "120 minutes",
-      value: "120",
+      value: "120min",
     },
     {
       name: "All Day",
-      value: "day",
+      value: "allDay",
     },
   ];
 
