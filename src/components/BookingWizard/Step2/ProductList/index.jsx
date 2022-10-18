@@ -8,12 +8,12 @@ const ProductList = ({ room }) => {
         (product) =>
           room.availabilities[room.selectedStartTime][product.duration] > 0
       ),
-    [room]
+    [room.availabilities, room.selectedStartTime, room.products]
   );
 
   return (
     <div className="row g-0">
-      {availableProducts?.map((product) => (
+      {availableProducts.map((product) => (
         <ProductListItem
           product={product}
           roomId={room.id}
