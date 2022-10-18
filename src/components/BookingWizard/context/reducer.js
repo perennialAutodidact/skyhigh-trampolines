@@ -65,7 +65,6 @@ export const wizardReducer = (state, action) => {
 
     // sets the disabled times for a room
     case "SET_DISABLED_TIMES":
-      console.log(roomId, disabledStartTimes);
       return {
         ...state,
         rooms: state.rooms.map((room) =>

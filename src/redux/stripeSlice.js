@@ -82,7 +82,6 @@ export const stripeSlice = createSlice({
     },
     [createPaymentIntent.fulfilled]: (state, action) => {
       state.loading = "fulfilled";
-      console.log(action.payload);
       state.paymentIntent = action.payload;
     },
     [createPaymentIntent.rejected]: (state, action) => {

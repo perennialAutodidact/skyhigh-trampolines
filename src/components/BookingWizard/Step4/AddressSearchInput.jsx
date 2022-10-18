@@ -24,7 +24,6 @@ const AddressSearchInput = ({ formOnChange, setFormValue }) => {
 
   const handleInput = (e) => {
     // Update the keyword of the input element
-    console.log(e.target.value);
     setValue(e.target.value);
     formOnChange(e.target.value);
   };
@@ -33,7 +32,6 @@ const AddressSearchInput = ({ formOnChange, setFormValue }) => {
     () => {
       // When user selects a place, we can replace the keyword without request data from API
       // by setting the second parameter to "false"
-      console.log(description);
       setValue(description, false);
       formOnChange(description);
       clearSuggestions();

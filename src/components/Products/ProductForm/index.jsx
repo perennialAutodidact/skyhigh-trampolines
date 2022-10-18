@@ -115,10 +115,7 @@ const ProductForm = ({ productTypes, durations }) => {
       <h1>Add a product</h1>
       <div className="row">
         <div className="col-4">
-          <form
-            onSubmit={handleSubmit(onSubmit, (e) => console.log(e))}
-            className="container"
-          >
+          <form onSubmit={handleSubmit(onSubmit)} className="container">
             {/* PRODUCT NAME */}
             <div className="row mb-3">
               <label htmlFor="name" className="form-label p-0">
