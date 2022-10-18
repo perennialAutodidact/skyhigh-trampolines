@@ -53,7 +53,6 @@ const CheckoutForm = ({ goBack, setError }) => {
       appDispatch(setStripeError({ error: result.error.message }));
     } else {
       appDispatch(setStripeLoadingStatus("succeeded"));
-      wizardDispatch(checkoutSuccess(result.paymentIntent.id));
       navigate("/booking/thank-you");
     }
   };
