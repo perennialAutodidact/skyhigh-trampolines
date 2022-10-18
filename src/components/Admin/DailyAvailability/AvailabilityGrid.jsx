@@ -8,7 +8,6 @@ const AvailabilityGrid = ({ room }) => {
   const times = getHalfHourIncrementStrings("9:00", "16:30");
   const ticketTypes = ["60 min", "90 min", "120 min", "All Day"];
   const ticketNames = ["60min", "90min", "120min", "allDay"];
-  //   console.log(room);
 
   const roomAvailabilities = getRoomAvailabilities(room, times);
 
@@ -37,7 +36,9 @@ const AvailabilityGrid = ({ room }) => {
         <thead>
           <tr className="fw-bold">
             <td className="text-center border-end">Time</td>
-            <td colSpan="4" className="text-center">Ticket Durations</td>
+            <td colSpan="4" className="text-center">
+              Ticket Durations
+            </td>
           </tr>
           <tr>
             <td className="bg-light border-end"></td>
