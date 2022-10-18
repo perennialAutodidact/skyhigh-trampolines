@@ -1,129 +1,167 @@
 import { useEffect, useMemo } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getBookingById } from "../../../redux/bookingsSlice";
-import style from "./BookingDetail.module.scss";
-import { toMoney } from "../../BookingWizard/context/utils";
+import { getOrderSubtotal, toMoney } from "../../BookingWizard/context/utils";
+import LoadingSpinner from "../../LoadingSpinner";
+import { formatReceiptId } from "../../../utils";
+import { BsCalendarCheck, BsClock } from "react-icons/bs";
+import _ from "lodash";
+
 const BookingDetail = () => {
   let { id } = useParams();
 
   const appDispatch = useDispatch();
-  let { booking } = useSelector((appState) => appState.bookings);
+  let { booking, loading: bookingLoadingStatus } = useSelector(
+    (appState) => appState.bookings
+  );
 
   useEffect(() => {
-    if (id && booking.id !== id) {
+    if (!booking && bookingLoadingStatus !== "pending") {
       appDispatch(getBookingById(id));
     }
-  }, [id, booking, appDispatch]);
+  }, [booking, id, appDispatch]);
 
-  const totalPrice = useMemo(() => {
-    let price =
-      booking.rooms?.reduce((acc, room) => {
-        return (
-          acc +
-          room.products.reduce((ac, product) => ac + product.totalPrice, 0)
-        );
-      }, 0) || 0;
+  const totalPrice = useMemo(
+    () => booking && getOrderSubtotal(booking.rooms, booking.addOns),
+    [booking]
+  );
 
-    if (booking.addOns) {
-      price += booking.addOns.reduce((ac, addOn) => ac + addOn.totalPrice, 0);
-    }
-
-    return price;
-  }, [booking.rooms, booking.addOns]);
-
-  if (!booking.id) {
-    return <div>Loading...</div>;
+  if (bookingLoadingStatus === "pending") {
+    return (
+      <div className="mt-5">
+        <LoadingSpinner />
+      </div>
+    );
   }
 
-  return (
-    <div className={style.container}>
-      <h1>Booking detail</h1>
-      <div className={style.confirmId}>
-        Confirmation # {booking.receiptId.split("-")[0]}
-      </div>
-      <div className={style.orderDetails}>Order Details</div>
-      <div>Booking Date: {booking.date}</div>
-      <div className={style.productList}>
-        <div className="row">
-          <div className="col">
-            <div className={style.product}>
-              <p>Product</p>
+  return booking !== null ? (
+    <div className="container-fluid mb-5">
+      <Link to="/admin" className="link-dark text-decoration-none">
+        Back
+      </Link>
+      <div className="row">
+        <div className="col-12 col-lg-6 offset-lg-3">
+          <h3 className="fw-bold order-details pt-3">Order Details</h3>
+          <div className="border-top pt-3">
+            <div className="d-flex align-items-center gap-2">
+              {" "}
+              <BsCalendarCheck /> {booking.date}
             </div>
-          </div>
-          <div className="col">
-            <p>Qty</p>
-          </div>
-          <div className="col">
-            <p>Booking time</p>
-          </div>
-          <div className={`col ${style["text-right"]}`}>
-            <p>Price</p>
-          </div>
-        </div>
-        {booking.rooms.map((room) => {
-          return room.products.map((product) => {
-            return (
-              <div className={style.productId} key={product.id}>
-                <div className="row">
-                  <div className="col">
-                    {room.name}: {product.name}
+            <div className="p-0 mb-4">
+              Confirmation #{" "}
+              <span className="fw-bold">
+                {formatReceiptId(booking.receiptId)}
+              </span>
+            </div>
+
+            <div className="row border-bottom mb-3">
+              <div className="col-6">Product</div>
+              <div className="col-3 text-center">Qty</div>
+              <div className="col-3 text-center">Price</div>
+            </div>
+
+            {booking.rooms.map((room) => {
+              return (
+                <div className="row" key={room.id}>
+                  <div className="col-12">
+                    <h4 className="m-0 p-0">{room.name}</h4>
+                    <div className="d-flex align-items-center gap-2">
+                      <BsClock /> {room.startTime}
+                    </div>
+                    {room.products.map((product) => (
+                      <div className="row mt-2">
+                        <div className="col-6">{product.name}</div>
+                        <div className="col-3 text-center">
+                          {product.quantity}
+                        </div>
+                        <div className="col-3 text-center">
+                          $ {product.price / 100}
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                  <div className="col">{product.quantity}</div>
-                  <div className="col">{product.duration}</div>
-                  <div className={`col ${style["text-right"]}`}>
-                    {toMoney(product.totalPrice)}
-                  </div>
+                  <br />
                 </div>
-              </div>
-            );
-          });
-        })}
+              );
+            })}
 
-        {booking.addOns?.map((addOn) => {
-          return (
-            <div className="row" key={addOn.id}>
-              <div className="col">{addOn.name}</div>
-              <div className="col">{addOn.quantity}</div>
-              <div className="col">-</div>
-              <div className={`col ${style["text-right"]}`}>
-                {toMoney(addOn.totalPrice)}
+            <h5 className="m-0 mt-3 p-0">Add-Ons</h5>
+            {booking.addOns.map((addOn) => (
+              <div className="row" key={addOn.id}>
+                <div className="col-6">{addOn.name}</div>
+                <div className="col-3 text-center">{addOn.quantity}</div>
+                <div className="col-3 text-center">$ {addOn.price / 100}</div>
+              </div>
+            ))}
+
+            <div className="row mt-3 pt-3 border-top">
+              <div className="col-9 text-end fw-bold">Subtotal</div>
+              <div className="col-3 text-center">
+                ${toMoney((booking.receipt.subTotal / 100) * 100)}
               </div>
             </div>
-          );
-        })}
-
-        <div>
-          <hr />
-        </div>
-        <div className={style.totalPrice}>
-          <div className="row">
-            <div className="col">Total</div>
-            <div className={`col ${style["text-right"]}`}>
-              {toMoney(totalPrice)}
+            <div className="row">
+              <div className="col-9 text-end fw-bold">Transaction Fee</div>
+              <div className="col-3 text-center">
+                ${toMoney((booking.receipt.transactionFee / 100) * 100)}
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-9 text-end fw-bold">Tax</div>
+              <div className="col-3 text-center">
+                ${toMoney((booking.receipt.tax / 100) * 100)}
+              </div>
+            </div>
+            <div className="row mt-3">
+              <h5 className="col-9 text-end fw-bold">Grand Total</h5>
+              <div className="col-3 text-center">
+                ${toMoney((booking.receipt.grandTotal / 100) * 100)}
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <h4>Customer Information</h4>
-      <div>Full name: {booking.customer.fullName}</div>
-      <div>Email: {booking.customer.email}</div>
-      <div>Address: {booking.customer.address}</div>
-      <div>Mobile Number: {booking.customer.phone}</div>
+      <div className="row mt-5">
+        <div className="col-12 col-lg-6 offset-lg-3">
+          <h4>Customer Information</h4>
+          <div className="row mt-2 gy-2">
+            <div className="col-12">
+              <h6 className="m-0">Name</h6>
+              <div>{booking.customer.fullName}</div>
+            </div>
+            <div className="col-12">
+              <h6 className="m-0">Email</h6>
+              <div>{booking.customer.email}</div>
+            </div>
+            <div className="col-12">
+              <h6 className="m-0">Address</h6>
+              <div>{booking.customer.address}</div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <h4>Waiver Details</h4>
-      <p className={style.sign}>
-        <strong>Signed:</strong> {booking.waiverId ? "Yes" : "No"}
-      </p>
-      {booking.signature && (
-        <img
-          className={style.signature}
-          src={booking.signature}
-          alt="signature"
-          width="500"
-        />
-      )}
+      <div className="row mt-3">
+        <div className="col-12 col-lg-6 offset-lg-3">
+          <h5>Waiver Signature</h5>
+          {booking.signature ? (
+            <img
+              className="border border-2 border-dotted"
+              src={booking.signature}
+              alt="signature"
+              width="100%"
+            />
+          ) : (
+            "The waiver has not been signed."
+          )}
+        </div>
+      </div>
+    </div>
+  ) : (
+    <div className="my-5">
+      <div className="text-center">{`No booking found with id ${id}`}</div>
     </div>
   );
 };
