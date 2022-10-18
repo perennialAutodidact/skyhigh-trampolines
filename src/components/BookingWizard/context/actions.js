@@ -10,13 +10,6 @@ export const setProgressBarStep = (step) => ({
   },
 });
 
-export const checkoutSuccess = (confirmationId) => ({
-  type: "CHECKOUT_SUCCESS",
-  payload: {
-    confirmationId,
-  },
-});
-
 export const setInitialRoomState = (rooms) => ({
   type: "SET_INITIAL_ROOM_STATE",
   payload: { rooms },
@@ -85,9 +78,4 @@ export const updateTax = (tax) => ({
 export const updateGrandTotal = (grandTotal) => ({
   type: "UPDATE_GRAND_TOTAL",
   payload: { grandTotal },
-});
-
-export const updatePaymentStatus = (paymentStatus) => ({
-  type: "updatePaymentStatus",
-  payload: { paymentStatus },
 });
