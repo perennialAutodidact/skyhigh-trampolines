@@ -39,7 +39,7 @@ const AccordionItem = ({ item, headerText, children }) => {
             </div>
 
             <div className="col-6 col-lg-7">
-              <h4 className="m-0">{headerText}</h4>
+              <h4 className="m-0 p-0">{headerText}</h4>
             </div>
           </button>
         </div>
