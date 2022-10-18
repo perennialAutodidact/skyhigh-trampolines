@@ -40,7 +40,6 @@ export const getRoomAvailabilities = (room, times) => {
 
   let ticketCounts = times.map((time) => capacity);
   let bookingIndex, startIndex, endIndex, booking, timeIndex;
-  // console.log(room);
 
   bookingIndex = 0;
   while (bookingIndex < bookings.length) {
@@ -106,3 +105,5 @@ export const getRoomAvailabilities = (room, times) => {
   }
   return allAvailableTickets;
 };
+
+export const formatReceiptId = (receiptId) => receiptId.split("-")[0];
