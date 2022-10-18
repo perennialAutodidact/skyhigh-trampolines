@@ -9,6 +9,7 @@ import {
 import { getTotalHeadCount } from "../../BookingWizard/context/utils";
 import LoadingSpinner from "../../LoadingSpinner";
 import { useCallback } from "react";
+import { formatReceiptId } from "../../../utils";
 
 const headerNames = [
   "Booking Date",
@@ -39,7 +40,7 @@ const BookingsList = () => {
   }, [page]);
 
   useEffect(() => {
-    if (bookingsPage.length === 0 && bookingsLoadingStatus === "idle") {
+    if (bookingsPage.length === 0 && bookingsLoadingStatus !== "pending") {
       appDispatch(getFirstBookingPage());
     }
   }, [bookingsPage, bookingsLoadingStatus, appDispatch]);
@@ -90,7 +91,7 @@ const BookingsList = () => {
                         to={`/admin/bookings/${booking.id}`}
                         className="link-dark"
                       >
-                        {booking.receiptId}
+                        {formatReceiptId(booking.receiptId)}
                       </Link>
                     ) : (
                       <span className="text-muted">{booking.status}</span>
@@ -99,10 +100,8 @@ const BookingsList = () => {
                   <td>
                     <div className="d-flex flex-column gap-2">
                       {booking.rooms.map((room) => (
-                        <div className="d-flex gap-2 align-items-start">
-                          <div className="badge bg-info d-flex align-items-center">
-                            {room.startTime}
-                          </div>
+                        <div className="d-flex gap-2 align-items-start align-items-lg-center">
+                          <div className="badge bg-info">{room.startTime}</div>
                           <div>{room.name}</div>
                         </div>
                       ))}
