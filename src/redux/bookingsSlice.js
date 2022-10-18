@@ -46,21 +46,12 @@ const getBookings = async (pageQuery) => {
   }
 };
 
-const getReceipts = async (bookings) => {
+const getReceipt = async (booking) => {
   try {
-    return await Promise.all(
-      bookings.map(async (booking) => {
-        let { receiptId } = booking;
-        if (receiptId) {
-          let receipt = await getDoc(doc(db, "receipts", receiptId)).then(
-            (doc) => doc.data()
-          );
-          booking["total"] = receipt.grandTotal;
-        }
-
-        return booking;
-      })
-    );
+    let { receiptId } = booking;
+    let receipt = await getDoc(doc(db, "receipts", receiptId));
+    booking["receipt"] = { ...receipt.data() };
+    return booking;
   } catch (error) {
     return error;
   }
@@ -101,6 +92,7 @@ export const getBookingById = createAsyncThunk(
 
         booking.signature = signature;
       }
+      booking = await getReceipt(booking);
 
       return {
         booking,
@@ -124,8 +116,6 @@ export const getFirstBookingPage = createAsyncThunk(
       );
 
       let bookingsPage = await getBookings(pageQuery);
-
-      bookingsPage = await getReceipts(bookingsPage);
 
       return { bookingsPage };
     } catch (error) {
@@ -160,8 +150,6 @@ export const getNextBookingPage = createAsyncThunk(
         );
 
         fetchedBookings = await getBookings(pageQuery);
-
-        fetchedBookings = await getReceipts(fetchedBookings);
       }
       return { fetchedBookings };
     } catch (error) {
@@ -183,7 +171,7 @@ export const getBookingsByDate = createAsyncThunk(
 
       let rooms = await getRooms();
       bookings = sortBookingsByRoom(bookings, rooms);
-      console.log({ date, bookings });
+
       return fulfillWithValue({ date, bookings });
     } catch (error) {
       return rejectWithValue(parseError(error));
@@ -236,7 +224,7 @@ const bookingsSlice = createSlice({
     bookingsPage: [],
     allBookings: [],
     pageStartIds: [],
-    booking: {},
+    booking: null,
     page: 1,
     perPage: 10,
     isLastPage: false,
@@ -333,7 +321,6 @@ const bookingsSlice = createSlice({
       state.loading = "succeeded";
     },
     [getBookingsByDate.rejected]: (state, action) => {
-      console.log("FAILED");
       state.loading = "failed";
       state.error = action.payload.message;
     },
