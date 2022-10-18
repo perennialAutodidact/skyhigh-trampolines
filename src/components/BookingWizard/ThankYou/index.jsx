@@ -10,94 +10,92 @@ const ThankYou = () => {
   const selectedAddOns = getSelectedAddOns(wizardState.addOns);
 
   return (
-    <div className="container pt-3 pb-5 w-75 mb-5">
-      <div className="text-center">
-        <h1>Thank You!</h1>
-        <h3>Your order has been received.</h3>
-      </div>
-      <div>
-        <p className="pt-3">Hello {wizardState.formData.fullName},</p>
-        <p className="pt-3">
-          Your booking has been confirmed. We've sent an email to{" "}
-          <strong className={styles.bold}>{wizardState.formData.email}</strong>{" "}
-          with your order confirmation and receipt.
-        </p>
-        <br />
+    <div className="container-fluid pt-3 pb-5">
+      <div className="row">
+        <div className="col-12 col-lg-6 offset-lg-3">
+          <div className="text-center mt-5">
+            <h1>Thank You!</h1>
+            <h3>Your order has been received.</h3>
+          </div>
+          <div className="mt-5">
+            <div className="pt-3">Hello {wizardState.formData.fullName},</div>
+            <div className="pt-3 m-0">
+              Your booking has been confirmed. We've sent an email to{" "}
+              <strong className={styles.bold}>
+                {wizardState.formData.email}
+              </strong>{" "}
+              with your order confirmation and receipt.
+            </div>
+            <br />
 
-        <h3 className="fw-bold order-details">Order Details</h3>
+            <h3 className="fw-bold order-details border-top pt-3">
+              Order Details
+            </h3>
 
-        <p>Confirmation {wizardState.confirmationId}</p>
-        <br />
+            <div className="p-0 mb-4">
+              Confirmation #{" "}
+              <span className="fw-bold">
+                {wizardState.formData.receiptId.split("-")[0]}
+              </span>
+            </div>
 
-        {bookedRooms.map((room) => {
-          return (
-            <div key={room.id}>
-              <p>{room.name}</p>
-              {room.products.map((product) => {
-                return (
-                  <div className={styles.order} key={product.id}>
-                    <div>
-                      <p className={styles.product}>{product.name}</p>
-                      {room.selectedStartTime && (
-                        <p className={styles.bookingTime}>
-                          Booking Time {room.selectedStartTime}
-                        </p>
-                      )}
+            {bookedRooms.map((room) => {
+              return (
+                <div className="row" key={room.id}>
+                  <div className="col-12">
+                    <h4 className="m-0 p-0">{room.name}</h4>
+                    <div className={styles.bookingTime}>
+                      Start Time {room.selectedStartTime}
                     </div>
-                    <p className={styles.amount}>X {product.quantity}</p>
-                    <p className={styles.price}>$ {product.price / 100}</p>
+                    {room.products.map((product) => (
+                      <div className="row mt-2">
+                        <div className="col-6">{product.name}</div>
+                        <div className="col-2 text-end">{product.quantity}</div>
+                        <div className="col-4 text-end">
+                          $ {product.price / 100}
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                );
-              })}
-              <br />
-            </div>
-          );
-        })}
+                  <br />
+                </div>
+              );
+            })}
 
-        {selectedAddOns.map((addOn) => {
-          return (
-            <div className={styles.order} key={addOn.id}>
-              <div>
-                <p className={styles.addOn}>{addOn.name}</p>
+            <h5 className="m-0 mt-3 p-0">Add-Ons</h5>
+            {selectedAddOns.map((addOn) => (
+              <div className="row" key={addOn.id}>
+                <div className="col-6">{addOn.name}</div>
+                <div className="col-2 text-end">{addOn.quantity}</div>
+                <div className="col-4 text-end">$ {addOn.price / 100}</div>
               </div>
-              <p className={styles.amount}>X {addOn.quantity}</p>
-              <p className={styles.price}>$ {addOn.price / 100}</p>
+            ))}
+
+            <div className="row mt-3 pt-3 border-top">
+              <div className="col-9 text-end fw-bold">Subtotal</div>
+              <div className="col-3 text-end">
+                ${toMoney(wizardState.formData.subTotal)}
+              </div>
             </div>
-          );
-        })}
-        <div className={styles.order}>
-          <div>
-            <p className={styles.addOn}></p>
+            <div className="row">
+              <div className="col-9 text-end fw-bold">Transaction Fee</div>
+              <div className="col-3 text-end">
+                ${toMoney(wizardState.formData.transactionFee)}
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-9 text-end fw-bold">Tax</div>
+              <div className="col-3 text-end">
+                ${toMoney(wizardState.formData.tax)}
+              </div>
+            </div>
+            <div className="row mt-3">
+              <h5 className="col-9 text-end fw-bold">Grand Total</h5>
+              <div className="col-3 text-end">
+                ${toMoney(wizardState.formData.grandTotal)}
+              </div>
+            </div>
           </div>
-          <p className={styles.amount}>Subtotal</p>
-          <p className={styles.price}>
-            ${toMoney(wizardState.formData.subTotal)}
-          </p>
-        </div>
-        <div className={styles.order}>
-          <div>
-            <p className={styles.addOn}></p>
-          </div>
-          <p className={styles.amount}>Transaction Fee</p>
-          <p className={styles.price}>
-            ${toMoney(wizardState.formData.transactionFee)}
-          </p>
-        </div>
-        <div className={styles.order}>
-          <div>
-            <p className={styles.addOn}></p>
-          </div>
-          <p className={styles.amount}>Tax</p>
-          <p className={styles.price}>${toMoney(wizardState.formData.tax)}</p>
-        </div>
-        <div className={styles.order}>
-          <div>
-            <p className={styles.addOn}></p>
-          </div>
-          <h5 className={styles.amount}>Grand Total</h5>
-          <p className={styles.price}>
-            ${toMoney(wizardState.formData.grandTotal)}
-          </p>
         </div>
       </div>
     </div>
