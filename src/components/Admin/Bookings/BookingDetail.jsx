@@ -40,7 +40,7 @@ const BookingDetail = () => {
     <div className={style.container}>
       <h1>Booking detail</h1>
       <div className={style.confirmId}>
-        Confirmation ID# {booking.paymentIntentId}
+        Confirmation # {booking.receiptId.split("-")[0]}
       </div>
       <div className={style.orderDetails}>Order Details</div>
       <div>Booking Date: {booking.date}</div>
