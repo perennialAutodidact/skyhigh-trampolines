@@ -1,6 +1,6 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
-const uuid = require("uuid");
+
 if (admin.apps.length === 0) {
   admin.initializeApp(functions.config().firebase);
 }
@@ -115,7 +115,7 @@ exports.updateBookingFromStripeEvent = functions.firestore
       const {
         amount,
         id: paymentIntentId,
-        metadata: { bookingId, tax, subTotal, transactionFee },
+        metadata: { bookingId, tax, subTotal, transactionFee, receiptId },
       } = paymentIntent;
 
       const bookingRef = db.collection("bookings").doc(bookingId);
@@ -128,10 +128,6 @@ exports.updateBookingFromStripeEvent = functions.firestore
           break;
         case "payment_intent.succeeded":
           // const receiptId = paymentIntent.charges.data[0].receipt_number // use this for live stripe receiptId
-          const receiptId = uuid
-            .v4(Date.now(), Buffer.alloc(4))
-            .toString("hex")
-            .toUpperCase();
 
           await db
             .collection("receipts")

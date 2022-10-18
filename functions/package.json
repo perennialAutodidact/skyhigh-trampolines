@@ -16,8 +16,7 @@
     "@sendgrid/mail": "^7.7.0",
     "firebase-admin": "^10.0.2",
     "firebase-functions": "^4.0.0-rc.0",
-    "stripe": "^10.11.0",
-    "uuid": "^9.0.0"
+    "stripe": "^10.11.0"
   },
   "devDependencies": {
     "firebase-functions-test": "^0.2.0"
