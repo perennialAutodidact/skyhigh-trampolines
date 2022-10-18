@@ -33,7 +33,7 @@ const Waiver = ({ register, setValue, errors, clearErrors }) => {
   return (
     <div className="container">
       <div className="waiver-body">
-        <p>
+        <p className="p-0">
           I (and/or my child) am participating in a COMPANY LLC event on the
           date(s) specified below (“Event”) and HEREBY ASSUME ALL OF THE RISKS
           OF PARTICIPATING AND/OR VOLUNTEERING IN THIS EVENT, including by way
@@ -45,7 +45,7 @@ const Waiver = ({ register, setValue, errors, clearErrors }) => {
           liability without fault.
         </p>
 
-        <p>
+        <p className="p-0">
           I am participating in this Event purely on a voluntary basis. It is
           for recreational purposes only and is not required, expected, or
           encouraged as a condition or part of my employment, school curriculum,
@@ -62,12 +62,12 @@ const Waiver = ({ register, setValue, errors, clearErrors }) => {
           participate, whether I am required to sign an additional release for
           such future events or not.
         </p>
-        <p>
+        <p className="p-0">
           In consideration of my application and permitting me to participate in
           this Event, I hereby agree as follows for myself, my executors,
           administrators, and assigns (“Releasing Parties”) as follows:
         </p>
-        <p>
+        <p className="p-0">
           I WAIVE, RELEASE, AND FOREVER DISCHARGE from any and all liability,
           including but not limited to, liability arising from the negligence or
           fault of the Released Parties, for my death, disability, personal
@@ -91,7 +91,7 @@ const Waiver = ({ register, setValue, errors, clearErrors }) => {
           participation in this Event, whether caused by my negligence,
           intentional or negligent acts or omissions, or otherwise.
         </p>
-        <p>
+        <p className="p-0">
           I acknowledge that neither the Released Parties are responsible for
           the errors, omissions, acts, or failures to act of any party or entity
           conducting the Event on behalf of the Released Parties or that I
@@ -99,7 +99,7 @@ const Waiver = ({ register, setValue, errors, clearErrors }) => {
           Release, however, is not intended to discharge the Released Parties
           from liability for fraud or violation of a statutory duty.
         </p>
-        <p>
+        <p className="p-0">
           I hereby consent to receive medical treatment, which may be deemed
           advisable in the event of injury, accident, and/or illness during the
           Event (including during travel to and from the Event). For the sake of
@@ -108,7 +108,7 @@ const Waiver = ({ register, setValue, errors, clearErrors }) => {
           me as a result of an injury, accident, or illness during the Event
           shall be covered by this Release.
         </p>
-        <p>
+        <p className="p-0">
           This Release shall be construed broadly to provide a release and
           waiver to the maximum extent permissible under applicable law. It
           shall be governed by New York law.
@@ -125,12 +125,13 @@ const Waiver = ({ register, setValue, errors, clearErrors }) => {
             {...register("waiverAgreed")}
             className={`
             form-check-input
+            shadow
             ${errors.waiverAgreed ? "is-invalid" : ""}
             `}
           />
         </div>
         <div className="col-11">
-          <p>
+          <p className="p-0">
             I CERTIFY THAT I HAVE READ THIS DOCUMENT, AND AM AT LEAST 18 YEARS
             OF AGE AND NOT A MINOR, AND I FULLY UNDERSTAND ITS CONTENT. I AM
             AWARE THAT THIS IS A RELEASE OF LIABILITY AND A CONTRACT THAT I AM
