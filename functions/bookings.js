@@ -8,9 +8,18 @@ const db = admin.firestore();
 
 //sendgrid
 const sgMail = require("@sendgrid/mail");
-const SENDGRID_KEY = process.env.SENDGRID_KEY;
+const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
 const TEMPLATE_ID = process.env.SENDGRID_TEMPLATE_ID;
-sgMail.setApiKey(SENDGRID_KEY);
+sgMail.setApiKey(SENDGRID_API_KEY);
+
+/**
+ *
+ * @param {number} amount A number representing money, probably an integer
+ * @returns {number} The number as a two-digit decimal number
+ *
+ * toMoney(1299) => 12.99
+ */
+const toMoney = (amount) => amount && (amount.toFixed(0) / 100).toFixed(2);
 
 // function to send email
 const sendEmailToUser = async (
@@ -24,21 +33,29 @@ const sendEmailToUser = async (
   // send a post request to the sendgrid api
   const msg = {
     to: [booking.customer?.email],
-    from: "lodracorte@vusra.com",
+    from: "skyhightrampolines@gmail.com",
     template_id: TEMPLATE_ID,
 
     dynamic_template_data: {
-      name: booking.customer?.fullName,
+      customer: booking.customer,
       subject: "Booking Confirmation",
-      idNumber: receiptId,
-      currentDate: new Date().toDateString(),
-      bookingDate: booking.date,
-      rooms: booking.rooms ? booking.rooms : [],
-      addOns: booking.addOns ? booking.addOns : [],
-      subtotal: subTotal / 100,
-      fee: transactionFee / 100,
-      tax: tax / 100,
-      total: amount / 100,
+      receiptId: booking.receiptId.split("-")[0],
+      date: booking.date,
+      rooms: booking.rooms.map((room) => ({
+        ...room,
+        products: room.products.map((product) => ({
+          ...product,
+          totalPrice: toMoney((product.totalPrice / 100) * 100),
+        })),
+      })),
+      addOns: booking.addOns.map((addOn) => ({
+        ...addOn,
+        totalPrice: toMoney((addOn.totalPrice / 100) * 100),
+      })),
+      subTotal: toMoney((subTotal / 100) * 100),
+      transactionFee: toMoney((transactionFee / 100) * 100),
+      tax: toMoney((tax / 100) * 100),
+      grandTotal: toMoney((amount / 100) * 100),
     },
   };
 
