@@ -7,8 +7,16 @@ const ProductListItem = ({ product, roomId, availableQuantity }) => {
   // eslint-disable-next-line
   const [state, dispatch] = useContext(BookingWizardContext);
 
-  const onChange = (e) => {
-    dispatch(setProductQuantity(roomId, product.id, e.target.value));
+  const onChange = (e, max) => {
+    let value = e.target.value.replace(/\D/g, "");
+    value = Number(value);
+    if (isNaN(value)) {
+      value = 0;
+    } else if (value > max) {
+      value = max;
+    }
+
+    dispatch(setProductQuantity(roomId, product.id, value));
   };
 
   const incrementQuantity = (product) => {
@@ -47,7 +55,8 @@ const ProductListItem = ({ product, roomId, availableQuantity }) => {
             className="form-control p-0 text-center"
             aria-label={product.name}
             value={product.quantity}
-            onChange={onChange}
+            onChange={(e) => onChange(e, availableQuantity)}
+            pattern={"[0-9]+"}
           />
           <div
             onClick={() => incrementQuantity(product)}
