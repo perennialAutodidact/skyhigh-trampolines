@@ -83,7 +83,7 @@ const Step2 = () => {
         updateBooking({ bookingId: bookingInProgress.id, ...bookingData })
       );
     }
-  }, [bookingInProgress, bookingLoading, bookingData, appDispatch]);
+  }, [bookingInProgress, bookingData, appDispatch]);
 
   const onSubmit = (formData) => {
     wizardDispatch(updateForm({ rooms: wizardState.rooms }));

@@ -1,8 +1,6 @@
-import React, { useState, useMemo } from "react";
 import { getHalfHourIncrementStrings } from "../../BookingWizard/context/utils";
 import { getRoomAvailabilities } from "../../../utils";
 import { useCallback } from "react";
-import { useEffect } from "react";
 
 const AvailabilityGrid = ({ room }) => {
   const times = getHalfHourIncrementStrings("9:00", "16:30");

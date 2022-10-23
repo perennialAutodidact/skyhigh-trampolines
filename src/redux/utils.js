@@ -4,7 +4,6 @@ export const createThunkCondition = (sliceName) => ({
     const slice = state[sliceName];
 
     const fetchStatus = slice.loading;
-    const error = slice.error;
     if (fetchStatus === "pending") {
       // Already in progress, don't need to re-fetch
       return false;

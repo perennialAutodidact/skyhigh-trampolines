@@ -1,13 +1,14 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { auth } from "../../firebase/client";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useLocation, useNavigate, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import LoadingSpinner from "../LoadingSpinner";
 import styled from "./Admin.module.scss";
 
 const Admin = (props) => {
   const { toggleSidebar, setToggleSidebar } = props;
+  // eslint-disable-next-line
   const [user, loading] = useAuthState(auth);
   return (
     <div>

@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import React, { useState, useMemo } from "react";
+import React, { useMemo } from "react";
 import { GoArrowLeft, GoArrowRight } from "react-icons/go";
 
 const DatePicker = ({ selectedDate, setSelectedDate }) => {

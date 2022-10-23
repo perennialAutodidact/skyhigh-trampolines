@@ -1,10 +1,7 @@
 import React from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchProducts,
-  resetProductsLoadingStatus,
-} from "../../redux/productsSlice";
+import { fetchProducts } from "../../redux/productsSlice";
 import LoadingSpinner from "../LoadingSpinner";
 import styles from "./ProductList.module.scss";
 

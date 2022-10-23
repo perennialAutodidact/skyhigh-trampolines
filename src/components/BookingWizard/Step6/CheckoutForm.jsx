@@ -14,7 +14,6 @@ import {
   setStripeLoadingStatus,
   setStripeError,
 } from "../../../redux/stripeSlice";
-import { checkoutSuccess } from "../context/actions";
 
 const CheckoutForm = ({ goBack, setError }) => {
   const navigate = useNavigate();
@@ -25,7 +24,7 @@ const CheckoutForm = ({ goBack, setError }) => {
     (appState) => appState.stripe
   );
   const { bookingInProgress } = useSelector((appState) => appState.bookings);
-  const [wizardState, wizardDispatch] = useContext(BookingWizardContext);
+  const [wizardState] = useContext(BookingWizardContext);
   const { signatureImageData } = wizardState.formData;
 
   const bookingData = useMemo(

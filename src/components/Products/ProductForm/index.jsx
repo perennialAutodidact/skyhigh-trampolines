@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { productSchema } from "./schema";
@@ -10,7 +10,6 @@ import {
 } from "../../../redux/productsSlice";
 import { getRoomsList } from "../../../redux/roomsSlice";
 import LoadingSpinner from "../../LoadingSpinner";
-import { toMoney } from "../../BookingWizard/context/utils";
 
 //import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 const ProductForm = ({ productTypes, durations }) => {

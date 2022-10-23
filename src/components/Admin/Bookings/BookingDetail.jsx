@@ -1,8 +1,8 @@
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getBookingById } from "../../../redux/bookingsSlice";
-import { getOrderSubtotal, toMoney } from "../../BookingWizard/context/utils";
+import { toMoney } from "../../BookingWizard/context/utils";
 import LoadingSpinner from "../../LoadingSpinner";
 import { formatReceiptId } from "../../../utils";
 import { BsCalendarCheck, BsClock } from "react-icons/bs";

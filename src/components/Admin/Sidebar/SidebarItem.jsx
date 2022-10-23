@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
-import styled from "./SidebarItem.module.scss";
 
 const SidebarItem = (props) => {
   const { item, setToggleSidebar, breakpoint } = props;
@@ -28,8 +27,7 @@ const SidebarItem = (props) => {
               key={menu.id}
               onClick={() => {
                 navigate(`${menu.path}`);
-                if(breakpoint === 'sm'){
-
+                if (breakpoint === "sm") {
                   setToggleSidebar(false);
                 }
               }}

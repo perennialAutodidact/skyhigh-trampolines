@@ -13,8 +13,6 @@ import {
 import { httpsCallable } from "firebase/functions";
 import {
   bookingsCollection,
-  receiptsCollection,
-  waiversCollection,
   db,
   functions,
   roomsCollection,

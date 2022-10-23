@@ -65,6 +65,7 @@ const Step6 = ({ stripe }) => {
     grandTotal,
     subTotal,
     tax,
+    wizardDispatch,
   ]);
 
   if (!stripe || !clientSecret) {

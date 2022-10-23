@@ -1,13 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import {
-  addDoc,
-  collection,
-  collectionGroup,
-  getDoc,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
+import { addDoc, getDoc, getDocs, query, where } from "firebase/firestore";
 import {
   storage,
   roomsCollection,
