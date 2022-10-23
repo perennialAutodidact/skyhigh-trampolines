@@ -221,7 +221,7 @@ export const cancelBooking = createAsyncThunk(
 const bookingsSlice = createSlice({
   name: "bookings",
   initialState: {
-    bookingsPage: [],
+    bookingsPage: null,
     allBookings: [],
     pageStartIds: [],
     booking: null,

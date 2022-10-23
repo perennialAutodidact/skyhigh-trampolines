@@ -6,7 +6,6 @@ import { getOrderSubtotal, toMoney } from "../../BookingWizard/context/utils";
 import LoadingSpinner from "../../LoadingSpinner";
 import { formatReceiptId } from "../../../utils";
 import { BsCalendarCheck, BsClock } from "react-icons/bs";
-import _ from "lodash";
 
 const BookingDetail = () => {
   let { id } = useParams();
@@ -20,12 +19,7 @@ const BookingDetail = () => {
     if (!booking && bookingLoadingStatus !== "pending") {
       appDispatch(getBookingById(id));
     }
-  }, [booking, id, appDispatch]);
-
-  const totalPrice = useMemo(
-    () => booking && getOrderSubtotal(booking.rooms, booking.addOns),
-    [booking]
-  );
+  }, [booking, id, bookingLoadingStatus, appDispatch]);
 
   if (bookingLoadingStatus === "pending") {
     return (

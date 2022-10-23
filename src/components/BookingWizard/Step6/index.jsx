@@ -36,7 +36,7 @@ const Step6 = ({ stripe }) => {
       const receiptId = uuidv4().toUpperCase();
 
       const paymentIntentData = {
-        amount: (toMoney(grandTotal) * 100).toFixed(0),
+        amount: parseInt(Number(toMoney(grandTotal)) * 100),
         metadata: {
           bookingId: bookingInProgress.id,
           tax: (toMoney(tax) * 100).toFixed(0),

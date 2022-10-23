@@ -50,8 +50,9 @@ const Step3 = () => {
         const { id, name, quantity, price, totalPrice } = addOn;
         return { id, name, quantity, price, totalPrice };
       }),
+      grandTotal: wizardState.formData.grandTotal,
     }),
-    [wizardState.addOns]
+    [wizardState.addOns, wizardState.formData.grandTotal]
   );
   const addOnsDataIsValid = useCallback(
     () => wizardState.addOns.some((addOn) => addOn.quantity > 0),

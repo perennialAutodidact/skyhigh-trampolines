@@ -139,8 +139,7 @@ export const getSelectedAddOns = (addOns) =>
  *
  * toMoney(1299) => 12.99
  */
-export const toMoney = (amount) =>
-  amount && (amount.toFixed(0) / 100).toFixed(2);
+export const toMoney = (amount) => (amount.toFixed(0) / 100).toFixed(2);
 
 /**
  *

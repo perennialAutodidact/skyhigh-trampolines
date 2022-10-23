@@ -37,13 +37,21 @@ const BookingsList = () => {
     if (page > 1) {
       appDispatch(getPrevBookingPage());
     }
-  }, [page]);
+  }, [page, appDispatch]);
 
   useEffect(() => {
-    if (bookingsPage.length === 0 && bookingsLoadingStatus !== "pending") {
+    if (!bookingsPage && bookingsLoadingStatus !== "pending") {
       appDispatch(getFirstBookingPage());
     }
   }, [bookingsPage, bookingsLoadingStatus, appDispatch]);
+
+  if (!bookingsPage || bookingsLoadingStatus === "pending") {
+    return (
+      <div className="my-5">
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   return (
     <div className="container-fluid">
@@ -67,11 +75,7 @@ const BookingsList = () => {
           </div>
         </div>
       </div>
-      {bookingsLoadingStatus === "pending" ? (
-        <div className="my-5">
-          <LoadingSpinner />
-        </div>
-      ) : (
+      <div className="col-12">
         <div className="table-responsive">
           <table className="table mt-4">
             <thead>
@@ -82,41 +86,53 @@ const BookingsList = () => {
               </tr>
             </thead>
             <tbody>
-              {bookingsPage.map((booking) => (
-                <tr>
-                  <td>{booking.date}</td>
-                  <td>
-                    {booking.receiptId ? (
-                      <Link
-                        to={`/admin/bookings/${booking.id}`}
-                        className="link-dark"
-                      >
-                        {formatReceiptId(booking.receiptId)}
-                      </Link>
-                    ) : (
-                      <span className="text-muted">{booking.status}</span>
-                    )}
-                  </td>
-                  <td>
-                    <div className="d-flex flex-column gap-2">
-                      {booking.rooms.map((room) => (
-                        <div className="d-flex gap-2 align-items-start align-items-lg-center">
-                          <div className="badge bg-info">{room.startTime}</div>
-                          <div>{room.name}</div>
-                        </div>
-                      ))}
-                    </div>
-                  </td>
-                  <td>{getTotalHeadCount(booking.rooms)}</td>
-                  <td>{booking.total ? `$${booking.total / 100}` : "N/A"}</td>
-                  <td>{booking.customer?.fullName || "N/A"}</td>
-                  <td>{booking.customer?.email || "N/A"}</td>
-                </tr>
-              ))}
+              {bookingsPage.length === 0 ? (
+                <div className="my-5">
+                  <h4>No bookings</h4>
+                </div>
+              ) : (
+                bookingsPage.map((booking) => (
+                  <tr>
+                    <td>{booking.date}</td>
+                    <td>
+                      {booking.receiptId ? (
+                        <Link
+                          to={`/admin/bookings/${booking.id}`}
+                          className="link-dark"
+                        >
+                          {formatReceiptId(booking.receiptId)}
+                        </Link>
+                      ) : (
+                        <span className="text-muted">{booking.status}</span>
+                      )}
+                    </td>
+                    <td>
+                      <div className="d-flex flex-column gap-2">
+                        {booking.rooms.map((room) => (
+                          <div className="d-flex gap-2 align-items-start align-items-lg-center">
+                            <div className="badge bg-info">
+                              {room.startTime}
+                            </div>
+                            <div>{room.name}</div>
+                          </div>
+                        ))}
+                      </div>
+                    </td>
+                    <td>{getTotalHeadCount(booking.rooms)}</td>
+                    <td>
+                      {booking.grandTotal
+                        ? `$${booking.grandTotal / 100}`
+                        : "N/A"}
+                    </td>
+                    <td>{booking.customer?.fullName || "N/A"}</td>
+                    <td>{booking.customer?.email || "N/A"}</td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
-      )}
+      </div>
     </div>
   );
 };
