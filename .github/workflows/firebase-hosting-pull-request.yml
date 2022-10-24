@@ -4,6 +4,8 @@
 name: Deploy to Firebase Hosting on PR
 "on": pull_request
 
+# set environment variables in Github as
+# "Repository Secrets", not "Environment Secrets"
 env:
   CI: false
   NODE_ENV: ${{ secrets.NODE_ENV }}

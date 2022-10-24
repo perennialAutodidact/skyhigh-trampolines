@@ -7,6 +7,8 @@ name: Deploy to Firebase Hosting on merge
     branches:
       - main
 
+# set environment variables in Github as
+# "Repository Secrets", not "Environment Secrets"
 env:
   CI: false
   NODE_ENV: ${{ secrets.NODE_ENV }}
