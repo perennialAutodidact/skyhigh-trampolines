@@ -26,7 +26,7 @@ const AccordionItem = ({ item, headerText, children }) => {
             aria-expanded={isExpanded}
             aria-controls={`accordion-collapse-${item.id}`}
           >
-            <div className="col-4 col-lg-3">
+            <div className="col-4 col-md-3">
               {!imageLoaded ? (
                 <LoadingSpinner />
               ) : (
@@ -38,7 +38,7 @@ const AccordionItem = ({ item, headerText, children }) => {
               )}
             </div>
 
-            <div className="col-6 col-lg-7">
+            <div className="col-6 col-md-7">
               <h4 className="m-0 p-0">{headerText}</h4>
             </div>
           </button>
