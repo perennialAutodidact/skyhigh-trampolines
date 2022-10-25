@@ -1,106 +1,40 @@
-# React Solo Project
+# Sky High Trampolines CMS
 
-## Requirements
+![Commits](https://badgen.net/github/commits/perennialautodidact/skyhigh-trampolines/main)
+![Contributors](https://badgen.net//github/contributors/scott-coates-org/group-project-team-sapphire)
+![Checks](https://badgen.net/github/checks/perennialautodidact/skyhigh-trampolines/main)
 
-- `React.js 18`
-- `Node.js ^16.10`. Need to change your version?
-  - [Windows](https://github.com/coreybutler/nvm-windows)
-  - [Mac](https://github.com/tj/n)
-- Firebase (database, auth, hosting, and storage).
+Live: [Sky High Tramplines](https://skyhigh-trampolines.firebaseapp.com)
 
-## Getting Started
+This project is a CMS and appointment booking system for a fake trampoline park named **Sky High Trampolines**. It was the result of four, week-long Agile sprints enacted by four international devlopers.
 
-We are using "yarn" instead of "npm" in this project.
+- [perennialAutodidact](https://github.com/perennialAutodidact)
+- [m-oniqu3](https://github.com/m-oniqu3)
+- [jinchoo](https://github.com/jinchoo)
+- [waldothedeveloper](https://github.com/waldothedeveloper)
 
-1. Install yarn. `npm install -g yarn`
-2. Install all node modules. `yarn install`
-3. Boot up the server. `yarn start`
+This repository is a fork of [the original](https://github.com/Scott-Coates-Org/group-project-team-sapphire/) with some added features and updated styling.
 
-### Hosting
+## Tech Stack
 
-1. Go to the official Firebase website and set up a project.
-2. Enable Firebase Hosting by going into the hosting section under Build dropdown.
-3. Inside your repo run the following commands (one at a time):
-4. `npm install -g firebase-tools`
-5. `firebase login`
-6. `firebase init`
-7. `yarn build` (_remember to always build before deploying your code to production_).
-8. `firebase deploy`
-9. If you run into trouble take a look at: https://www.geeksforgeeks.org/how-to-deploy-react-project-on-firebase/
+### Frontend
 
-### Firebase (if you need authentication or a database in your project)
+![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![Redux](https://img.shields.io/badge/redux-%23593d88.svg?style=for-the-badge&logo=redux&logoColor=white)
+![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)
+![React Hook Form](https://img.shields.io/badge/React%20Hook%20Form-%23EC5990.svg?style=for-the-badge&logo=reacthookform&logoColor=white)
+![Bootstrap](https://img.shields.io/badge/bootstrap-%23563D7C.svg?style=for-the-badge&logo=bootstrap&logoColor=white)
+![SASS](https://img.shields.io/badge/SASS-hotpink.svg?style=for-the-badge&logo=SASS&logoColor=white)
 
-1. Go to the official Firebase website and set up a project.
-2. Enable Firebase Firestore and Firestore Authentication.
-3. Make sure to enable google authentication in the settings.
-4. If you used `yarn` to install all dependencies, you shouldn't need to install anything else.
-5. Change the name of the '.env.local.example' file to '.env.local' and write your api key and other information (can be found in the settings of your project on the firebase website).
-6. You can import the 'Login' component on the page you want the user to log in. At the moment the logic is set up to support authorization with Google. If you want to add others (email, username and password, github) You will have to implement this on your own.
-7. Clicking on the "Continue with Google" button should open a pop-up that logs you in. If this doesn't work, check your firebase keys and if you have google authentication enabled. Once you are logged in, it will automatically update the state in the 'authSlice' reducer with your information (display name, email and access token). If you need any of these, you can get them with a useSelector hook in the component where you need them.
-8. You can check if the user is signed in by checking the state of the 'authSlice'. If user is false (empty), the user isn't signed in.
-9. You are free to style the buttons or the login component as you see fit. You can (probably a good idea) move the log out button somewhere else. As long as you import all the necessary things and don't change the function/logic, it should work.
+### Backend
 
-### To trigger a cloud functions
+![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase)
 
-```javascript
-const callFirebase = () => {
-  //this url is the 'trigger url' of the function you want to call
-  const url = 'https://us-central1-team-sapphire.cloudfunctions.net/helloWorld';
-  fetch(url)
-    .then((response) => response.json())
-    .then((result) => {
-      console.log(result);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};
-```
+## Features
 
-### Redux
+The app has a customer-facing UI for booking reservations in two different rooms and an admin UI for viewing existing bookings, visualizing ticket availablity for each room and viewing/creating additional rooms, products and add-ons.
 
-The "redux" folder contains two example reducers with explanation on how they work and links to relevant documentation:
+## Customer UI
 
-- Counter: Executes some simple sychronous logic.
-- Users: Example of asynchronous reducers, it fetches dummy data about users and writes this data on the db (You need to have Firestore storage set up to make it work).
-
-You can delete this examples if you wish to do so.
-
-### Folder Structure And Advice
-
-1. You can adjust the folder structure if you have other preferances.
-2. You can use whichever CSS library you wish, or just plain CSS/SASS (preferably modules).
-3. You may modify the boilerplate (e.g. delete dummy text in App.js, the counter, the the logo.svg, etc.)
-4. V1 of this project is due in 4 weeks. Remeber to KISS (Keep It Simple, Stupid). You need to think of v1 as a conceptual boundary of constraints; anything _outside those boundaries must be saved for a future version_.
-
-<!---
-*** WHEN YOU ARE UP AND RUNNING, YOU MAY DELETE EVERYTHING ABOVE -EXCEPT- THE VERY TOP LINE. ***
--->
-
-## Sprint Progress
-
-Go to the [milestones tab](../../milestone/1) to track your progress, it is important that when you complete an issue you mark it as closed.
-
-## Project Overview
-
-Web-based, SaaS eCommerce app for managing a trampoline park online!
-
-- You and your team will build the admin-facing section for managing rooms, packages, pricing, and more.
-- You will also build the consumer-facing section, allowsing customers to book passes, food, and checkout with a credit card.
-
-### Public URL
-
-[Replace me with the link to your app's URL](https://www.google.com/)
-
-### Notes on Bootstrap
-
-- Bootstrap 5 [docs](https://getbootstrap.com/docs/5.0/getting-started/introduction/)
-- Bootstrap variables added in `_bootstrap_setup.scss` will override Bootstrap's internal variables when Bootstrap is loaded in `index.scss`
-- Files beginning with and underscore `_` are partials. They should be used when importing `.scss` files into one another to avoid creating corresponding `.css` files when Sass is compiled.
-
-## Team Members Roll Call
-
-- [x] Monique
-- [x] Keegan
-- [x] Waldo
-- [x] Jin
+## Admin UI
