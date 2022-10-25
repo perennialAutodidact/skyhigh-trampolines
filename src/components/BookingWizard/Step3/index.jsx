@@ -19,6 +19,7 @@ import AccordionItem from "../common/Accordion/AccordionItem";
 import AccordionCollapse from "../common/Accordion/AccordionCollapse";
 import AddOnsList from "./AddOnsList";
 import { updateBooking } from "../../../redux/bookingsSlice";
+import { toMoney } from "../context/utils";
 
 const Step3 = () => {
   const navigate = useNavigate();
@@ -50,10 +51,13 @@ const Step3 = () => {
         const { id, name, quantity, price, totalPrice } = addOn;
         return { id, name, quantity, price, totalPrice };
       }),
-      grandTotal: wizardState.formData.grandTotal,
+      grandTotal: parseInt(
+        toMoney(Number(wizardState.formData.grandTotal) * 100)
+      ),
     }),
     [wizardState.addOns, wizardState.formData.grandTotal]
   );
+
   const addOnsDataIsValid = useCallback(
     () => wizardState.addOns.some((addOn) => addOn.quantity > 0),
     [wizardState.addOns]
@@ -88,6 +92,12 @@ const Step3 = () => {
     }
   }, [addOns, addOnsLoadingStatus, appDispatch, wizardDispatch]);
 
+  useEffect(() => {
+    if (addOns) {
+      wizardDispatch(setInitialAddOnState(addOns));
+    }
+  }, [wizardDispatch, addOns]);
+
   if (
     addOnsLoadingStatus === "pending" ||
     bookingsLoadingStatus === "pending"
@@ -108,7 +118,8 @@ const Step3 = () => {
         <div className="row px-0 mb-3">
           <div className="col-12 col-lg-6">
             <label htmlFor="date" className="form-label p-0 d-flex gap-1">
-              <h3>Select Add-Ons</h3> <span className="text-danger">*</span>
+              <h3 className="ps-3">Select Add-Ons</h3>{" "}
+              <span className="text-danger">*</span>
             </label>
           </div>
         </div>
