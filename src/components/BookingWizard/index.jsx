@@ -34,6 +34,13 @@ const BookingWizard = () => {
     [currentPath]
   );
 
+  const isWaiverPage = useMemo(
+    () =>
+      currentPath.length > 1 &&
+      currentPath[currentPath.length - 1] === "step-5",
+    [currentPath]
+  );
+
   //   redirect to step 1 if the page is reloaded and the formData is reset
   useEffect(() => {
     if (
@@ -61,7 +68,9 @@ const BookingWizard = () => {
         <div className="row">
           <div
             className={`col-12 ${
-              !isThankYouPage ? "col-lg-6 offset-lg-1" : ""
+              !isThankYouPage && !isWaiverPage
+                ? "col-lg-6 offset-lg-1"
+                : "col-lg-8 offset-lg-2 my-5"
             }`}
           >
             <div className="border border-grey rounded mt-3">
@@ -86,10 +95,12 @@ const BookingWizard = () => {
               </Routes>
             </div>
           </div>
-          {!isThankYouPage && (
+          {!isThankYouPage && !isWaiverPage ? (
             <div className="d-none d-lg-flex align-items-start flex-column col-lg-4">
               <CartPreview />
             </div>
+          ) : (
+            ""
           )}
         </div>
       </div>
