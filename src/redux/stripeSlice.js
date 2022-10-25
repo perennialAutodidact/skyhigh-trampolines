@@ -73,7 +73,7 @@ export const stripeSlice = createSlice({
       state.loading = action.payload;
     },
     setStripeError: (state, action) => {
-      state.error = action.payload.message.error;
+      state.error = action.payload.message;
     },
   },
   extraReducers: {
