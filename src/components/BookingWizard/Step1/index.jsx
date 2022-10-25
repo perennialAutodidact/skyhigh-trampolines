@@ -1,4 +1,8 @@
 import React, { useContext, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { resetAddOnsLoadingStatus } from "../../../redux/addOnsSlice";
+import { resetProductsLoadingStatus } from "../../../redux/productsSlice";
+import { resetRoomsLoadingStatus } from "../../../redux/roomsSlice";
 import { useNavigate } from "react-router-dom";
 import { BookingWizardContext } from "../context";
 import { step1Schema } from "../context/schema";
@@ -9,6 +13,7 @@ import CalendarDatePicker from "./CalendarDatePicker";
 import FormNavButtons from "../common/FormNavButtons";
 
 const Step1 = () => {
+  const appDispatch = useDispatch();
   const navigate = useNavigate();
   const [wizardState, wizardDispatch] = useContext(BookingWizardContext);
 
@@ -34,6 +39,9 @@ const Step1 = () => {
   const goBack = () => {
     navigate("/");
     wizardDispatch(setProgressBarStep(1));
+    appDispatch(resetRoomsLoadingStatus());
+    appDispatch(resetProductsLoadingStatus());
+    appDispatch(resetAddOnsLoadingStatus());
   };
 
   useEffect(() => {
