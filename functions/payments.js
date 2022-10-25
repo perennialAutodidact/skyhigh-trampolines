@@ -1,11 +1,14 @@
 const functions = require("firebase-functions");
+const { defineSecret } = require("firebase-functions/params");
 const Stripe = require("stripe");
-const admin = require("firebase-admin");
+const {getFirestore} = require("firebase-admin/firestore")
 
-const db = admin.firestore();
+const db = getFirestore();
 
-exports.createPaymentIntent = functions.https
-  .runWith({ secrets: ["STRIPE_API_KEY"] })
+const STRIPE_SECRET_KEY = defineSecret("STRIPE_SECRET_KEY");
+
+exports.createPaymentIntent = functions
+  .runWith({ secrets: [STRIPE_SECRET_KEY] }).https
   .onCall(async (data, context) => {
     const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
     const { amount, metadata } = data;
@@ -25,8 +28,8 @@ exports.createPaymentIntent = functions.https
     }
   });
 
-exports.updatePaymentIntent = functions.https
-  .runWith({ secrets: ["STRIPE_API_KEY"] })
+exports.updatePaymentIntent = functions
+  .runWith({ secrets: [STRIPE_SECRET_KEY] }).https
   .onCall(async (paymentIntentData, context) => {
     const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -38,10 +41,9 @@ exports.updatePaymentIntent = functions.https
     }
   });
 
-exports.cancelPaymentIntent = functions.https.runWith({
-  secrets: ["STRIPE_API_KEY"],
-});
-onCall(async (paymentIntentId, context) => {
+exports.cancelPaymentIntent = functions.runWith({
+  secrets: [STRIPE_SECRET_KEY],
+}).https.onCall(async (paymentIntentId, context) => {
   const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
   try {

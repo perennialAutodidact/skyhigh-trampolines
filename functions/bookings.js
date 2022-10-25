@@ -1,16 +1,12 @@
 const functions = require("firebase-functions");
-const admin = require("firebase-admin");
-
-if (admin.apps.length === 0) {
-  admin.initializeApp(functions.config().firebase);
-}
-const db = admin.firestore();
-
-//sendgrid
+const {getFirestore} = require("firebase-admin/firestore")
+const {defineSecret} = require("firebase-functions/params")
 const sgMail = require("@sendgrid/mail");
-const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
-const TEMPLATE_ID = process.env.SENDGRID_TEMPLATE_ID;
-sgMail.setApiKey(SENDGRID_API_KEY);
+
+const SENDGRID_API_KEY = defineSecret('SENDGRID_API_KEY')
+ 
+const db = getFirestore();
+
 
 /**
  *
@@ -23,31 +19,31 @@ const toMoney = (amount) => amount && (amount.toFixed(0) / 100).toFixed(2);
 
 // function to send email
 const sendEmailToUser = async (
-  receiptId,
+  TEMPLATE_ID,
   booking,
   amount,
   tax,
   subTotal,
   transactionFee
-) => {
-  // send a post request to the sendgrid api
-  const msg = {
-    to: [booking.customer?.email],
-    from: "skyhightrampolines@gmail.com",
-    template_id: TEMPLATE_ID,
-
-    dynamic_template_data: {
-      customer: booking.customer,
-      subject: "Booking Confirmation",
-      receiptId: booking.receiptId.split("-")[0],
-      date: booking.date,
-      rooms: booking.rooms.map((room) => ({
-        ...room,
-        products: room.products.map((product) => ({
-          ...product,
-          totalPrice: toMoney((product.totalPrice / 100) * 100),
+  ) => {
+    // send a post request to the sendgrid api
+    const msg = {
+      to: [booking.customer?.email],
+      from: "skyhightrampolines@gmail.com",
+      template_id: TEMPLATE_ID,
+      
+      dynamic_template_data: {
+        customer: booking.customer,
+        subject: "Booking Confirmation",
+        receiptId: booking.receiptId.split("-")[0],
+        date: booking.date,
+        rooms: booking.rooms.map((room) => ({
+          ...room,
+          products: room.products.map((product) => ({
+            ...product,
+            totalPrice: toMoney((product.totalPrice / 100) * 100),
+          })),
         })),
-      })),
       addOns: booking.addOns.map((addOn) => ({
         ...addOn,
         totalPrice: toMoney((addOn.totalPrice / 100) * 100),
@@ -58,7 +54,7 @@ const sendEmailToUser = async (
       grandTotal: toMoney((amount / 100) * 100),
     },
   };
-
+  
   try {
     await sgMail.send(msg);
     return { success: true };
@@ -67,63 +63,12 @@ const sendEmailToUser = async (
   }
 };
 
-// exports.createBooking = functions.https.onCall(async (bookingData, context) => {
-//   try {
-//     const dateCreated = admin.firestore.Timestamp.now();
-//     const status = "pending";
-//     const receiptId = "";
-
-//     const res = await db.collection("bookings").add({
-//       ...bookingData,
-//       dateCreated,
-//       status,
-//       receiptId,
-//     });
-//     return { bookingId: res.id };
-//   } catch (error) {
-//     throw new functions.https.HttpsError("unknown", error);
-//   }
-// });
-
-// exports.updateBooking = functions.https.onCall(async (data, context) => {
-//   const { bookingId, waiverSignature, ...bookingData } = data;
-
-//   try {
-//     if (waiverSignature) {
-//       const waiver = await db.collection("waivers").add({
-//         signature: waiverSignature,
-//         bookingId,
-//       });
-//       bookingData["waiverId"] = waiver.id;
-//     }
-//     const res = await db
-//       .collection("bookings")
-//       .doc(bookingId)
-//       .update({ ...bookingData });
-
-//     return { message: "updated" };
-//   } catch (error) {
-//     throw new functions.https.HttpsError("unknown", error);
-//   }
-// });
-
-// exports.cancelBooking = functions.https.onCall(async (data, context) => {
-//   const { bookingId } = data;
-
-//   try {
-//     await db.collection("bookings").doc(bookingId).update({
-//       status: "canceled",
-//     });
-
-//     return { message: "success" };
-//   } catch (error) {
-//     throw new functions.https.HttpsError("unknown", error);
-//   }
-// });
-
-exports.updateBookingFromStripeEvent = functions.firestore
+  exports.updateBookingFromStripeEvent = functions.runWith({secrets:[SENDGRID_API_KEY]}).firestore
   .document("stripeEvents/{eventId}")
   .onCreate(async (event, context) => {
+    const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
+    const TEMPLATE_ID = process.env.SENDGRID_TEMPLATE_ID;
+    sgMail.setApiKey(SENDGRID_API_KEY);
     try {
       const eventData = event.data();
 
@@ -166,6 +111,7 @@ exports.updateBookingFromStripeEvent = functions.firestore
 
           // send email
           await sendEmailToUser(
+            TEMPLATE_ID,
             receiptId,
             booking,
             amount,
