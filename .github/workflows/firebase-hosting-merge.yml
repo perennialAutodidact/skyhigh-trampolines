@@ -32,6 +32,7 @@ jobs:
       - uses: actions/checkout@v2
       - run: yarn install --frozen-lockfile && yarn build
 
+      - name: "Cloud function environment variables"
       - run: |
           cd functions
           touch .env
