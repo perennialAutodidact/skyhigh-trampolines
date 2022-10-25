@@ -55,29 +55,21 @@ const CheckoutForm = ({ goBack, setError }) => {
       navigate("/booking/thank-you");
     }
   };
-  //   if (!elements || !stripe) {
-  //     return (
-  //       <div className="my-5">
-  //         <LoadingSpinner />
-  //       </div>
-  //     );
-  //   }
+
   return (
     <form onSubmit={onSubmit}>
       <PaymentElement />
-      <div className="container px-0 px-lg-3">
-        <div className="container">
-          <FormNavButtons
-            goBack={goBack}
-            submitButtonText={
-              stripeLoadingStatus === "pending" ? (
-                <LoadingSpinner color={"light"} size={"sm"} />
-              ) : (
-                "Submit"
-              )
-            }
-          />
-        </div>
+      <div className="container px-0">
+        <FormNavButtons
+          goBack={goBack}
+          submitButtonText={
+            stripeLoadingStatus === "pending" ? (
+              <LoadingSpinner color={"light"} size={"sm"} />
+            ) : (
+              "Submit"
+            )
+          }
+        />
       </div>
     </form>
   );
