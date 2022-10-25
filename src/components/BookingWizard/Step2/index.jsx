@@ -1,4 +1,10 @@
-import React, { useCallback, useMemo, useContext, useEffect } from "react";
+import React, {
+  useCallback,
+  useMemo,
+  useContext,
+  useEffect,
+  useRef,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getRoomsList } from "../../../redux/roomsSlice";
 import {
@@ -116,7 +122,6 @@ const Step2 = () => {
     if (rooms.length === 0 && roomsLoadingState === "idle") {
       (async () => {
         const roomData = await appDispatch(getRoomsList()).unwrap();
-        await appDispatch(getBookingsByDate(wizardState.formData.date));
 
         wizardDispatch(setInitialRoomState(roomData));
       })();
@@ -130,22 +135,31 @@ const Step2 = () => {
   ]);
 
   useEffect(() => {
-    const date = wizardState.formData.date;
-    if (!bookingsByDate[date]) {
-      appDispatch(getBookingsByDate(date));
-    } else {
-      if (bookingsByDate[date]) {
-        bookingsByDate[date].forEach((room) => {
-          let availabilities = getRoomAvailabilities(
-            room,
-            wizardState.startTimes
-          );
-          wizardDispatch(setRoomAvailabilities(room.id, availabilities));
+    if (rooms && !roomDataIsValid) {
+      wizardDispatch(setInitialRoomState(rooms));
+    }
+  }, [wizardDispatch, rooms, roomDataIsValid]);
 
+  const availabilitiesFetched = useRef(false);
+  useEffect(() => {
+    const date = wizardState.formData.date;
+    if (!availabilitiesFetched.current) {
+      appDispatch(getBookingsByDate(date)).then(
+        () => (availabilitiesFetched.current = true)
+      );
+    }
+    if (bookingsByDate[date]) {
+      bookingsByDate[date].forEach((room) => {
+        let availabilities = getRoomAvailabilities(
+          room,
+          wizardState.startTimes
+        );
+        if (availabilities !== room.availabilities) {
+          wizardDispatch(setRoomAvailabilities(room.id, availabilities));
           let disabledTimes = getDisabledTimes(availabilities);
           wizardDispatch(setDisabledTimes(room.id, disabledTimes));
-        });
-      }
+        }
+      });
     }
   }, [
     bookingsByDate,
@@ -173,7 +187,8 @@ const Step2 = () => {
         <div className="row px-0 mb-3">
           <div className="col-12 col-lg-6 ">
             <label htmlFor="date" className="form-label p-0 d-flex gap-1">
-              <h3>Select Products</h3> <span className="text-danger">*</span>
+              <h3 className="ps-3">Select Products</h3>{" "}
+              <span className="text-danger">*</span>
             </label>
           </div>
 
