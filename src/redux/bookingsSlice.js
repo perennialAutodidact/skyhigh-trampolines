@@ -1,21 +1,22 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { createThunkCondition, parseError } from "./utils";
 import {
-  getDocs,
   query,
   orderBy,
   where,
-  getDoc,
-  doc,
   startAfter,
   limit,
+  doc,
+  getDocs,
+  getDoc,
+  addDoc,
+  updateDoc,
 } from "firebase/firestore";
-import { httpsCallable } from "firebase/functions";
 import {
   bookingsCollection,
   db,
-  functions,
   roomsCollection,
+  waiversCollection,
 } from "../firebase/client";
 import dayjs from "dayjs";
 import { sortBookingsByRoom } from "../utils";
@@ -181,11 +182,21 @@ export const getBookingsByDate = createAsyncThunk(
 export const createBooking = createAsyncThunk(
   "bookings/createBooking",
   async (bookingData, { rejectWithValue }) => {
-    const callCreateBooking = httpsCallable(functions, "createBooking");
-
     try {
-      const booking = await callCreateBooking(bookingData);
-      return booking;
+      const dateCreated = dayjs().unix();
+      const status = "pending";
+      const receiptId = "";
+
+      const bookingRef = await addDoc(bookingsCollection, {
+        ...bookingData,
+        dateCreated,
+        status,
+        receiptId,
+      });
+
+      console.log(bookingRef.id);
+
+      return { bookingId: bookingRef.id };
     } catch (error) {
       return rejectWithValue(parseError(error));
     }
@@ -194,10 +205,24 @@ export const createBooking = createAsyncThunk(
 
 export const updateBooking = createAsyncThunk(
   "bookings/updateBooking",
-  async (bookingData, { rejectWithValue }) => {
-    const callUpdateBooking = httpsCallable(functions, "updateBooking");
+  async (data, { rejectWithValue }) => {
+    const { bookingId, waiverSignature, ...bookingData } = data;
+
     try {
-      return await callUpdateBooking(bookingData);
+      if (waiverSignature) {
+        const waiver = await addDoc(waiversCollection, {
+          signature: waiverSignature,
+          bookingId,
+        });
+        bookingData["waiverId"] = waiver.id;
+      }
+
+      const bookingDoc = doc(bookingsCollection, bookingId);
+      await updateDoc(bookingDoc, {
+        ...bookingData,
+      });
+
+      return { message: "updated" };
     } catch (error) {
       return rejectWithValue(parseError(error));
     }
@@ -207,9 +232,13 @@ export const updateBooking = createAsyncThunk(
 export const cancelBooking = createAsyncThunk(
   "bookings/cancelBooking",
   async (bookingId, { rejectWithValue }) => {
-    const callCancelBooking = httpsCallable(functions, "cancelBooking");
     try {
-      return await callCancelBooking({ bookingId });
+      const bookingDoc = doc(bookingsCollection, bookingId);
+      await updateDoc(bookingDoc, {
+        status: "canceled",
+      });
+
+      return { message: "success" };
     } catch (error) {
       return rejectWithValue(parseError(error));
     }
@@ -231,7 +260,12 @@ const bookingsSlice = createSlice({
     error: null,
     bookingInProgress: null,
   },
-  reducers: {},
+  reducers: {
+    clearBooking: (state, action) => {
+      state.bookingInProgress = null;
+      state.loading = "idle";
+    },
+  },
   extraReducers: {
     // GET FIRST BOOKING PAGE
     [getFirstBookingPage.pending]: (state, action) => {
