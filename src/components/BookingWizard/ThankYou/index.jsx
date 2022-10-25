@@ -12,18 +12,19 @@ const ThankYou = () => {
   return (
     <div className="container-fluid pt-3 pb-5">
       <div className="row">
-        <div className="col-12 col-lg-6 offset-lg-3">
+        <div className="col-12 col-lg-10 offset-lg-1">
           <div className="text-center mt-5">
             <h1>Thank You!</h1>
             <h3>Your order has been received.</h3>
           </div>
           <div className="mt-5">
-            <div className="pt-3">Hello {wizardState.formData.fullName},</div>
+            <div className="pt-3">
+              Hello{" "}
+              <span className="fw-bold">{wizardState.formData.fullName}</span>,
+            </div>
             <div className="pt-3 m-0">
               Your booking has been confirmed. We've sent an email to{" "}
-              <strong className={styles.bold}>
-                {wizardState.formData.email}
-              </strong>{" "}
+              <strong className="fw-bold">{wizardState.formData.email}</strong>{" "}
               with your order confirmation and receipt.
             </div>
             <br />
