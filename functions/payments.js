@@ -5,7 +5,7 @@ const admin = require("firebase-admin");
 const db = admin.firestore();
 
 exports.createPaymentIntent = functions.https.onCall(async (data, context) => {
-  functions.logger.log(process.env);
+  functions.logger.log("env", process.env);
   const { amount, metadata } = data;
   try {
     const paymentIntent = await stripe.paymentIntents.create({
