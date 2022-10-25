@@ -31,6 +31,17 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: yarn install --frozen-lockfile && yarn build
+
+      - run: |
+          cd functions
+          touch .env
+
+          echo "${{ secrets.NODE_ENV }}" >> .env
+          echo "${{ secrets.STRIPE_SECRET_KEY }}" >> .env
+          echo "${{ secrets.STRIPE_HANDLE_EVENT_SECRET_PRODUCTION }}" >> .env
+          echo "${{ secrets.SENDGRID_API_KEY }}" >> .env
+          echo "${{ secrets.SENDGRID_TEMPLATE_ID }}" >> .env
+
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
