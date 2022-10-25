@@ -33,7 +33,7 @@ jobs:
       - run: yarn install --frozen-lockfile && yarn build
 
       - name: "Cloud function environment variables"
-      - run: |
+        run: |
           cd functions
           touch .env
 
