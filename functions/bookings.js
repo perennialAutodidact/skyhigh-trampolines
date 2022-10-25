@@ -67,59 +67,59 @@ const sendEmailToUser = async (
   }
 };
 
-exports.createBooking = functions.https.onCall(async (bookingData, context) => {
-  try {
-    const dateCreated = admin.firestore.Timestamp.now();
-    const status = "pending";
-    const receiptId = "";
+// exports.createBooking = functions.https.onCall(async (bookingData, context) => {
+//   try {
+//     const dateCreated = admin.firestore.Timestamp.now();
+//     const status = "pending";
+//     const receiptId = "";
 
-    const res = await db.collection("bookings").add({
-      ...bookingData,
-      dateCreated,
-      status,
-      receiptId,
-    });
-    return { bookingId: res.id };
-  } catch (error) {
-    throw new functions.https.HttpsError("unknown", error);
-  }
-});
+//     const res = await db.collection("bookings").add({
+//       ...bookingData,
+//       dateCreated,
+//       status,
+//       receiptId,
+//     });
+//     return { bookingId: res.id };
+//   } catch (error) {
+//     throw new functions.https.HttpsError("unknown", error);
+//   }
+// });
 
-exports.updateBooking = functions.https.onCall(async (data, context) => {
-  const { bookingId, waiverSignature, ...bookingData } = data;
+// exports.updateBooking = functions.https.onCall(async (data, context) => {
+//   const { bookingId, waiverSignature, ...bookingData } = data;
 
-  try {
-    if (waiverSignature) {
-      const waiver = await db.collection("waivers").add({
-        signature: waiverSignature,
-        bookingId,
-      });
-      bookingData["waiverId"] = waiver.id;
-    }
-    const res = await db
-      .collection("bookings")
-      .doc(bookingId)
-      .update({ ...bookingData });
+//   try {
+//     if (waiverSignature) {
+//       const waiver = await db.collection("waivers").add({
+//         signature: waiverSignature,
+//         bookingId,
+//       });
+//       bookingData["waiverId"] = waiver.id;
+//     }
+//     const res = await db
+//       .collection("bookings")
+//       .doc(bookingId)
+//       .update({ ...bookingData });
 
-    return { message: "updated" };
-  } catch (error) {
-    throw new functions.https.HttpsError("unknown", error);
-  }
-});
+//     return { message: "updated" };
+//   } catch (error) {
+//     throw new functions.https.HttpsError("unknown", error);
+//   }
+// });
 
-exports.cancelBooking = functions.https.onCall(async (data, context) => {
-  const { bookingId } = data;
+// exports.cancelBooking = functions.https.onCall(async (data, context) => {
+//   const { bookingId } = data;
 
-  try {
-    await db.collection("bookings").doc(bookingId).update({
-      status: "canceled",
-    });
+//   try {
+//     await db.collection("bookings").doc(bookingId).update({
+//       status: "canceled",
+//     });
 
-    return { message: "success" };
-  } catch (error) {
-    throw new functions.https.HttpsError("unknown", error);
-  }
-});
+//     return { message: "success" };
+//   } catch (error) {
+//     throw new functions.https.HttpsError("unknown", error);
+//   }
+// });
 
 exports.updateBookingFromStripeEvent = functions.firestore
   .document("stripeEvents/{eventId}")
@@ -151,7 +151,7 @@ exports.updateBookingFromStripeEvent = functions.firestore
             .doc(receiptId)
             .set({
               bookingId,
-              grandTotal: amount,
+              grandTotal: parseInt(amount),
               subTotal: parseInt(subTotal),
               tax: parseInt(tax),
               transactionFee,

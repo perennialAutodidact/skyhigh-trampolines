@@ -330,7 +330,7 @@ const bookingsSlice = createSlice({
     [createBooking.fulfilled]: (state, action) => {
       state.loading = "succeeded";
       state.bookingInProgress = {
-        id: action.payload.data.bookingId,
+        id: action.payload.bookingId,
       };
     },
     [createBooking.rejected]: (state, action) => {
