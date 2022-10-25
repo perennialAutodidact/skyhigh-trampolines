@@ -2,6 +2,8 @@ const functions = require("firebase-functions");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const admin = require("firebase-admin");
 
+functions.logger.log(process.env);
+
 const db = admin.firestore();
 
 exports.createPaymentIntent = functions.https.onCall(async (data, context) => {
