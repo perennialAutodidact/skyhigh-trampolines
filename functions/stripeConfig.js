@@ -1,39 +1,36 @@
 const functions = require("firebase-functions");
-const { defineSecret } = require("firebase-functions/params");
 const Stripe = require("stripe");
 const { getFirestore } = require("firebase-admin/firestore");
-
-const STRIPE_SECRET_KEY = defineSecret("STRIPE_SECRET_KEY");
-const STRIPE_HANDLE_EVENT_SECRET = defineSecret("STRIPE_HANDLE_EVENT_SECRET");
+const secrets = require("./secretsClient");
 
 const db = getFirestore();
 
-exports.handleStripeEvent = functions
-  .runWith({
-    secrets: [STRIPE_SECRET_KEY, STRIPE_HANDLE_EVENT_SECRET],
-  })
-  .https.onRequest((req, res) => {
-    let stripe = Stripe(STRIPE_SECRET_KEY);
-    let stripeSigningSecret = STRIPE_HANDLE_EVENT_SECRET;
-    let signature = req.headers["stripe-signature"];
+exports.handleStripeEvent = functions.https.onRequest(async (req, res) => {
+  const stripeSecretKey = await secrets.getSecretValue("STRIPE_SECRET_KEY");
+  const stripeSigningSecret = await secrets.getSecretValue(
+    "STRIPE_HANDLE_EVENT_SECRET"
+  );
 
-    let event;
-    try {
-      event = stripe.webhooks.constructEvent(
-        req.rawBody,
-        signature,
-        stripeSigningSecret
-      );
-    } catch (error) {
-      throw new functions.https.HttpsError(
-        "unknown",
-        `Error constructing Stripe event: ${error}`
-      );
-    }
+  let stripe = Stripe(stripeSecretKey);
+  let signature = req.headers["stripe-signature"];
 
-    db.collection("stripeEvents")
-      .doc()
-      .set({ ...event });
+  let event;
+  try {
+    event = stripe.webhooks.constructEvent(
+      req.rawBody,
+      signature,
+      stripeSigningSecret
+    );
+  } catch (error) {
+    throw new functions.https.HttpsError(
+      "unknown",
+      `Error constructing Stripe event: ${error}`
+    );
+  }
 
-    return res.send();
-  });
+  db.collection("stripeEvents")
+    .doc()
+    .set({ ...event });
+
+  return res.send();
+});

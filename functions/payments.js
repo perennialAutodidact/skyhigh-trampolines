@@ -1,37 +1,34 @@
 const functions = require("firebase-functions");
-const { defineSecret } = require("firebase-functions/params");
 const Stripe = require("stripe");
 const { getFirestore } = require("firebase-admin/firestore");
-
+const secrets = require("./secretsClient");
 const db = getFirestore();
 
-const STRIPE_SECRET_KEY = defineSecret("STRIPE_SECRET_KEY");
+exports.createPaymentIntent = functions.https.onCall(async (data, context) => {
+  const stripeSecretKey = await secrets.getSecretValue("STRIPE_SECRET_KEY");
+  functions.logger.log({ stripeSecretKey });
+  const stripe = Stripe(stripeSecretKey);
+  const { amount, metadata } = data;
+  try {
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount,
+      currency: "usd",
+      automatic_payment_methods: { enabled: true },
+      metadata,
+    });
 
-exports.createPaymentIntent = functions
-  .runWith({ secrets: [STRIPE_SECRET_KEY] })
-  .https.onCall(async (data, context) => {
-    const stripe = Stripe(STRIPE_SECRET_KEY);
-    const { amount, metadata } = data;
-    try {
-      const paymentIntent = await stripe.paymentIntents.create({
-        amount,
-        currency: "usd",
-        automatic_payment_methods: { enabled: true },
-        metadata,
-      });
+    const { client_secret: clientSecret, id } = paymentIntent;
 
-      const { client_secret: clientSecret, id } = paymentIntent;
+    return { clientSecret, id };
+  } catch (error) {
+    throw new functions.https.HttpsError("unknown", error);
+  }
+});
 
-      return { clientSecret, id };
-    } catch (error) {
-      throw new functions.https.HttpsError("unknown", error);
-    }
-  });
-
-exports.updatePaymentIntent = functions
-  .runWith({ secrets: [STRIPE_SECRET_KEY] })
-  .https.onCall(async (paymentIntentData, context) => {
-    const stripe = Stripe(STRIPE_SECRET_KEY);
+exports.updatePaymentIntent = functions.https.onCall(
+  async (paymentIntentData, context) => {
+    const stripeSecretKey = await secrets.getSecretValue("STRIPE_SECRET_KEY");
+    const stripe = Stripe(stripeSecretKey);
 
     const { id, data } = paymentIntentData;
     try {
@@ -39,14 +36,13 @@ exports.updatePaymentIntent = functions
     } catch (error) {
       throw new functions.https.HttpsError("unknown", error);
     }
-  });
+  }
+);
 
-exports.cancelPaymentIntent = functions
-  .runWith({
-    secrets: [STRIPE_SECRET_KEY],
-  })
-  .https.onCall(async (paymentIntentId, context) => {
-    const stripe = Stripe(STRIPE_SECRET_KEY);
+exports.cancelPaymentIntent = functions.https.onCall(
+  async (paymentIntentId, context) => {
+    const stripeSecretKey = secrets.getSecretValue("STRIPE_SECRET_KEY");
+    const stripe = Stripe(stripeSecretKey);
 
     try {
       const booking = await db
@@ -63,4 +59,5 @@ exports.cancelPaymentIntent = functions
     } catch (error) {
       throw new functions.https.HttpsError("unknown", error);
     }
-  });
+  }
+);

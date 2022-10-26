@@ -1,9 +1,7 @@
 const functions = require("firebase-functions");
 const { getFirestore } = require("firebase-admin/firestore");
-const { defineSecret } = require("firebase-functions/params");
 const sendgrid = require("@sendgrid/mail");
-
-const SENDGRID_API_KEY = defineSecret("SENDGRID_API_KEY");
+const secrets = require("./secretsClient");
 
 const db = getFirestore();
 
@@ -56,12 +54,13 @@ const buildEmailMessage = (
 };
 
 exports.updateBookingFromStripeEvent = functions
-  .runWith({ secrets: [SENDGRID_API_KEY] })
   .firestore.document("stripeEvents/{eventId}")
   .onCreate(async (event, context) => {
-    const sendgridApiKey = SENDGRID_API_KEY;
+    const sendgridApiKey = secrets.getSecretValue('SENDGRID_API_KEY');
     const templateId = process.env.SENDGRID_TEMPLATE_ID;
+
     sendgrid.setApiKey(sendgridApiKey);
+    
     try {
       const eventData = event.data();
 
