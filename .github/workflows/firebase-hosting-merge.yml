@@ -28,4 +28,4 @@ jobs:
           channelId: live
           projectId: skyhigh-trampolines
       
-      - run: firebase deploy --only functions
+      - run: /usr/bin/npx firebase-tools@latest deploy --project skyhigh-trampolines --only functions
