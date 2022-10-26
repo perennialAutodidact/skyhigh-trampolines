@@ -15,6 +15,7 @@ exports.handleStripeEvent = functions.https.onRequest(async (req, res) => {
   let signature = req.get("stripe-signature");
   let event;
   try {
+    functions.logger.log({signature, stripeSigningSecret})
     event = stripe.webhooks.constructEvent(
       req.rawBody,
       signature,
