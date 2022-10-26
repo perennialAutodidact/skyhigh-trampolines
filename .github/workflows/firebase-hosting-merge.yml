@@ -32,7 +32,7 @@ jobs:
         run: |
           export GOOGLE_APPLICATION_CREDENTIALS=$HOME/gcloud.json
           npx firebase-tools@latest deploy --token "${{ secrets.FIREBASE_CI_TOKEN }}" --project skyhigh-trampolines --only functions --json
-        env: ${{ secrets.FIREBASE_CI_SECRET }}
+        env: ${{ secrets.FIREBASE_CI_TOKEN }}
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
