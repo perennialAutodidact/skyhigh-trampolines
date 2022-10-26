@@ -1,7 +1,7 @@
 const functions = require("firebase-functions");
 const { getFirestore } = require("firebase-admin/firestore");
 const { defineSecret } = require("firebase-functions/params");
-const sgMail = require("@sendgrid/mail");
+const sendgrid = require("@sendgrid/mail");
 
 const SENDGRID_API_KEY = defineSecret("SENDGRID_API_KEY");
 
@@ -17,19 +17,18 @@ const db = getFirestore();
 const toMoney = (amount) => amount && (amount.toFixed(0) / 100).toFixed(2);
 
 // function to send email
-const sendEmailToUser = async (
-  TEMPLATE_ID,
+const buildEmailMessage = (
+  templateId,
   booking,
   amount,
   tax,
   subTotal,
   transactionFee
 ) => {
-  // send a post request to the sendgrid api
-  const msg = {
+  const message = {
     to: [booking.customer?.email],
     from: "skyhightrampolines@gmail.com",
-    template_id: TEMPLATE_ID,
+    template_id: templateId,
 
     dynamic_template_data: {
       customer: booking.customer,
@@ -53,22 +52,16 @@ const sendEmailToUser = async (
       grandTotal: toMoney((amount / 100) * 100),
     },
   };
-
-  try {
-    await sgMail.send(msg);
-    return { success: true };
-  } catch (error) {
-    return { success: false, error };
-  }
+  return message;
 };
 
 exports.updateBookingFromStripeEvent = functions
   .runWith({ secrets: [SENDGRID_API_KEY] })
   .firestore.document("stripeEvents/{eventId}")
   .onCreate(async (event, context) => {
-    const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
-    const TEMPLATE_ID = process.env.SENDGRID_TEMPLATE_ID;
-    sgMail.setApiKey(SENDGRID_API_KEY);
+    const sendgridApiKey = SENDGRID_API_KEY.value();
+    const templateId = process.env.SENDGRID_TEMPLATE_ID;
+    sendgrid.setApiKey(sendgridApiKey);
     try {
       const eventData = event.data();
 
@@ -110,8 +103,8 @@ exports.updateBookingFromStripeEvent = functions
           const booking = await bookingRef.get().then((doc) => doc.data());
 
           // send email
-          await sendEmailToUser(
-            TEMPLATE_ID,
+          const message = buildEmailMessage(
+            templateId,
             receiptId,
             booking,
             amount,
@@ -120,6 +113,7 @@ exports.updateBookingFromStripeEvent = functions
             transactionFee
           );
 
+          await sendgrid.send(message);
           break;
         case "payment_intent.cancelled":
           // deleteBooking(eventData)
