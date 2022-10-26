@@ -21,6 +21,11 @@ exports.handleStripeEvent = functions.https.onRequest(async (req, res) => {
       signature,
       stripeSigningSecret
     );
+    db.collection("stripeEvents")
+      .doc()
+      .set({ ...event });
+  
+    return res.send();
   } catch (error) {
     throw new functions.https.HttpsError(
       "unknown",
@@ -28,9 +33,4 @@ exports.handleStripeEvent = functions.https.onRequest(async (req, res) => {
     );
   }
 
-  db.collection("stripeEvents")
-    .doc()
-    .set({ ...event });
-
-  return res.send();
 });

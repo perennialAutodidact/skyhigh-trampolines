@@ -111,6 +111,8 @@ exports.updateBookingFromStripeEvent = functions
             subTotal,
             transactionFee
           );
+          
+            functions.logger.log({message})
 
           await sendgrid.send(message);
           break;

@@ -6,7 +6,6 @@ const db = getFirestore();
 
 exports.createPaymentIntent = functions.https.onCall(async (data, context) => {
   const stripeSecretKey = await secrets.getSecretValue("STRIPE_SECRET_KEY");
-  functions.logger.log({ stripeSecretKey });
   const stripe = Stripe(stripeSecretKey);
   const { amount, metadata } = data;
   try {
