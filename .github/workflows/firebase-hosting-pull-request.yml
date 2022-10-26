@@ -23,5 +23,3 @@ jobs:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_SKYHIGH_TRAMPOLINES }}'
           projectId: skyhigh-trampolines
-
-      - run: /usr/bin/npx firebase-tools@latest deploy --project skyhigh-trampolines --only functions

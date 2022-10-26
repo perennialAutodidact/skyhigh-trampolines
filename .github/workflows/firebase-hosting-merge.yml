@@ -28,4 +28,11 @@ jobs:
           channelId: live
           projectId: skyhigh-trampolines
       
-      - run: /usr/bin/npx firebase-tools@latest deploy --project skyhigh-trampolines --only functions
+      - name: Build Cloud Functions
+        run: cd functions && npm i
+      
+      - name: Create SA key
+        run: echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_SKYHIGH_TRAMPOLINES }}" > $HOME/gcloud.json
+      
+      - name: Deploy Cloud Functions
+        run: export GOOGLE_APPLICATION_CREDENTIALS=$HOME/gcloud.json && npx firebase-tools@latest deploy --project skyhigh-trampolines --only functions --json
