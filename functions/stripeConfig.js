@@ -13,7 +13,6 @@ exports.handleStripeEvent = functions.https.onRequest(async (req, res) => {
 
   let stripe = Stripe(stripeSecretKey);
   let signature = req.get("stripe-signature");
-
   let event;
   try {
     event = stripe.webhooks.constructEvent(
@@ -21,17 +20,17 @@ exports.handleStripeEvent = functions.https.onRequest(async (req, res) => {
       signature,
       stripeSigningSecret
     );
-    db.collection("stripeEvents")
+    functions.logger.log({ event });
+    await db
+      .collection("stripeEvents")
       .doc()
       .set({ ...event });
 
     return res.send();
   } catch (error) {
-    return res.send(
-      new functions.https.HttpsError(
-        "unknown",
-        `Error constructing Stripe event: ${error}`
-      )
+    throw new functions.https.HttpsError(
+      "unknown",
+      `Error constructing Stripe event: ${error}`
     );
   }
 });
