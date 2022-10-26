@@ -30,7 +30,8 @@ jobs:
       
       - name: Deploy Cloud Functions
         run: export GOOGLE_APPLICATION_CREDENTIALS=$HOME/gcloud.json && npx firebase-tools@latest deploy --project skyhigh-trampolines --only functions --json
-      
+        env: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SKYHIGH_TRAMPOLINES }}
+        
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
