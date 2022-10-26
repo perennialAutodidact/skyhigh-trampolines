@@ -10,7 +10,7 @@ const STRIPE_SECRET_KEY = defineSecret("STRIPE_SECRET_KEY");
 exports.createPaymentIntent = functions
   .runWith({ secrets: [STRIPE_SECRET_KEY] })
   .https.onCall(async (data, context) => {
-    const stripe = Stripe(STRIPE_SECRET_KEY.value());
+    const stripe = Stripe(STRIPE_SECRET_KEY);
     const { amount, metadata } = data;
     try {
       const paymentIntent = await stripe.paymentIntents.create({
@@ -31,7 +31,7 @@ exports.createPaymentIntent = functions
 exports.updatePaymentIntent = functions
   .runWith({ secrets: [STRIPE_SECRET_KEY] })
   .https.onCall(async (paymentIntentData, context) => {
-    const stripe = Stripe(STRIPE_SECRET_KEY.value());
+    const stripe = Stripe(STRIPE_SECRET_KEY);
 
     const { id, data } = paymentIntentData;
     try {
@@ -46,7 +46,7 @@ exports.cancelPaymentIntent = functions
     secrets: [STRIPE_SECRET_KEY],
   })
   .https.onCall(async (paymentIntentId, context) => {
-    const stripe = Stripe(STRIPE_SECRET_KEY.value());
+    const stripe = Stripe(STRIPE_SECRET_KEY);
 
     try {
       const booking = await db

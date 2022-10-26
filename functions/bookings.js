@@ -59,7 +59,7 @@ exports.updateBookingFromStripeEvent = functions
   .runWith({ secrets: [SENDGRID_API_KEY] })
   .firestore.document("stripeEvents/{eventId}")
   .onCreate(async (event, context) => {
-    const sendgridApiKey = SENDGRID_API_KEY.value();
+    const sendgridApiKey = SENDGRID_API_KEY;
     const templateId = process.env.SENDGRID_TEMPLATE_ID;
     sendgrid.setApiKey(sendgridApiKey);
     try {

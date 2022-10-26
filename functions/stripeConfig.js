@@ -13,8 +13,8 @@ exports.handleStripeEvent = functions
     secrets: [STRIPE_SECRET_KEY, STRIPE_HANDLE_EVENT_SECRET],
   })
   .https.onRequest((req, res) => {
-    let stripe = Stripe(STRIPE_SECRET_KEY.value());
-    let stripeSigningSecret = STRIPE_HANDLE_EVENT_SECRET.value();
+    let stripe = Stripe(STRIPE_SECRET_KEY);
+    let stripeSigningSecret = STRIPE_HANDLE_EVENT_SECRET;
     let signature = req.headers["stripe-signature"];
 
     let event;
