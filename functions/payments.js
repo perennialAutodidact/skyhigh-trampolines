@@ -1,16 +1,16 @@
 const functions = require("firebase-functions");
 const { defineSecret } = require("firebase-functions/params");
 const Stripe = require("stripe");
-const {getFirestore} = require("firebase-admin/firestore")
+const { getFirestore } = require("firebase-admin/firestore");
 
 const db = getFirestore();
 
 const STRIPE_SECRET_KEY = defineSecret("STRIPE_SECRET_KEY");
 
 exports.createPaymentIntent = functions
-  .runWith({ secrets: [STRIPE_SECRET_KEY] }).https
-  .onCall(async (data, context) => {
-    const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
+  .runWith({ secrets: [STRIPE_SECRET_KEY] })
+  .https.onCall(async (data, context) => {
+    const stripe = Stripe(STRIPE_SECRET_KEY.value());
     const { amount, metadata } = data;
     try {
       const paymentIntent = await stripe.paymentIntents.create({
@@ -29,9 +29,9 @@ exports.createPaymentIntent = functions
   });
 
 exports.updatePaymentIntent = functions
-  .runWith({ secrets: [STRIPE_SECRET_KEY] }).https
-  .onCall(async (paymentIntentData, context) => {
-    const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
+  .runWith({ secrets: [STRIPE_SECRET_KEY] })
+  .https.onCall(async (paymentIntentData, context) => {
+    const stripe = Stripe(STRIPE_SECRET_KEY.value());
 
     const { id, data } = paymentIntentData;
     try {
@@ -41,24 +41,26 @@ exports.updatePaymentIntent = functions
     }
   });
 
-exports.cancelPaymentIntent = functions.runWith({
-  secrets: [STRIPE_SECRET_KEY],
-}).https.onCall(async (paymentIntentId, context) => {
-  const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
+exports.cancelPaymentIntent = functions
+  .runWith({
+    secrets: [STRIPE_SECRET_KEY],
+  })
+  .https.onCall(async (paymentIntentId, context) => {
+    const stripe = Stripe(STRIPE_SECRET_KEY.value());
 
-  try {
-    const booking = await db
-      .collection("bookings")
-      .where("paymentIntentId", "==", paymentIntentId)
-      .get();
+    try {
+      const booking = await db
+        .collection("bookings")
+        .where("paymentIntentId", "==", paymentIntentId)
+        .get();
 
-    await booking.update({
-      status: "canceled",
-      receiptId: "",
-    });
+      await booking.update({
+        status: "canceled",
+        receiptId: "",
+      });
 
-    return await stripe.paymentIntents.cancel(paymentIntentId);
-  } catch (error) {
-    throw new functions.https.HttpsError("unknown", error);
-  }
-});
+      return await stripe.paymentIntents.cancel(paymentIntentId);
+    } catch (error) {
+      throw new functions.https.HttpsError("unknown", error);
+    }
+  });

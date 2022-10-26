@@ -1,7 +1,7 @@
 const functions = require("firebase-functions");
 const { defineSecret } = require("firebase-functions/params");
 const Stripe = require("stripe");
-const {getFirestore} = require("firebase-admin/firestore")
+const { getFirestore } = require("firebase-admin/firestore");
 
 const STRIPE_SECRET_KEY = defineSecret("STRIPE_SECRET_KEY");
 const STRIPE_HANDLE_EVENT_SECRET = defineSecret("STRIPE_HANDLE_EVENT_SECRET");
@@ -13,8 +13,8 @@ exports.handleStripeEvent = functions
     secrets: [STRIPE_SECRET_KEY, STRIPE_HANDLE_EVENT_SECRET],
   })
   .https.onRequest((req, res) => {
-    let stripe = Stripe(process.env.STRIPE_SECRET_KEY);
-    let stripeSigningSecret = process.env.STRIPE_HANDLE_EVENT_SECRET;
+    let stripe = Stripe(STRIPE_SECRET_KEY.value());
+    let stripeSigningSecret = STRIPE_HANDLE_EVENT_SECRET.value();
     let signature = req.headers["stripe-signature"];
 
     let event;

@@ -1,12 +1,11 @@
 const functions = require("firebase-functions");
-const {getFirestore} = require("firebase-admin/firestore")
-const {defineSecret} = require("firebase-functions/params")
+const { getFirestore } = require("firebase-admin/firestore");
+const { defineSecret } = require("firebase-functions/params");
 const sgMail = require("@sendgrid/mail");
 
-const SENDGRID_API_KEY = defineSecret('SENDGRID_API_KEY')
- 
-const db = getFirestore();
+const SENDGRID_API_KEY = defineSecret("SENDGRID_API_KEY");
 
+const db = getFirestore();
 
 /**
  *
@@ -25,25 +24,25 @@ const sendEmailToUser = async (
   tax,
   subTotal,
   transactionFee
-  ) => {
-    // send a post request to the sendgrid api
-    const msg = {
-      to: [booking.customer?.email],
-      from: "skyhightrampolines@gmail.com",
-      template_id: TEMPLATE_ID,
-      
-      dynamic_template_data: {
-        customer: booking.customer,
-        subject: "Booking Confirmation",
-        receiptId: booking.receiptId.split("-")[0],
-        date: booking.date,
-        rooms: booking.rooms.map((room) => ({
-          ...room,
-          products: room.products.map((product) => ({
-            ...product,
-            totalPrice: toMoney((product.totalPrice / 100) * 100),
-          })),
+) => {
+  // send a post request to the sendgrid api
+  const msg = {
+    to: [booking.customer?.email],
+    from: "skyhightrampolines@gmail.com",
+    template_id: TEMPLATE_ID,
+
+    dynamic_template_data: {
+      customer: booking.customer,
+      subject: "Booking Confirmation",
+      receiptId: booking.receiptId.split("-")[0],
+      date: booking.date,
+      rooms: booking.rooms.map((room) => ({
+        ...room,
+        products: room.products.map((product) => ({
+          ...product,
+          totalPrice: toMoney((product.totalPrice / 100) * 100),
         })),
+      })),
       addOns: booking.addOns.map((addOn) => ({
         ...addOn,
         totalPrice: toMoney((addOn.totalPrice / 100) * 100),
@@ -54,7 +53,7 @@ const sendEmailToUser = async (
       grandTotal: toMoney((amount / 100) * 100),
     },
   };
-  
+
   try {
     await sgMail.send(msg);
     return { success: true };
@@ -63,8 +62,9 @@ const sendEmailToUser = async (
   }
 };
 
-  exports.updateBookingFromStripeEvent = functions.runWith({secrets:[SENDGRID_API_KEY]}).firestore
-  .document("stripeEvents/{eventId}")
+exports.updateBookingFromStripeEvent = functions
+  .runWith({ secrets: [SENDGRID_API_KEY] })
+  .firestore.document("stripeEvents/{eventId}")
   .onCreate(async (event, context) => {
     const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
     const TEMPLATE_ID = process.env.SENDGRID_TEMPLATE_ID;
