@@ -75,12 +75,9 @@ export const getBookingById = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       let booking = await getDoc(doc(db, "bookings", id)).then((doc) => {
-        let { dateCreated, ...data } = doc.data();
-        dateCreated = dayjs.unix(dateCreated.seconds).format();
         return {
           id: doc.id,
-          dateCreated,
-          ...data,
+          ...doc.data(),
         };
       });
 
@@ -163,8 +160,8 @@ export const getBookingsByDate = createAsyncThunk(
     try {
       let bookingsQuery = query(
         bookingsCollection,
-        where("status", "in", ["pending", "complete"]),
-        where("date", "==", date)
+        where("date", "==", date),
+        where("status", "in", ["pending", "complete"])
       );
       let bookings = await getBookings(bookingsQuery);
 
@@ -183,7 +180,7 @@ export const createBooking = createAsyncThunk(
   "bookings/createBooking",
   async (bookingData, { rejectWithValue }) => {
     try {
-      const dateCreated = dayjs().unix();
+      const dateCreated = dayjs().format();
       const status = "pending";
       const receiptId = "";
 
@@ -193,8 +190,6 @@ export const createBooking = createAsyncThunk(
         status,
         receiptId,
       });
-
-      console.log(bookingRef.id);
 
       return { bookingId: bookingRef.id };
     } catch (error) {
