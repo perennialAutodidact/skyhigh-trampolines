@@ -11,18 +11,18 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
-          with:
-            node-version: 16.x
+        with:
+          node-version: 16.x
       - uses: actions/cache@v2
-          with:
-            path: ~/.npm
-            key: ${{ runner.os }}-node-${{ hashFiles('**/functions/package-lock.json') }}
-            restore-keys: |
-              ${{ runner.os }}-node-
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/functions/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
       - name: Build Cloud Functions
-          run: cd functions && npm ci
+        run: cd functions && npm ci
       - name: Create SA key
-          run: echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > $HOME/gcloud.json
+        run: echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > $HOME/gcloud.json
       - name: Deploy Cloud Functions
-          run: export GOOGLE_APPLICATION_CREDENTIALS=$HOME/gcloud.json && npx firebase-tools deploy --only functions --json
+        run: export GOOGLE_APPLICATION_CREDENTIALS=$HOME/gcloud.json && npx firebase-tools deploy --only functions --json
           
