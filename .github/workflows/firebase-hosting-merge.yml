@@ -3,11 +3,11 @@
 
 name: Deploy to Firebase Hosting on merge
 'on':
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - 'functions/**'
+push:
+  branches:
+    - main
+  paths-ignore:
+    - 'functions/**'
 
 env:
   CI: false
