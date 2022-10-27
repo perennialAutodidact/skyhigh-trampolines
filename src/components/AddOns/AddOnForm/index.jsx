@@ -48,73 +48,74 @@ const AddOnForm = () => {
   };
   return (
     <div className="container">
-      <h1>Add an add-on</h1>
-      <div className="row">
-        <div className="col-4">
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="container text-start"
-          >
-            {/* ADDON NAME */}
-            <div className="row mb-3">
-              <label htmlFor="name" className="form-label p-0">
-                Name <span className="text-danger">*</span>
-              </label>
-              <input
-                {...register("name")}
-                id="name"
-                className={`form-control ${errors.name && "is-invalid"}`}
-              />
-              {errors.name && (
-                <p className="text-danger">{errors.name.message}</p>
-              )}
-            </div>
-
-            {/* ADDON PRICE */}
-            <div className="row mb-3">
-              <label htmlFor="price" className="form-label p-0">
-                Price <span className="text-danger">*</span>
-              </label>
-              <div className="input-group p-0">
-                <div className="input-group-text">$</div>
+      <div className="row mt-5">
+        <div className="col-12 col-lg-6 offset-lg-2">
+          <h1>Add an add-on</h1>
+          <form onSubmit={handleSubmit(onSubmit)} className="container p-0 mt-3">
+            <div className="row g-2">
+              {/* ADDON NAME */}
+              <div className="col-12">
+                <label htmlFor="name" className="form-label p-0">
+                  Name <span className="text-danger">*</span>
+                </label>
                 <input
-                  {...register("price")}
-                  id="price"
-                  className={`form-control ${errors.price && "is-invalid"}`}
-                  placeholder="e.g. 12.99"
+                  {...register("name")}
+                  id="name"
+                  className={`form-control ${errors.name && "is-invalid"}`}
                 />
+                {errors.name && (
+                  <p className="text-danger">{errors.name.message}</p>
+                )}
               </div>
-              {errors.price && (
-                <p className="text-danger">{errors.price.message}</p>
-              )}
-            </div>
 
-            <div className="row mb-4">
-              <label htmlFor="photo-url" className="form-label text-start p-0">
-                Photo <span className="text-danger">*</span>
-              </label>
-              <input
-                type="file"
-                multiple
-                name={"photo"}
-                ref={imageField.ref}
-                onChange={imageFieldOnChange}
-                id="photo"
-                className={`form-control ${errors.photo && "is-invalid"}`}
-              />
-              {errors.photo && (
-                <p className="text-danger">{errors.photo.message}</p>
-              )}
-            </div>
-            <div className="row mb-3">
-              <div className="col col-4 p-0">
-                <button type="submit" className="btn btn-success w-100">
-                  {addOnsLoadingStatus === "pending" ? (
-                    <LoadingSpinner color={"light"} size={"sm"} />
-                  ) : (
-                    "Submit"
-                  )}
-                </button>
+              {/* ADDON PRICE */}
+              <div className="col-12 col-lg-5">
+                <label htmlFor="price" className="form-label p-0">
+                  Price <span className="text-danger">*</span>
+                </label>
+                <div className="input-group p-0">
+                  <div className="input-group-text">$</div>
+                  <input
+                    {...register("price")}
+                    id="price"
+                    className={`form-control ${errors.price && "is-invalid"}`}
+                    placeholder="e.g. 12.99"
+                  />
+                </div>
+                {errors.price && (
+                  <p className="text-danger">{errors.price.message}</p>
+                )}
+              </div>
+
+              <div className="col-12 col-lg-7">
+                <label
+                  htmlFor="photo-url"
+                  className="form-label text-start p-0"
+                >
+                  Photo <span className="text-danger">*</span>
+                </label>
+                <input
+                  type="file"
+                  multiple
+                  name={"photo"}
+                  ref={imageField.ref}
+                  onChange={imageFieldOnChange}
+                  id="photo"
+                  className={`form-control ${errors.photo && "is-invalid"}`}
+                />
+                {errors.photo && (
+                  <p className="text-danger">{errors.photo.message}</p>
+                )}
+              </div>
+              
+              <div className="col-12 col-lg-6 mt-4">
+                  <button type="submit" className="btn btn-success w-100">
+                    {addOnsLoadingStatus === "pending" ? (
+                      <LoadingSpinner color={"light"} size={"sm"} />
+                    ) : (
+                      "Submit"
+                    )}
+                  </button>
               </div>
             </div>
           </form>

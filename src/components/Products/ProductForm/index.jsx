@@ -111,168 +111,189 @@ const ProductForm = ({ productTypes, durations }) => {
 
   return (
     <div className="container text-start">
+      <div className="col-12 col-lg-8 offset-lg-2 mt-3 mt-lg-5">
       <h1>Add a product</h1>
-      <div className="row">
-        <div className="col-4">
-          <form onSubmit={handleSubmit(onSubmit)} className="container">
-            {/* PRODUCT NAME */}
-            <div className="row mb-3">
-              <label htmlFor="name" className="form-label p-0">
-                Name <span className="text-danger">*</span>
-              </label>
-              <input
-                {...register("name")}
-                id="name"
-                className={`form-control ${errors.name && "is-invalid"}`}
-              />
-              {errors.name && (
-                <p className="text-danger">{errors.name.message}</p>
-              )}
-            </div>
+        <form onSubmit={handleSubmit(onSubmit)} className="container p-0 mt-3">
+          <div className="row g-2">
+            <div className="col-12 col-lg-7">
+              <div className="row g-2">
+                {/* PRODUCT NAME */}
+                <div className="col-12">
+                  <label htmlFor="name" className="form-label p-0">
+                    Name <span className="text-danger">*</span>
+                  </label>
+                  <input
+                    {...register("name")}
+                    id="name"
+                    className={`form-control ${errors.name && "is-invalid"}`}
+                  />
+                  {errors.name && (
+                    <p className="text-danger">{errors.name.message}</p>
+                  )}
+                </div>
 
-            {/* PRODUCT DESCRIPTION */}
-            <div className="row mb-3">
-              <label htmlFor="description" className="form-label p-0">
-                Description <span className="text-danger">*</span>
-              </label>
-              <input
-                {...register("description")}
-                id="description"
-                className={`form-control ${errors.description && "is-invalid"}`}
-              />
-              {errors.description && (
-                <p className="text-danger">{errors.description.message}</p>
-              )}
-            </div>
+                {/* PRODUCT DESCRIPTION */}
+                <div className="col-12">
+                  <label htmlFor="description" className="form-label p-0">
+                    Description <span className="text-danger">*</span>
+                  </label>
+                  <input
+                    {...register("description")}
+                    id="description"
+                    className={`form-control ${
+                      errors.description && "is-invalid"
+                    }`}
+                  />
+                  {errors.description && (
+                    <p className="text-danger">{errors.description.message}</p>
+                  )}
+                </div>
 
-            {/* PRODUCT PRICE */}
-            <div className="row mb-3">
-              <label htmlFor="price" className="form-label p-0">
-                Price <span className="text-danger">*</span>
-              </label>
-              <div className="input-group p-0">
-                <div className="input-group-text">$</div>
-                <input
-                  {...register("price")}
-                  id="price"
-                  className={`form-control ${errors.price && "is-invalid"}`}
-                  placeholder="e.g. 12.99"
-                />
+                {/* PRODUCT PRICE */}
+                <div className="col-12 col-lg-6">
+                  <label htmlFor="price" className="form-label p-0">
+                    Price <span className="text-danger">*</span>
+                  </label>
+                  <div className="input-group p-0">
+                    <div className="input-group-text">$</div>
+                    <input
+                      {...register("price")}
+                      id="price"
+                      className={`form-control ${errors.price && "is-invalid"}`}
+                      placeholder="e.g. 12.99"
+                    />
+                  </div>
+                  {errors.price && (
+                    <p className="text-danger">{errors.price.message}</p>
+                  )}
+                </div>
+
+                {/* PRODUCT ROOM */}
+                <div className="col-12 col-lg-6">
+                  <label
+                    htmlFor="room-id"
+                    className="form-label text-start p-0"
+                  >
+                    Room <span className="text-danger">*</span>
+                  </label>
+                  <select
+                    {...register("room")}
+                    id="room-id"
+                    className={`form-select ${errors.room && "is-invalid"}`}
+                  >
+                    <option value="">Select a room</option>
+                    {roomOptions.map((room) => (
+                      <option value={room.id} key={room.id}>
+                        {room.name}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.room && (
+                    <p className="text-danger">{errors.room.message}</p>
+                  )}
+                </div>
               </div>
-              {errors.price && (
-                <p className="text-danger">{errors.price.message}</p>
-              )}
             </div>
 
-            {/* PRODUCT TYPE */}
-            <div className="row mb-3">
-              <label
-                htmlFor="productType"
-                className="form-label text-start p-0"
-              >
-                Product Type <span className="text-danger">*</span>
-              </label>
-              <select
-                {...register("productType")}
-                id="productType"
-                className={`form-select  ${errors.productType && "is-invalid"}`}
-              >
-                <option value="">Select a product type</option>
-                {productTypes.map((productType) => (
-                  <option value={productType.id} key={productType.id}>
-                    {productType.name}
-                  </option>
-                ))}
-              </select>
-              {errors.productType && (
-                <p className="text-danger">{errors.productType.message}</p>
-              )}
-            </div>
+            <div className="col-12 col-lg-5">
+              <div className="row g-2">
+                {/* PRODUCT TYPE */}
+                <div className="col-12">
+                  <label
+                    htmlFor="productType"
+                    className="form-label text-start p-0"
+                  >
+                    Product Type <span className="text-danger">*</span>
+                  </label>
+                  <select
+                    {...register("productType")}
+                    id="productType"
+                    className={`form-select  ${
+                      errors.productType && "is-invalid"
+                    }`}
+                  >
+                    <option value="">Select a product type</option>
+                    {productTypes.map((productType) => (
+                      <option value={productType.id} key={productType.id}>
+                        {productType.name}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.productType && (
+                    <p className="text-danger">{errors.productType.message}</p>
+                  )}
+                </div>
 
-            {/* PRODUCT ROOM */}
-            <div className="row mb-3">
-              <label htmlFor="room-id" className="form-label text-start p-0">
-                Room <span className="text-danger">*</span>
-              </label>
-              <select
-                {...register("room")}
-                id="room-id"
-                className={`form-select ${errors.room && "is-invalid"}`}
-              >
-                <option value="">Select a room</option>
-                {roomOptions.map((room) => (
-                  <option value={room.id} key={room.id}>
-                    {room.name}
-                  </option>
-                ))}
-              </select>
-              {errors.room && (
-                <p className="text-danger">{errors.room.message}</p>
-              )}
-            </div>
+                {/* PRODUCT DURATION */}
+                <div className="col-12">
+                  <label
+                    htmlFor="duration-id"
+                    className="form-label text-start p-0"
+                  >
+                    Duration <span className="text-danger">*</span>
+                  </label>
+                  <select
+                    {...register("duration")}
+                    id="duration-id"
+                    className={`form-select ${errors.duration && "is-invalid"}`}
+                  >
+                    <option value="">Select a duration</option>
+                    {durations.map((duration) => (
+                      <option value={duration.value} key={duration.name}>
+                        {duration.name}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.duration && (
+                    <p className="text-danger">{errors.duration.message}</p>
+                  )}
+                </div>
 
-            {/* PRODUCT DURATION */}
-            <div className="row mb-3">
-              <label
-                htmlFor="duration-id"
-                className="form-label text-start p-0"
-              >
-                Duration <span className="text-danger">*</span>
-              </label>
-              <select
-                {...register("duration")}
-                id="duration-id"
-                className={`form-select ${errors.duration && "is-invalid"}`}
-              >
-                <option value="">Select a duration</option>
-                {durations.map((duration) => (
-                  <option value={duration.value} key={duration.name}>
-                    {duration.name}
-                  </option>
-                ))}
-              </select>
-              {errors.duration && (
-                <p className="text-danger">{errors.duration.message}</p>
-              )}
+                <div className="col-12">
+                  <label
+                    htmlFor="photo-url"
+                    className="form-label text-start p-0"
+                  >
+                    Photo <span className="text-danger">*</span>
+                  </label>
+                  <input
+                    type="file"
+                    multiple
+                    name={"photo"}
+                    ref={imageField.ref}
+                    onChange={imageFieldOnChange}
+                    id="photo"
+                    className={`form-control ${errors.photo && "is-invalid"}`}
+                  />
+                  {errors.photo && (
+                    <p className="text-danger">{errors.photo.message}</p>
+                  )}
+                </div>
+              </div>
             </div>
-
-            <div className="row mb-4">
-              <label htmlFor="photo-url" className="form-label text-start p-0">
-                Photo <span className="text-danger">*</span>
-              </label>
-              <input
-                type="file"
-                multiple
-                name={"photo"}
-                ref={imageField.ref}
-                onChange={imageFieldOnChange}
-                id="photo"
-                className={`form-control ${errors.photo && "is-invalid"}`}
-              />
-              {errors.photo && (
-                <p className="text-danger">{errors.photo.message}</p>
-              )}
-            </div>
-
-            <div className="row mb-3">
-              {roomsError ? <p className="text-danger p-0">roomsError</p> : ""}
-              {productsError ? (
+            <div className="col-12">
+               {roomsError ? (
+                <p className="text-danger p-0">{roomsError}</p>
+              ) : (
+                ""
+              )}{productsError ? (
                 <p className="text-danger p-0">{productsError}</p>
               ) : (
                 ""
               )}
-              <div className="col col-4 p-0">
-                <button type="submit" className="btn btn-success w-100 py-2">
-                  {productsLoadingStatus === "pending" ? (
-                    <LoadingSpinner color={"light"} size={"sm"} />
-                  ) : (
-                    "Submit"
-                  )}
-                </button>
-              </div>
             </div>
-          </form>
-        </div>
+
+            <div className="col-12 col-lg-4 mt-4 p-0">
+              <button type="submit" className="btn btn-success w-100 py-2">
+                {productsLoadingStatus === "pending" ? (
+                  <LoadingSpinner color={"light"} size={"sm"} />
+                ) : (
+                  "Submit"
+                )}
+              </button>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   );
