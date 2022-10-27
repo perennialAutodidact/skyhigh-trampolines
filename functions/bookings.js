@@ -56,7 +56,7 @@ const buildEmailMessage = (
 exports.updateBookingFromStripeEvent = functions
   .firestore.document("stripeEvents/{eventId}")
   .onCreate(async (event, context) => {
-    const sendgridApiKey = secrets.getSecretValue('SENDGRID_API_KEY');
+    const sendgridApiKey = await secrets.getSecretValue('SENDGRID_API_KEY');
     const templateId = process.env.SENDGRID_TEMPLATE_ID;
 
     sendgrid.setApiKey(sendgridApiKey);
@@ -72,7 +72,7 @@ exports.updateBookingFromStripeEvent = functions
         metadata: { bookingId, tax, subTotal, transactionFee, receiptId },
       } = paymentIntent;
 
-      const bookingRef = db.collection("bookings").doc(bookingId);
+      let bookingRef = db.collection("bookings").doc(bookingId);
 
       switch (eventData.type) {
         case "payment_intent.created":
@@ -99,12 +99,12 @@ exports.updateBookingFromStripeEvent = functions
             receiptId: receiptId,
           });
 
-          const booking = await bookingRef.get().then((doc) => doc.data());
+          const booking = await bookingRef.get().then(doc=>doc.data())
+
 
           // send email
           const message = buildEmailMessage(
             templateId,
-            receiptId,
             booking,
             amount,
             tax,
@@ -112,8 +112,6 @@ exports.updateBookingFromStripeEvent = functions
             transactionFee
           );
           
-            functions.logger.log({message})
-
           await sendgrid.send(message);
           break;
         case "payment_intent.cancelled":

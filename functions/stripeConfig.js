@@ -7,21 +7,22 @@ const db = getFirestore();
 
 exports.handleStripeEvent = functions.https.onRequest(async (req, res) => {
   const stripeSecretKey = await secrets.getSecretValue("STRIPE_SECRET_KEY");
-  const stripeSigningSecret = await secrets.getSecretValue(
+  let stripeSigningSecret = await secrets.getSecretValue(
     "STRIPE_HANDLE_EVENT_SECRET"
-  );
+    );
+    if(process.env.NODE_ENV === "DEVELOPMENT"){
+      stripeSigningSecret = process.env.STRIPE_HANDLE_EVENT_SECRET
+    }
 
   let stripe = Stripe(stripeSecretKey);
   let signature = req.get("stripe-signature");
   let event;
   try {
-    functions.logger.log({signature, stripeSigningSecret})
     event = stripe.webhooks.constructEvent(
       req.rawBody,
       signature,
       stripeSigningSecret
     );
-    functions.logger.log({ event });
     await db
       .collection("stripeEvents")
       .doc()
