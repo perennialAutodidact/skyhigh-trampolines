@@ -1,9 +1,9 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { useOnClickOutside } from "../../../hooks/useOnClickOutside";
 import usePlacesAutocomplete from "use-places-autocomplete";
 import styles from "./AddressSearchInput.module.scss";
 
-const AddressSearchInput = ({ formOnChange, setFormValue }) => {
+const AddressSearchInput = ({ formOnChange, defaultValue }) => {
   const {
     ready,
     value,
@@ -36,6 +36,13 @@ const AddressSearchInput = ({ formOnChange, setFormValue }) => {
       formOnChange(description);
       clearSuggestions();
     };
+
+    useEffect(()=>{
+      if(defaultValue && !value){
+        setValue(defaultValue)
+      }
+    }, [defaultValue, setValue, value])
+
   const renderSuggestions = () =>
     data.map((suggestion) => {
       const {
