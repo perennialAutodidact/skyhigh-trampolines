@@ -6,13 +6,15 @@ const secrets = require("./secretsClient");
 const db = getFirestore();
 
 exports.handleStripeEvent = functions.https.onRequest(async (req, res) => {
-  const stripeSecretKey = await secrets.getSecretValue("STRIPE_SECRET_KEY");
-  let stripeSigningSecret = await secrets.getSecretValue(
-    "STRIPE_HANDLE_EVENT_SECRET"
-    );
-    if(process.env.NODE_ENV === "DEVELOPMENT"){
-      stripeSigningSecret = process.env.STRIPE_HANDLE_EVENT_SECRET
-    }
+  let stripeSecretKey =
+    process.env.NODE_ENV === "production"
+      ? await secrets.getSecretValue("STRIPE_SECRET_KEY")
+      : process.env.STRIPE_HANDLE_EVENT_SECRET;
+
+  let stripeSigningSecret =
+    process.env.NODE_ENV === "production"
+      ? await secrets.getSecretValue("STRIPE_HANDLE_EVENT_SECRET")
+      : process.env.STRIPE_HANDLE_EVENT_SECRET;
 
   let stripe = Stripe(stripeSecretKey);
   let signature = req.get("stripe-signature");

@@ -5,7 +5,10 @@ const secrets = require("./secretsClient");
 const db = getFirestore();
 
 exports.createPaymentIntent = functions.https.onCall(async (data, context) => {
-  const stripeSecretKey = await secrets.getSecretValue("STRIPE_SECRET_KEY");
+  const stripeSecretKey =
+    process.env.NODE_ENV === "production"
+      ? await secrets.getSecretValue("STRIPE_SECRET_KEY")
+      : process.env.STRIPE_SECRET_KEY;
   const stripe = Stripe(stripeSecretKey);
   const { amount, metadata } = data;
   try {
@@ -26,7 +29,10 @@ exports.createPaymentIntent = functions.https.onCall(async (data, context) => {
 
 exports.updatePaymentIntent = functions.https.onCall(
   async (paymentIntentData, context) => {
-    const stripeSecretKey = await secrets.getSecretValue("STRIPE_SECRET_KEY");
+    const stripeSecretKey =
+      process.env.NODE_ENV === "production"
+        ? await secrets.getSecretValue("STRIPE_SECRET_KEY")
+        : process.env.STRIPE_SECRET_KEY;
     const stripe = Stripe(stripeSecretKey);
 
     const { id, data } = paymentIntentData;
@@ -40,7 +46,10 @@ exports.updatePaymentIntent = functions.https.onCall(
 
 exports.cancelPaymentIntent = functions.https.onCall(
   async (paymentIntentId, context) => {
-    const stripeSecretKey = secrets.getSecretValue("STRIPE_SECRET_KEY");
+    const stripeSecretKey =
+      process.env.NODE_ENV === "production"
+        ? await secrets.getSecretValue("STRIPE_SECRET_KEY")
+        : process.env.STRIPE_SECRET_KEY;
     const stripe = Stripe(stripeSecretKey);
 
     try {
