@@ -15,6 +15,7 @@ env:
   REACT_APP_FIREBASE_STORAGE_BUCKET: ${{ secrets.REACT_APP_FIREBASE_STORAGE_BUCKET }}
   REACT_APP_STRIPE_PUBLISHABLE_KEY: ${{ secrets.REACT_APP_STRIPE_PUBLISHABLE_KEY }}
   REACT_APP_GOOGLE_PLACES_API_KEY: ${{ secrets.REACT_APP_GOOGLE_PLACES_API_KEY }}
+  
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
@@ -27,26 +28,4 @@ jobs:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_SKYHIGH_TRAMPOLINES }}'
           projectId: skyhigh-trampolines
-          channelId: 'pr-${{ github.event.number }}-${{ github.event.merge.head.ref }}'
-      
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 16.x
-      
-      - uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/functions/package-lock.json') }}
-          restore-keys: |
-              ${{ runner.os }}-node-
-      
-      - name: Build Cloud Functions
-        run: cd functions && npm i
-      
-      - name: Create SA key
-        run: echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}" > $HOME/gcloud.json
-      
-      - name: Deploy Cloud Functions
-        run: |
-          export GOOGLE_APPLICATION_CREDENTIALS=$HOME/gcloud.json
-          npx firebase-tools@latest deploy --project skyhigh-trampolines --only functions --json
+         
