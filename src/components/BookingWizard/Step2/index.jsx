@@ -135,10 +135,10 @@ const Step2 = () => {
   ]);
 
   useEffect(() => {
-    if (rooms && !roomDataIsValid) {
+    if (rooms && !roomDataIsValid() && wizardState.rooms.length===0) {
       wizardDispatch(setInitialRoomState(rooms));
     }
-  }, [wizardDispatch, rooms, roomDataIsValid]);
+  }, [wizardState.rooms, wizardDispatch, rooms, roomDataIsValid]);
 
   const availabilitiesFetched = useRef(false);
   useEffect(() => {

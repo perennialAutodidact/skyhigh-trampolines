@@ -93,10 +93,10 @@ const Step3 = () => {
   }, [addOns, addOnsLoadingStatus, appDispatch, wizardDispatch]);
 
   useEffect(() => {
-    if (addOns) {
+    if (addOns && !addOnsDataIsValid() && wizardState.addOns.length===0) {
       wizardDispatch(setInitialAddOnState(addOns));
     }
-  }, [wizardDispatch, addOns]);
+  }, [wizardState.addOns, wizardDispatch, addOns, addOnsDataIsValid]);
 
   if (
     addOnsLoadingStatus === "pending" ||
