@@ -121,7 +121,7 @@ const BookingsList = () => {
                     <td>{getTotalHeadCount(booking.rooms)}</td>
                     <td>
                       {booking.grandTotal
-                        ? `$${booking.grandTotal / 100}`
+                        ? `$${(booking.grandTotal / 100).toFixed(2)}`
                         : "N/A"}
                     </td>
                     <td>{booking.customer?.fullName || "N/A"}</td>
