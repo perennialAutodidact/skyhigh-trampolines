@@ -27,6 +27,7 @@ jobs:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_SKYHIGH_TRAMPOLINES }}'
           projectId: skyhigh-trampolines
+          channelId: 'pr-${{ github.event.number }}-${{ github.event.merge.head.ref }}'
       
       - uses: actions/setup-node@v1
         with:
