@@ -1,13 +1,23 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { BookingWizardContext } from "../context";
 import styles from "./ThankYou.module.scss";
 import { toMoney, getBookedRooms, getSelectedAddOns } from "../context/utils";
+import { clearPaymentIntent } from "../../../redux/stripeSlice";
 
 const ThankYou = () => {
+  const appDispatch = useDispatch();
+  const {paymentIntent} = useSelector(appState=>appState.stripe)
   const [wizardState] = useContext(BookingWizardContext);
 
   const bookedRooms = getBookedRooms(wizardState.rooms);
   const selectedAddOns = getSelectedAddOns(wizardState.addOns);
+
+  useEffect(()=>{
+    if(paymentIntent.id){
+      appDispatch(clearPaymentIntent())
+    }
+  },[paymentIntent, appDispatch])
 
   return (
     <div className="container-fluid pt-3 pb-5">
