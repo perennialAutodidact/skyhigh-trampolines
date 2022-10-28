@@ -13,6 +13,7 @@ import Admin from "./components/Admin";
 import Login from "./components/Admin/Login/Login";
 import Navbar from "./components/Navbar";
 import Homepage from "./components/Homepage";
+import About from "./components/About";
 import BookingWizard from "./components/BookingWizard";
 import ProductData from "./components/Products";
 import ProductForm from "./components/Products/ProductForm";
@@ -38,6 +39,7 @@ function App() {
       setToggleSidebar(false);
     }
   }, [breakpoint, setToggleSidebar]);
+  
   return (
     <div className="container-fluid p-0 overflow-hidden">
       <Navbar setToggleSidebar={setToggleSidebar} />
@@ -75,6 +77,7 @@ function App() {
           </Route>
 
           <Route path="/" element={<Homepage />} />
+          <Route path="/about" element={<About />} />
           <Route path="/login" element={<Login />} />
           <Route path="/booking/*" element={<BookingWizard />} />
         </Routes>
