@@ -2,17 +2,23 @@ import React, { useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { cancelPaymentIntent } from "../../redux/stripeSlice";
 import { Link } from "react-router-dom";
-import styled from "./Homepage.module.scss";
+import styles from "./Homepage.module.scss";
 import { cancelBooking } from "../../redux/bookingsSlice";
 import { useOnLoadImages } from "../../hooks/useOnLoadImages";
+import { useBreakpoint } from "hooks/useBreakpoint";
 import LoadingSpinner from "../LoadingSpinner";
+import AnimatedMask from "components/About/AnimatedMask";
+import { gsap } from "gsap";
+import { BsClouds } from "react-icons/bs";
 
 const Homepage = () => {
   const appDispatch = useDispatch();
   const { paymentIntent } = useSelector((appState) => appState.stripe);
   const { bookingInProgress } = useSelector((appState) => appState.bookings);
   const homePageRef = useRef(null);
+  const q = gsap.utils.selector(homePageRef);
   const imagesLoaded = useOnLoadImages(homePageRef);
+  const breakpoint = useBreakpoint();
 
   useEffect(() => {
     if (paymentIntent.id) {
@@ -23,6 +29,8 @@ const Homepage = () => {
     }
   }, [paymentIntent, bookingInProgress, appDispatch]);
 
+  useEffect(() => {}, []);
+
   return (
     <div ref={homePageRef}>
       {!imagesLoaded ? (
@@ -30,29 +38,48 @@ const Homepage = () => {
           <LoadingSpinner />
         </div>
       ) : (
-        <section className={`${styled.homepage} position-relative`}>
-          <figure className="h-100 w-100 position-relative">
-            <img
-              className="img-fluid h-100 w-100"
-              src="https://images.unsplash.com/photo-1612985838143-47ffc9b76532?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1175&q=80"
-              alt="Women jumping in trampoline"
-            />
-          </figure>
-
-          <div
-            className={`${styled.overlay} position-absolute d-flex justify-content-center align-items-center w-100 bg-overlay bg-opacity-50`}
-          >
-            <button
-              type="button"
-              className="btn btn-light btn-lg rounded shadow"
-            >
-              <Link
-                to="/booking"
-                className="text-decoration-none link-dark fs-5 fw-bold"
+        <section
+          className={`container-fluid position-relative ${styles.homepage}`}
+        >
+          <div className="row">
+            <div className="col-12 px-0">
+              <h1 className="my-3 text-center">Sky High Trampoline Park</h1>
+              <AnimatedMask />
+            </div>
+            <div className={`col-12 p-0 position-relative ${styles.content}`}>
+              <div
+                className={`${styles.darkBlueCircle}
+                  bg-secondary rounded-circle
+                  pe-md-5
+                  d-flex
+                  justify-content-center 
+                  justify-content-md-start
+                  position-absolute text-light
+                `}
+                id="large-circle"
+              ></div>
+              <div
+                className={`${styles.lightGrayCircle} bg-light rounded-circle position-absolute`}
+                id="small-circle"
+              ></div>
+              <div
+                className={`${styles.lightBlueCircle}
+                  bg-info p-4
+                  border border-5 border-white
+                  rounded-circle 
+                  d-flex 
+                  justify-content-center
+                  position-absolute
+                `}
+                id="medium-circle"
               >
-                Buy Tickets
-              </Link>
-            </button>
+                <Link to="/booking">
+                  <button className="btn btn-primary btn-lg fs-1 p-3 mt-5 px-5 px-3 shadow">
+                    Book Now
+                  </button>
+                </Link>
+              </div>
+            </div>
           </div>
         </section>
       )}

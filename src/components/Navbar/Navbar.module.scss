@@ -1,8 +1,9 @@
-@use '../../styles/bootstrap-setup'as *;
+@use "../../styles/bootstrap-setup" as *;
 
 nav {
   height: 8vh;
   position: relative;
+  z-index: 100;
 
   .logout,
   .icon {

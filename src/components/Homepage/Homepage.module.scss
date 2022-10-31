@@ -1,15 +1,78 @@
+@import "../../styles/team-sapphire-variables";
+
 .homepage {
-    height: 92vh;
+  overflow: hidden;
+  height: 92vh;
+}
 
-    figure {
-        img {
-            object-fit: cover;
-        }
-    }
+.content {
+  height: 10vh;
 
-    .overlay {
-        background: rgba(0, 0, 0, 0.5);
-        top: 0;
-        height: 92vh;
-    }
+  z-index: 1;
+}
+
+.darkBlueCircle {
+  height: 110vw;
+  width: 110vw;
+
+  left: -50vw;
+  top: -5vh;
+
+  z-index: 1;
+}
+
+.lightBlueCircle {
+  height: 110vw;
+  width: 110vw;
+
+  top: -5vh;
+  left: -5vw;
+
+  z-index: 4;
+}
+
+.lightGrayCircle {
+  height: 110vw;
+  width: 110vw;
+
+  top: -5vh;
+  left: 50vw;
+
+  z-index: 2;
+}
+
+@media screen and (min-width: 768px) {
+  .content {
+    height: 15vh;
+  }
+
+  .darkBlueCircle {
+    height: 110vw;
+    width: 110vw;
+
+    left: -50vw;
+    top: -7vh;
+
+    z-index: 1;
+  }
+
+  .lightBlueCircle {
+    height: 110vw;
+    width: 110vw;
+
+    top: -10vh;
+    left: -5vw;
+
+    z-index: 4;
+  }
+
+  .lightGrayCircle {
+    height: 110vw;
+    width: 110vw;
+
+    top: -7vh;
+    left: 40vw;
+
+    z-index: 2;
+  }
 }

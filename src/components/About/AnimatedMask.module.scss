@@ -1,0 +1,17 @@
+.mask {
+  mask-repeat: no-repeat;
+  display: block;
+  height: 68vh;
+  width: 100%;
+}
+
+.img {
+  height: 100%;
+  width: 100%;
+}
+
+@media screen and (min-width: 768px) {
+  .mask {
+    // height: 62vh;
+  }
+}

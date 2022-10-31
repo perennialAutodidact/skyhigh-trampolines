@@ -39,11 +39,11 @@ function App() {
       setToggleSidebar(false);
     }
   }, [breakpoint, setToggleSidebar]);
-  
+
   return (
     <div className="container-fluid p-0 overflow-hidden">
       <Navbar setToggleSidebar={setToggleSidebar} />
-      <div style={{ paddingTop: "8vh" }}>
+      <div style={{ paddingTop: "8vh" }} className="position-relative ">
         <Routes>
           <Route
             path="/admin"
