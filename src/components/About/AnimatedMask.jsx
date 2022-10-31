@@ -33,8 +33,11 @@ const AnimatedMask = () => {
     if (maskRef.current) {
       const mask = maskRef.current;
       const maskImageSize = windowSize.width / shrinkFactor;
+      console.log(windowSize);
       mask.style.maskSize = `${maskImageSize}px ${maskImageSize}px`;
+      mask.style.WebkitMaskSize = `${maskImageSize}px ${maskImageSize}px`;
       mask.style.maskImage = `url("images/kid${maskImageIndex}.png")`;
+      mask.style.WebkitMaskImage = `url("images/kid${maskImageIndex}.png")`;
 
       const ctx = gsap.context(() => {
         tl.current = gsap.timeline({
@@ -48,18 +51,21 @@ const AnimatedMask = () => {
           breakpoint === "sm"
             ? bgWidth / 2 - maskImageSize / 2
             : Math.random() * (windowSize.width - maskImageSize);
-        console.log(xPos);
+
         tl.current
           .set(mask, {
             maskPosition: `${xPos}px ${bgHeight}px`,
+            WebkitMaskImage: `${xPos}px ${bgHeight}px`,
           })
           .to(mask, {
             maskPosition: `${xPos}px 0`,
+            WebkitMaskPosition: `${xPos}px 0`,
             ease: "sine.out",
             duration: 2,
           })
           .to(mask, {
             maskPosition: `${xPos}px ${bgHeight}px`,
+            WebkitMaskPosition: `${xPos}px ${bgHeight}px`,
             ease: "sine.in",
             duration: 2,
           });
