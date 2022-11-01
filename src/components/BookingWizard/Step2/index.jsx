@@ -135,40 +135,40 @@ const Step2 = () => {
   ]);
 
   useEffect(() => {
-    if (rooms && !roomDataIsValid() && wizardState.rooms.length===0) {
+    if (rooms && !roomDataIsValid() && wizardState.rooms.length === 0) {
       wizardDispatch(setInitialRoomState(rooms));
     }
   }, [wizardState.rooms, wizardDispatch, rooms, roomDataIsValid]);
 
-  const availabilitiesFetched = useRef(false);
-  useEffect(() => {
-    const date = wizardState.formData.date;
-    if (!availabilitiesFetched.current) {
-      appDispatch(getBookingsByDate(date)).then(
-        () => (availabilitiesFetched.current = true)
-      );
-    }
-    if (bookingsByDate[date]) {
-      bookingsByDate[date].forEach((room) => {
-        let availabilities = getRoomAvailabilities(
-          room,
-          wizardState.startTimes
-        );
-        if (availabilities !== room.availabilities) {
-          wizardDispatch(setRoomAvailabilities(room.id, availabilities));
-          let disabledTimes = getDisabledTimes(availabilities);
-          wizardDispatch(setDisabledTimes(room.id, disabledTimes));
-        }
-      });
-    }
-  }, [
-    bookingsByDate,
-    bookingLoading,
-    wizardState.formData.date,
-    appDispatch,
-    wizardState.startTimes,
-    wizardDispatch,
-  ]);
+  // const availabilitiesFetched = useRef(false);
+  // useEffect(() => {
+  //   const date = wizardState.formData.date;
+  //   if (!availabilitiesFetched.current) {
+  //     appDispatch(getBookingsByDate(date)).then(
+  //       () => (availabilitiesFetched.current = true)
+  //     );
+  //   }
+  //   if (bookingsByDate[date]) {
+  //     bookingsByDate[date].forEach((room) => {
+  //       let availabilities = getRoomAvailabilities(
+  //         room,
+  //         wizardState.startTimes
+  //       );
+  //       if (availabilities !== room.availabilities) {
+  //         wizardDispatch(setRoomAvailabilities(room.id, availabilities));
+  //         let disabledTimes = getDisabledTimes(availabilities);
+  //         wizardDispatch(setDisabledTimes(room.id, disabledTimes));
+  //       }
+  //     });
+  //   }
+  // }, [
+  //   bookingsByDate,
+  //   bookingLoading,
+  //   wizardState.formData.date,
+  //   appDispatch,
+  //   wizardState.startTimes,
+  //   wizardDispatch,
+  // ]);
 
   if (roomsLoadingState === "pending") {
     return (
