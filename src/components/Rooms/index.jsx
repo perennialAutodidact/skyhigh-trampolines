@@ -33,7 +33,10 @@ const RoomsList = () => {
           ) : (
             <div className="row border-bottom pt-3 pb-5 d-flex justify-content-center gap-3">
               {rooms.map((room) => (
-                <div className="col-12 col-lg-4 p-3 border rounded shadow">
+                <div
+                  className="col-12 col-lg-4 p-3 border rounded shadow"
+                  key={room.id}
+                >
                   <div className="row">
                     <div className="col-4">
                       <img

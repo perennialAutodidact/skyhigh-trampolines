@@ -55,16 +55,16 @@ const DailyAvailability = () => {
         <LoadingSpinner />
       ) : (
         <div className="container">
+          <ColorLegend />
           <div className="row justify-content-center mt-4 gx-5">
             {bookingsByDate[selectedDate].map((room) => (
-              <div className="col-12 col-lg-6">
+              <div className="col-12 col-lg-6" key={room.id}>
                 <h2 className="text-center">{room.name}</h2>
                 <p className="text-center">Capacity: {room.capacity}</p>
                 <AvailabilityGrid room={room} />
               </div>
             ))}
           </div>
-          <ColorLegend />
         </div>
       )}
     </div>

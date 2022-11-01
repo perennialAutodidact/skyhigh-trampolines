@@ -35,7 +35,10 @@ const AllAddOns = () => {
           ) : (
             <div className="row border-bottom justify-content-center py-3 gap-4">
               {addOns.map((addOn) => (
-                <div className="col-12 col-lg-4 p-3 border rounded shadow">
+                <div
+                  className="col-12 col-lg-4 p-3 border rounded shadow"
+                  key={addOn.id}
+                >
                   <div className="row">
                     <div className="col-4">
                       <img

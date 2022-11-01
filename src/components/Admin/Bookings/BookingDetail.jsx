@@ -41,7 +41,7 @@ const BookingDetail = () => {
         Back
       </Link>
       <div className="row bg-white rounded gy-4 mt-3">
-        <div className="col-12 col-lg-6 offset-lg-3">
+        <div className="col-12 col-md-6 offset-md-3">
           <h3 className="fw-bold order-details pt-3">Order Details</h3>
           <div className="border-top pt-3">
             <div className="d-flex align-items-center gap-2">
@@ -70,7 +70,7 @@ const BookingDetail = () => {
                       <BsClock /> {room.startTime}
                     </div>
                     {room.products.map((product) => (
-                      <div className="row mt-2">
+                      <div className="row mt-2" key={product.id}>
                         <div className="col-6">{product.name}</div>
                         <div className="col-3 text-center">
                           {product.quantity}
@@ -122,7 +122,7 @@ const BookingDetail = () => {
           </div>
         </div>
 
-        <div className="col-12 col-lg-6 offset-lg-3 pb-5">
+        <div className="col-12 col-md-6 offset-md-3 pb-5">
           <h4>Customer Information</h4>
           <div className="row mt-2 gy-2">
             <div className="col-12">

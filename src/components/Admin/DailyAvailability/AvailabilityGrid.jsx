@@ -41,13 +41,15 @@ const AvailabilityGrid = ({ room }) => {
           <tr>
             <td className="bg-light border-end"></td>
             {ticketTypes.map((ticketType) => (
-              <td className="text-center">{ticketType}</td>
+              <td className="text-center" key={ticketType}>
+                {ticketType}
+              </td>
             ))}
           </tr>
         </thead>
         <tbody>
           {times.map((time) => (
-            <tr>
+            <tr key={`${room.id}-${time}`}>
               <td className="text-center">{time}</td>
               {ticketNames.map((ticketName) =>
                 isValidTime(time, ticketName) ? (
@@ -56,11 +58,17 @@ const AvailabilityGrid = ({ room }) => {
                       getTicketCount(time, ticketName),
                       room.capacity
                     )}`}
+                    key={`${room.id}-${ticketName}`}
                   >
                     {getTicketCount(time, ticketName).toString()}
                   </td>
                 ) : (
-                  <td className="text-center bg-light">-</td>
+                  <td
+                    className="text-center bg-light"
+                    key={`${room.id}-${ticketName}`}
+                  >
+                    -
+                  </td>
                 )
               )}
             </tr>

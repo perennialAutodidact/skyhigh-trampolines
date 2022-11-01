@@ -34,7 +34,10 @@ const ProductData = () => {
               ) : (
                 <div className="row border-bottom pt-3 pb-5 gap-4 d-flex justify-content-center">
                   {products.map((product) => (
-                    <div className="col-12 col-lg-3 p-3 border rounded shadow">
+                    <div
+                      className="col-12 col-lg-3 p-3 border rounded shadow"
+                      key={product.id}
+                    >
                       <div className="row">
                         <div className="col-4">
                           <img
