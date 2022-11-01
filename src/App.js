@@ -1,6 +1,6 @@
 import "./App.scss";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { Route, Routes } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./firebase/client";
@@ -23,26 +23,38 @@ import AddOnsList from "./components/AddOns";
 import AddOnForm from "./components/AddOns/AddOnForm";
 import DailyAvailability from "./components/Admin/DailyAvailability";
 import { useBreakpoint } from "./hooks/useBreakpoint";
+import { useOnClickOutside } from "./hooks/useOnClickOutside";
+import { useEffect } from "react";
 
 function App() {
   const [user, loading] = useAuthState(auth);
-  // state to toggle sidebar in admin
-
-  const [toggleSidebar, setToggleSidebar] = useState(false);
-  //
-
   const breakpoint = useBreakpoint();
-  useEffect(() => {
-    if (["md", "lg"].includes(breakpoint)) {
-      setToggleSidebar(true);
-    } else {
-      setToggleSidebar(false);
+  const [showSidebar, setShowSidebar] = useState(breakpoint === "lg");
+
+  const sidebarRef = useRef(null);
+  const hamburgerRef = useRef(null);
+
+  const clickOutsideHandler = useCallback(() => {
+    if (breakpoint === "sm") {
+      setShowSidebar(false);
     }
-  }, [breakpoint, setToggleSidebar]);
+  }, [breakpoint, setShowSidebar]);
+
+  useOnClickOutside([sidebarRef, hamburgerRef], () => {
+    clickOutsideHandler();
+  });
+
+  useEffect(() => {
+    setShowSidebar(breakpoint === "lg");
+  }, [breakpoint]);
 
   return (
-    <div className="container-fluid p-0 overflow-hidden">
-      <Navbar setToggleSidebar={setToggleSidebar} />
+    <div className="container-fluid bg-light min-vh-100 min-vw-100 p-0">
+      <Navbar
+        setShowSidebar={setShowSidebar}
+        showSidebar={showSidebar}
+        hamburgerRef={hamburgerRef}
+      />
       <div style={{ paddingTop: "8vh" }} className="position-relative ">
         <Routes>
           <Route
@@ -50,8 +62,9 @@ function App() {
             element={
               <ProtectedRoute isAllowed={!!user} loading={loading}>
                 <Admin
-                  toggleSidebar={toggleSidebar}
-                  setToggleSidebar={setToggleSidebar}
+                  showSidebar={showSidebar}
+                  setShowSidebar={setShowSidebar}
+                  sidebarRef={sidebarRef}
                 />
               </ProtectedRoute>
             }

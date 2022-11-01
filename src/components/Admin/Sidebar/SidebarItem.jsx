@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 
 const SidebarItem = (props) => {
-  const { item, setToggleSidebar, breakpoint } = props;
+  const { item, showSidebar, setShowSidebar, breakpoint } = props;
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -27,8 +27,8 @@ const SidebarItem = (props) => {
               key={menu.id}
               onClick={() => {
                 navigate(`${menu.path}`);
-                if (breakpoint === "sm") {
-                  setToggleSidebar(false);
+                if (["sm", "md"].includes(breakpoint)) {
+                  setShowSidebar(false);
                 }
               }}
             >

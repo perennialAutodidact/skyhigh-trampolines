@@ -11,10 +11,11 @@ import { VscThreeBars } from "react-icons/vsc";
 import { BsClouds } from "react-icons/bs";
 import styled from "./Navbar.module.scss";
 import { useOnClickOutside } from "../../hooks/useOnClickOutside";
+import { useCallback } from "react";
 
 const Navbar = (props) => {
   const dispatch = useDispatch();
-  const { setToggleSidebar } = props;
+  const { showSidebar, setShowSidebar, hamburgerRef } = props;
   const [user] = useAuthState(auth);
   const location = useLocation();
   const [showLogout, setShowLogout] = useState(false);
@@ -23,7 +24,7 @@ const Navbar = (props) => {
   const toggleShowLogout = () => setShowLogout((state) => !state);
 
   const userDropdownRef = useRef(null);
-  useOnClickOutside(userDropdownRef, () =>
+  useOnClickOutside([userDropdownRef], () =>
     setShowLogout(showLogout ? !showLogout : showLogout)
   );
 
@@ -34,19 +35,23 @@ const Navbar = (props) => {
     setShowLogout(false);
   };
   // toggle sidebar state
-  const handleSidebar = () => setToggleSidebar((state) => !state);
+  const toggleSidebar = useCallback(() => {
+    setShowSidebar((showSidebar) => !showSidebar);
+  }, [setShowSidebar, showSidebar]);
 
   return (
-    <nav className="border-bottom position-fixed w-100 bg-white container-fluid d-flex flex-column justify-content-center">
+    <nav className="border-bottom position-fixed  bg-white container-fluid d-flex flex-column justify-content-center">
       <div className="row">
         <div className="col-12 col-lg-6 d-flex justify-content-between justify-content-lg-start align-items-center">
           <div className=" d-flex align-items-center gap-2">
             {user && location.pathname.startsWith("/admin") && (
-              <VscThreeBars
-                size={22}
-                onClick={handleSidebar}
-                className={`${styled.icon} d-md-none`}
-              />
+              <div
+                className="d-lg-none"
+                ref={hamburgerRef}
+                onClick={toggleSidebar}
+              >
+                <VscThreeBars size={22} className={`${styled.icon}`} />
+              </div>
             )}
             <Link to={"/"} className="text-decoration-none link-dark">
               <h3 className="p-0 m-0 d-flex align-items-center gap-1">

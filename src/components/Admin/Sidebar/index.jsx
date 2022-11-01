@@ -5,43 +5,40 @@ import styled from "./Sidebar.module.scss";
 import { sidebarData } from "./sidebarData";
 import SidebarItem from "./SidebarItem";
 import { HiOutlineUserCircle } from "react-icons/hi";
-import { useOnClickOutside } from "../../../hooks/useOnClickOutside";
 import { useBreakpoint } from "../../../hooks/useBreakpoint";
 import { VscChromeClose } from "react-icons/vsc";
 
 const Sidebar = (props) => {
-  const { toggleSidebar, setToggleSidebar } = props;
+  const { showSidebar, setShowSidebar, sidebarRef } = props;
   const [user] = useAuthState(auth);
-  const sidebarRef = useRef(null);
 
   const breakpoint = useBreakpoint();
-  const clickOutsideHandler = useCallback(() => {
-    if (!["md", "lg"].includes(breakpoint)) {
-      setToggleSidebar(false);
-    }
-  }, [breakpoint, setToggleSidebar]);
-
-  useOnClickOutside(sidebarRef, () => {
-    clickOutsideHandler();
-  });
 
   // apply styles to sidebar based on showSidebar state
   const visibility = useMemo(
-    () => (toggleSidebar ? "sidebar__show" : "sidebar__hide"),
-    [toggleSidebar]
+    () => (showSidebar ? "sidebar__show" : "sidebar__hide"),
+    [showSidebar]
   );
 
   return (
     <>
       <aside
-        className={`${styled.sidebar} nav flex-column border-end bg-white ${styled[visibility]}`}
+        className={`${
+          styled.sidebar
+        } nav flex-column border-end bg-white shadow ${styled[visibility]}
+        ${
+          showSidebar
+            ? `d-block ${breakpoint === "lg" ? "col-2" : "col-6"}`
+            : "d-none"
+        }
+        `}
         ref={sidebarRef}
       >
         {!["md", "lg"].includes(breakpoint) && (
           <div className="px-3 py-4">
             <VscChromeClose
               size={22}
-              onClick={() => setToggleSidebar(false)}
+              onClick={() => setShowSidebar(false)}
               className={`${styled.icon} d-md-none`}
             />
           </div>
@@ -51,8 +48,8 @@ const Sidebar = (props) => {
             <SidebarItem
               key={index}
               item={item}
-              toggleSidebar={toggleSidebar}
-              setToggleSidebar={setToggleSidebar}
+              showSidebar={showSidebar}
+              setShowSidebar={setShowSidebar}
               breakpoint={breakpoint}
             />
           ))}
