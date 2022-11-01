@@ -62,7 +62,7 @@ const BookingWizard = () => {
 
   return (
     <BookingWizardContext.Provider value={[wizardState, wizardDispatch]}>
-      <div className="container">
+      <div className="container bg-white py-5 mb-5">
         {!isThankYouPage && <h1 className="text-center">Booking</h1>}
         {!isThankYouPage && <ProgressBar />}
         <div className="row">
