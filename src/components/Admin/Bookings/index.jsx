@@ -74,63 +74,66 @@ const BookingsList = () => {
             </button>
           </div>
         </div>
-      </div>
-      <div className="col-12">
-        <div className="table-responsive">
-          <table className="table mt-4">
-            <thead>
-              <tr>
-                {headerNames.map((headerName) => (
-                  <th>{headerName}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {bookingsPage.length === 0 ? (
-                <div className="my-5">
-                  <h4>No bookings</h4>
-                </div>
-              ) : (
-                bookingsPage.map((booking) => (
-                  <tr>
-                    <td>{booking.date}</td>
-                    <td>
-                      {booking.receiptId ? (
-                        <Link
-                          to={`/admin/bookings/${booking.id}`}
-                          className="link-dark"
-                        >
-                          {formatReceiptId(booking.receiptId)}
-                        </Link>
-                      ) : (
-                        <span className="text-muted">{booking.status}</span>
-                      )}
-                    </td>
-                    <td>
-                      <div className="d-flex flex-column gap-2">
-                        {booking.rooms.map((room) => (
-                          <div className="d-flex gap-2 align-items-start align-items-lg-center">
-                            <div className="badge bg-info">
-                              {room.startTime}
+        <div className="col-12 justify-content-center">
+          <div className="table-responsive">
+            <table className="table table-responsive bg-white border mt-4">
+              <thead>
+                <tr>
+                  {headerNames.map((headerName) => (
+                    <th key={headerName}>{headerName}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {bookingsPage.length === 0 ? (
+                  <div className="my-5">
+                    <h4>No bookings</h4>
+                  </div>
+                ) : (
+                  bookingsPage.map((booking) => (
+                    <tr key={booking.id}>
+                      <td>{booking.date}</td>
+                      <td>
+                        {booking.receiptId ? (
+                          <Link
+                            to={`/admin/bookings/${booking.id}`}
+                            className="link-dark"
+                          >
+                            {formatReceiptId(booking.receiptId)}
+                          </Link>
+                        ) : (
+                          <span className="text-muted">{booking.status}</span>
+                        )}
+                      </td>
+                      <td>
+                        <div className="d-flex flex-column gap-2">
+                          {booking.rooms.map((room) => (
+                            <div
+                              className="d-flex gap-2 align-items-start align-items-lg-center"
+                              key={room.id}
+                            >
+                              <div className="badge bg-info">
+                                {room.startTime}
+                              </div>
+                              <div>{room.name}</div>
                             </div>
-                            <div>{room.name}</div>
-                          </div>
-                        ))}
-                      </div>
-                    </td>
-                    <td>{getTotalHeadCount(booking.rooms)}</td>
-                    <td>
-                      {booking.grandTotal
-                        ? `$${(booking.grandTotal / 100).toFixed(2)}`
-                        : "N/A"}
-                    </td>
-                    <td>{booking.customer?.fullName || "N/A"}</td>
-                    <td>{booking.customer?.email || "N/A"}</td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                          ))}
+                        </div>
+                      </td>
+                      <td>{getTotalHeadCount(booking.rooms)}</td>
+                      <td>
+                        {booking.grandTotal
+                          ? `$${(booking.grandTotal / 100).toFixed(2)}`
+                          : "N/A"}
+                      </td>
+                      <td>{booking.customer?.fullName || "N/A"}</td>
+                      <td>{booking.customer?.email || "N/A"}</td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
