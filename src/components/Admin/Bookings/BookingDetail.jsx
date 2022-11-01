@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getBookingById } from "../../../redux/bookingsSlice";
@@ -15,11 +15,13 @@ const BookingDetail = () => {
     (appState) => appState.bookings
   );
 
+  const bookingFetched = useRef(false);
   useEffect(() => {
-    if (!booking && bookingLoadingStatus !== "pending") {
+    if (!bookingFetched.current && bookingLoadingStatus !== "pending") {
+      bookingFetched.current = true;
       appDispatch(getBookingById(id));
     }
-  }, [booking, id, bookingLoadingStatus, appDispatch]);
+  }, [id, bookingLoadingStatus, appDispatch]);
 
   if (bookingLoadingStatus === "pending") {
     return (
@@ -29,12 +31,16 @@ const BookingDetail = () => {
     );
   }
 
-  return booking !== null ? (
+  return !booking ? (
+    <div className="my-5">
+      <div className="text-center">{`No booking found with id ${id}`}</div>
+    </div>
+  ) : (
     <div className="container-fluid mb-5">
       <Link to="/admin" className="link-dark text-decoration-none">
         Back
       </Link>
-      <div className="row">
+      <div className="row bg-white rounded gy-4 mt-3">
         <div className="col-12 col-lg-6 offset-lg-3">
           <h3 className="fw-bold order-details pt-3">Order Details</h3>
           <div className="border-top pt-3">
@@ -107,7 +113,7 @@ const BookingDetail = () => {
                 ${toMoney((booking.receipt.tax / 100) * 100)}
               </div>
             </div>
-            <div className="row mt-3">
+            <div className="row mt-3 border-bottom">
               <h5 className="col-9 text-end fw-bold">Grand Total</h5>
               <div className="col-3 text-center">
                 ${toMoney((booking.receipt.grandTotal / 100) * 100)}
@@ -115,10 +121,8 @@ const BookingDetail = () => {
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="row mt-5">
-        <div className="col-12 col-lg-6 offset-lg-3">
+        <div className="col-12 col-lg-6 offset-lg-3 pb-5">
           <h4>Customer Information</h4>
           <div className="row mt-2 gy-2">
             <div className="col-12">
@@ -134,28 +138,22 @@ const BookingDetail = () => {
               <div>{booking.customer.address}</div>
             </div>
           </div>
-        </div>
-      </div>
 
-      <div className="row mt-3">
-        <div className="col-12 col-lg-6 offset-lg-3">
-          <h5>Waiver Signature</h5>
-          {booking.signature ? (
-            <img
-              className="border border-2 border-dotted"
-              src={booking.signature}
-              alt="signature"
-              width="100%"
-            />
-          ) : (
-            "The waiver has not been signed."
-          )}
+          <div className="col-12 mt-3">
+            <h5>Waiver Signature</h5>
+            {booking.signature ? (
+              <img
+                className="border border-2 border-dotted"
+                src={booking.signature}
+                alt="signature"
+                width="100%"
+              />
+            ) : (
+              "The waiver has not been signed."
+            )}
+          </div>
         </div>
       </div>
-    </div>
-  ) : (
-    <div className="my-5">
-      <div className="text-center">{`No booking found with id ${id}`}</div>
     </div>
   );
 };
