@@ -18,7 +18,7 @@ const AddressSearchInput = ({ formOnChange, defaultValue }) => {
   });
 
   let autoCompleteRef = useRef(null);
-  useOnClickOutside(autoCompleteRef, () => {
+  useOnClickOutside([autoCompleteRef], () => {
     clearSuggestions();
   });
 
@@ -37,11 +37,11 @@ const AddressSearchInput = ({ formOnChange, defaultValue }) => {
       clearSuggestions();
     };
 
-    useEffect(()=>{
-      if(defaultValue && !value){
-        setValue(defaultValue)
-      }
-    }, [defaultValue, setValue, value])
+  useEffect(() => {
+    if (defaultValue && !value) {
+      setValue(defaultValue);
+    }
+  }, [defaultValue, setValue, value]);
 
   const renderSuggestions = () =>
     data.map((suggestion) => {

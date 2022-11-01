@@ -81,7 +81,10 @@ const Step4 = () => {
             control={control}
             name="address"
             render={({ field }) => (
-              <AddressSearchInput formOnChange={field.onChange} defaultValue={field.value} />
+              <AddressSearchInput
+                formOnChange={field.onChange}
+                defaultValue={field.value}
+              />
             )}
           />
           {errors.address && (
