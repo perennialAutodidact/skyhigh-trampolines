@@ -33,9 +33,10 @@ const AnimatedMask = () => {
     if (maskRef.current) {
       const mask = maskRef.current;
       const maskImageSize = windowSize.width / shrinkFactor;
-      console.log(windowSize);
+
       mask.style.maskSize = `${maskImageSize}px ${maskImageSize}px`;
       mask.style.WebkitMaskSize = `${maskImageSize}px ${maskImageSize}px`;
+
       mask.style.maskImage = `url("images/kid${maskImageIndex}.png")`;
       mask.style.WebkitMaskImage = `url("images/kid${maskImageIndex}.png")`;
 
