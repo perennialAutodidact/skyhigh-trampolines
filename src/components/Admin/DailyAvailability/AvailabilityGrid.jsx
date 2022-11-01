@@ -29,8 +29,8 @@ const AvailabilityGrid = ({ room }) => {
   };
 
   return (
-    <div className="container shadow p-0 border mb-5">
-      <table className="table m-0">
+    <div className="container rounded shadow p-0 border mb-5">
+      <table className="table bg-white rounded m-0">
         <thead>
           <tr className="fw-bold">
             <td className="text-center border-end">Time</td>
