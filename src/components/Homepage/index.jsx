@@ -59,13 +59,12 @@ const Homepage = () => {
                 id="large-circle"
               ></div>
               <div
-                className={`${styles.lightGrayCircle} bg-light rounded-circle position-absolute`}
+                className={`${styles.lightGrayCircle} bg-white rounded-circle position-absolute`}
                 id="small-circle"
               ></div>
               <div
                 className={`${styles.lightBlueCircle}
-                  bg-info p-4
-                  border border-5 border-white
+                  bg-info p-4 shadow
                   rounded-circle 
                   d-flex 
                   justify-content-center

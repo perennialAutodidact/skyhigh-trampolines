@@ -25,7 +25,7 @@ const Admin = (props) => {
             />
           </div>
 
-          <div className={`container-fluid pt-3 ${styled.content}`}>
+          <div className={`container-fluid pt-3`}>
             <div className="row">
               <div className="pt-1 pb-1 col-lg-10 offset-lg-2">
                 {/* outlet to display nested routes */}
