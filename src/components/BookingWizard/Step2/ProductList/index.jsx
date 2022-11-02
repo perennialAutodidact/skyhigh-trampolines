@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import ProductListItem from "./ProductListItem";
 
-const ProductList = ({ room }) => {
+const ProductList = ({ room, fieldChangeHandler }) => {
   const availableProducts = useMemo(
     () =>
       room.products.filter(
@@ -18,6 +18,7 @@ const ProductList = ({ room }) => {
           product={product}
           roomId={room.id}
           key={product.id}
+          fieldChangeHandler={fieldChangeHandler}
           availableQuantity={
             room.availabilities[room.selectedStartTime][product.duration]
           }

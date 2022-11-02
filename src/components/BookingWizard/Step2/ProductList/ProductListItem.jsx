@@ -1,11 +1,16 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { BookingWizardContext } from "../../context";
 import { setProductQuantity } from "../../context/actions";
 import { BsPlusLg, BsDashLg } from "react-icons/bs";
+import { hasSelectedStartTimeAndProducts } from "components/BookingWizard/context/utils";
 
-const ProductListItem = ({ product, roomId, availableQuantity }) => {
-  // eslint-disable-next-line
-  const [state, dispatch] = useContext(BookingWizardContext);
+const ProductListItem = ({
+  product,
+  roomId,
+  availableQuantity,
+  fieldChangeHandler,
+}) => {
+  const [wizardState, wizardDispatch] = useContext(BookingWizardContext);
 
   const onChange = (e, max) => {
     let value = e.target.value.replace(/\D/g, "");
@@ -16,22 +21,26 @@ const ProductListItem = ({ product, roomId, availableQuantity }) => {
       value = max;
     }
 
-    dispatch(setProductQuantity(roomId, product.id, value));
+    wizardDispatch(setProductQuantity(roomId, product.id, value));
   };
 
   const incrementQuantity = (product, max) => {
     const quantity = parseInt(product.quantity);
     if (quantity < max) {
-      dispatch(setProductQuantity(roomId, product.id, quantity + 1));
+      wizardDispatch(setProductQuantity(roomId, product.id, quantity + 1));
     }
   };
 
   const decrementQuantity = (product) => {
     const quantity = parseInt(product.quantity);
     if (quantity > 0) {
-      dispatch(setProductQuantity(roomId, product.id, quantity - 1));
+      wizardDispatch(setProductQuantity(roomId, product.id, quantity - 1));
     }
   };
+
+  useEffect(() => {
+    fieldChangeHandler(hasSelectedStartTimeAndProducts(wizardState.rooms));
+  }, [fieldChangeHandler, wizardState.rooms]);
 
   return (
     <div className="row g-0 gy-1">

@@ -22,7 +22,7 @@ import {
   setDisabledTimes,
 } from "../context/actions";
 import { step2Schema } from "../context/schema";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Accordion from "../common/Accordion";
 import FormNavButtons from "../common/FormNavButtons";
@@ -52,10 +52,8 @@ const Step2 = () => {
   };
   const {
     handleSubmit,
-    setValue,
-    register,
+    control,
     formState: { errors },
-    clearErrors,
   } = useForm({
     initialValues,
     resolver: yupResolver(step2Schema),
@@ -103,21 +101,6 @@ const Step2 = () => {
     wizardDispatch(setProgressBarStep(1));
   };
 
-  const roomDataIsValid = useCallback(
-    () =>
-      wizardState.rooms.some(
-        (room) =>
-          room.selectedStartTime &&
-          room.products.some((product) => product.quantity > 0)
-      ),
-    [wizardState.rooms]
-  );
-
-  useEffect(() => {
-    setValue("productDataExists", roomDataIsValid());
-    clearErrors();
-  }, [setValue, roomDataIsValid, clearErrors]);
-
   useEffect(() => {
     if (rooms.length === 0 && roomsLoadingState === "idle") {
       (async () => {
@@ -134,45 +117,59 @@ const Step2 = () => {
     wizardState.formData.date,
   ]);
 
+  const initialRoomStateHasBeenSet = useRef(false);
   useEffect(() => {
-    if (rooms && !roomDataIsValid() && wizardState.rooms.length === 0) {
-      wizardDispatch(setInitialRoomState(rooms));
+    if (!initialRoomStateHasBeenSet.current) {
+      if (rooms && wizardState.rooms.length === 0) {
+        wizardDispatch(setInitialRoomState(rooms));
+        initialRoomStateHasBeenSet.current = true;
+      }
     }
-  }, [wizardState.rooms, wizardDispatch, rooms, roomDataIsValid]);
+    return () => (initialRoomStateHasBeenSet.current = false);
+  }, [wizardState.rooms, wizardDispatch, rooms]);
 
-  // const availabilitiesFetched = useRef(false);
-  // useEffect(() => {
-  //   const date = wizardState.formData.date;
-  //   if (!availabilitiesFetched.current) {
-  //     appDispatch(getBookingsByDate(date)).then(
-  //       () => (availabilitiesFetched.current = true)
-  //     );
-  //   }
-  //   if (bookingsByDate[date]) {
-  //     bookingsByDate[date].forEach((room) => {
-  //       let availabilities = getRoomAvailabilities(
-  //         room,
-  //         wizardState.startTimes
-  //       );
-  //       if (availabilities !== room.availabilities) {
-  //         wizardDispatch(setRoomAvailabilities(room.id, availabilities));
-  //         let disabledTimes = getDisabledTimes(availabilities);
-  //         wizardDispatch(setDisabledTimes(room.id, disabledTimes));
-  //       }
-  //     });
-  //   }
-  // }, [
-  //   bookingsByDate,
-  //   bookingLoading,
-  //   wizardState.formData.date,
-  //   appDispatch,
-  //   wizardState.startTimes,
-  //   wizardDispatch,
-  // ]);
+  const availabilitiesHaveBeenFetched = useRef(false);
+  useEffect(() => {
+    (async () => {
+      const date = wizardState.formData.date;
+      if (!availabilitiesHaveBeenFetched.current) {
+        await appDispatch(getBookingsByDate(date));
+        availabilitiesHaveBeenFetched.current = true;
+      }
+    })();
+    return () => (availabilitiesHaveBeenFetched.current = false);
+  }, [bookingsByDate, wizardState.formData.date, appDispatch]);
+
+  const roomAvailabilitiesHaveBeenSet = useRef(false);
+  useEffect(() => {
+    if (!roomAvailabilitiesHaveBeenSet.current) {
+      const date = wizardState.formData.date;
+      if (bookingsByDate[date]) {
+        bookingsByDate[date].forEach((room) => {
+          let availabilities = getRoomAvailabilities(
+            room,
+            wizardState.startTimes
+          );
+          if (availabilities !== room.availabilities) {
+            let disabledTimes = getDisabledTimes(availabilities);
+            wizardDispatch(setRoomAvailabilities(room.id, availabilities));
+            wizardDispatch(setDisabledTimes(room.id, disabledTimes));
+          }
+        });
+        roomAvailabilitiesHaveBeenSet.current = true;
+      }
+    }
+    return () => (roomAvailabilitiesHaveBeenSet.current = false);
+  }, [
+    wizardState.formData.date,
+    wizardState.startTimes,
+    wizardDispatch,
+    bookingsByDate,
+  ]);
 
   if (roomsLoadingState === "pending") {
     return (
-      <div className="conatiner text-center p-5">
+      <div className="container text-center p-5">
         <LoadingSpinner />
       </div>
     );
@@ -192,29 +189,50 @@ const Step2 = () => {
             </label>
           </div>
 
-          {/* hidden input field to handle errors if no products are selected */}
-          <input type="hidden" {...register("productDataExists")} />
-
-          <Accordion>
-            {wizardState.rooms.map((room, index) => (
-              <AccordionItem item={room} headerText={room.name} key={room.id}>
-                <AccordionCollapse collapseId={room.id}>
-                  <StartTimeList room={room} />
-                  {room.selectedStartTime && room.availabilities ? (
-                    <ProductList room={room} />
-                  ) : (
-                    ""
-                  )}
-                </AccordionCollapse>
-              </AccordionItem>
-            ))}
-          </Accordion>
-
-          {errors.productDataExists && (
-            <p className="text-danger text-center">
-              {errors.productDataExists.message}
-            </p>
-          )}
+          <Controller
+            name="productDataExists"
+            control={control}
+            render={({ field }) => (
+              <Accordion>
+                {wizardState.rooms.map((room, index) => (
+                  <AccordionItem
+                    item={room}
+                    headerText={room.name}
+                    key={room.id}
+                  >
+                    <AccordionCollapse collapseId={room.id}>
+                      {room.disabledStartTimes?.length ===
+                      wizardState.startTimes.length - 2 ? (
+                        <p className="text-center">
+                          Fully booked on{" "}
+                          <span className="fw-bold">
+                            {wizardState.formData.date}
+                          </span>
+                        </p>
+                      ) : (
+                        <>
+                          <StartTimeList room={room} />
+                          {room.selectedStartTime && room.availabilities ? (
+                            <ProductList
+                              room={room}
+                              fieldChangeHandler={field.onChange}
+                            />
+                          ) : (
+                            ""
+                          )}
+                        </>
+                      )}
+                    </AccordionCollapse>
+                  </AccordionItem>
+                ))}
+                {errors.productDataExists && (
+                  <p className="text-danger text-center">
+                    {errors.productDataExists.message}
+                  </p>
+                )}
+              </Accordion>
+            )}
+          />
         </div>
         <div className="container px-4">
           <FormNavButtons goBack={goBack} submitButtonText={"Next"} />
