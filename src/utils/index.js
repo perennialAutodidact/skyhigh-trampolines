@@ -37,8 +37,8 @@ export const ticketNameToTimeSlots = (ticketName, totalTimeSlots) => {
 
 export const getRoomAvailabilities = (room, times) => {
   const { bookings, capacity } = room;
-
   let ticketCounts = times.map((time) => capacity);
+
   let bookingIndex, startIndex, endIndex, booking, timeIndex;
 
   bookingIndex = 0;
@@ -49,7 +49,7 @@ export const getRoomAvailabilities = (room, times) => {
       let timeSlots = ticketNameToTimeSlots(ticket.duration, times.length);
       startIndex = timeIndex;
       endIndex = timeIndex + timeSlots;
-      while (startIndex < endIndex) {
+      while (startIndex < endIndex && startIndex < times.length) {
         ticketCounts[startIndex] -= ticket.quantity;
         startIndex++;
       }
