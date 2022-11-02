@@ -49,7 +49,7 @@ function App() {
   }, [breakpoint]);
 
   return (
-    <div className="container-fluid bg-light min-vh-100 min-vw-100 p-0">
+    <div className="container-fluid bg-light min-vh-100 p-0">
       <Navbar
         setShowSidebar={setShowSidebar}
         showSidebar={showSidebar}
