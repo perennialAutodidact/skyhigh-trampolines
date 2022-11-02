@@ -196,3 +196,16 @@ export const getDisabledTimes = (roomAvailabilities) => {
     )
   );
 };
+
+/**
+ *
+ * @param {Room[]} rooms Array of rooms
+ * @returns boolean Boolean indicating if at least one start time
+ *                  and product are selected from the same room
+ */
+export const hasSelectedStartTimeAndProducts = (rooms) =>
+  rooms.some(
+    (room) =>
+      room.selectedStartTime &&
+      room.products.some((product) => product.quantity > 0)
+  );
