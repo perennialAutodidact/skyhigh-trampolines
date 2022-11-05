@@ -54,8 +54,8 @@ const Step1 = () => {
         {/* DATE */}
         <div className="row mb-3">
           <div className="col-12 p-0">
-            <label htmlFor="date" className="form-label p-0 d-flex gap-1">
-              <h3>Select Date</h3> <span className="text-danger">*</span>
+            <label htmlFor="date" className="form-label p-0 d-flex gap-1 justify-content-center">
+              <h3>Select Date</h3> <span className="text-danger fs-2">*</span>
             </label>
             <input
               type="hidden"

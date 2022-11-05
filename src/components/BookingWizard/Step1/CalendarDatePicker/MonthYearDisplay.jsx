@@ -9,7 +9,8 @@ const MonthYearDisplay = () => {
 
   const changeCalendarPage = (date) => dispatch(updateCurrentPage(date));
 
-  const goToNextMonth = () => changeCalendarPage(currentPage.date.add(1, "month"));
+  const goToNextMonth = () =>
+    changeCalendarPage(currentPage.date.add(1, "month"));
   const goToPrevMonth = () =>
     changeCalendarPage(currentPage.date.subtract(1, "month"));
 
@@ -17,12 +18,18 @@ const MonthYearDisplay = () => {
   const year = currentPage.date.format("YYYY");
 
   return (
-    <div className="col-12 col-md-4 offset-md-4 my-3 d-flex justify-content-between align-items-center gap-3">
-      <GoArrowLeft onClick={goToPrevMonth} />
-      <div>
-        {month} {year}
+    <div className="container-fluid">
+      <div className="row">
+        <div className="col-12 col-md-6 offset-md-3  my-3">
+          <div className="d-flex justify-content-between align-items-center gap-3">
+            <GoArrowLeft onClick={goToPrevMonth} />
+            <div>
+              {month} {year}
+            </div>
+            <GoArrowRight onClick={goToNextMonth} />
+          </div>
+        </div>
       </div>
-      <GoArrowRight onClick={goToNextMonth} />
     </div>
   );
 };

@@ -116,10 +116,10 @@ const Step3 = () => {
       >
         {/* PRODUCT SELECT */}
         <div className="row px-0 mb-3">
-          <div className="col-12 col-lg-6">
-            <label htmlFor="date" className="form-label p-0 d-flex gap-1">
-              <h3 className="ps-3">Select Add-Ons</h3>{" "}
-              <span className="text-danger">*</span>
+          <div className="col-12">
+            <label htmlFor="date" className="form-label p-0 m-0 d-flex gap-1 justify-content-center">
+              <h3 className="m-0">Select Add-Ons</h3>{" "}
+              <span className="text-danger fs-2">*</span>
             </label>
           </div>
         </div>
