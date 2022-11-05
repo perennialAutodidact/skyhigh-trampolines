@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 
 const SidebarItem = (props) => {
-  const { item, showSidebar, setShowSidebar, breakpoint } = props;
+  const { item, setShowSidebar, breakpoint } = props;
   const navigate = useNavigate();
   const location = useLocation();
 

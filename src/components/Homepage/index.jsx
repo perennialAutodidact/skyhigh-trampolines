@@ -5,20 +5,15 @@ import { Link } from "react-router-dom";
 import styles from "./Homepage.module.scss";
 import { cancelBooking } from "../../redux/bookingsSlice";
 import { useOnLoadImages } from "../../hooks/useOnLoadImages";
-import { useBreakpoint } from "hooks/useBreakpoint";
 import LoadingSpinner from "../LoadingSpinner";
 import AnimatedMask from "components/About/AnimatedMask";
-import { gsap } from "gsap";
-import { BsClouds } from "react-icons/bs";
 
 const Homepage = () => {
   const appDispatch = useDispatch();
   const { paymentIntent } = useSelector((appState) => appState.stripe);
   const { bookingInProgress } = useSelector((appState) => appState.bookings);
   const homePageRef = useRef(null);
-  const q = gsap.utils.selector(homePageRef);
   const imagesLoaded = useOnLoadImages(homePageRef);
-  const breakpoint = useBreakpoint();
 
   useEffect(() => {
     if (paymentIntent.id) {
@@ -28,8 +23,6 @@ const Homepage = () => {
       appDispatch(cancelBooking(bookingInProgress.id));
     }
   }, [paymentIntent, bookingInProgress, appDispatch]);
-
-  useEffect(() => {}, []);
 
   return (
     <div ref={homePageRef}>

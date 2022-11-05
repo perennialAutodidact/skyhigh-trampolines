@@ -15,7 +15,7 @@ import { useCallback } from "react";
 
 const Navbar = (props) => {
   const dispatch = useDispatch();
-  const { showSidebar, setShowSidebar, hamburgerRef } = props;
+  const { setShowSidebar, hamburgerRef } = props;
   const [user] = useAuthState(auth);
   const location = useLocation();
   const [showLogout, setShowLogout] = useState(false);
@@ -37,7 +37,7 @@ const Navbar = (props) => {
   // toggle sidebar state
   const toggleSidebar = useCallback(() => {
     setShowSidebar((showSidebar) => !showSidebar);
-  }, [setShowSidebar, showSidebar]);
+  }, [setShowSidebar]);
 
   return (
     <nav className="border-bottom position-fixed  bg-white container-fluid d-flex flex-column justify-content-center">
@@ -60,7 +60,7 @@ const Navbar = (props) => {
               </h3>
             </Link>
           </div>
-          
+
           <div className="d-flex gap-2">
             <Link to={"/about"} className="ps-3 text-decoration-none link-dark">
               <div className="p-0 m-0 d-flex align-items-center gap-1 fs-5">

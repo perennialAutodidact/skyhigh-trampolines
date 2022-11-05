@@ -41,7 +41,6 @@ const Step2 = () => {
   );
   const {
     bookingInProgress,
-    loading: bookingLoading,
     bookingsByDate,
   } = useSelector((appState) => appState.bookings);
   const navigate = useNavigate();
