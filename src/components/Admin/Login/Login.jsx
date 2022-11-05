@@ -50,19 +50,20 @@ const Login = () => {
   return loading ? (
     <div className="mt-5 d-flex flex-column align-items-center">
       <LoadingSpinner />
-      <p className="mt-3">Wait a moment please...authenticating the user</p>
+      <p className="mt-3">Authenticating...</p>
     </div>
   ) : (
     <div className="container mt-5 d-flex justify-content-center align-items-center">
-      <div className="card col-12 col-lg-6">
+      <div className="card col-12 col-md-6 col-lg-4">
         <img
           src="https://images.unsplash.com/photo-1507836127377-5757cd3e6e6b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8dHJhbXBvbGluZSUyMHBhcmt8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
           className="card-img-top"
           alt="..."
+          
         />
         <div className="card-body container">
           <h5 className="card-title mt-3">Admin Log In</h5>
-          <p className="card-text">This page is only for site admins.</p>
+          <p className="card-text"></p>
           <div className="row mt-4 mb-3">
             <div className="col-12 mt-3">
               {error && (
