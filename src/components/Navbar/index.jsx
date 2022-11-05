@@ -60,11 +60,19 @@ const Navbar = (props) => {
               </h3>
             </Link>
           </div>
-          <Link to={"/about"} className="ps-3 text-decoration-none link-dark">
-            <div className="p-0 m-0 d-flex align-items-center gap-1 fs-5">
-              About
-            </div>
-          </Link>
+          
+          <div className="d-flex gap-2">
+            <Link to={"/about"} className="ps-3 text-decoration-none link-dark">
+              <div className="p-0 m-0 d-flex align-items-center gap-1 fs-5">
+                About
+              </div>
+            </Link>
+            <Link to={"/admin"} className="ps-3 text-decoration-none link-dark">
+              <div className="p-0 m-0 d-flex align-items-center gap-1 fs-5">
+                Admin
+              </div>
+            </Link>
+          </div>
         </div>
 
         <div className="col-6 d-none d-lg-flex justify-content-lg-end align-items-center">
