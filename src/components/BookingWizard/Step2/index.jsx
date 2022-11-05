@@ -138,7 +138,7 @@ const Step2 = () => {
       }
     })();
     return () => (availabilitiesHaveBeenFetched.current = false);
-  }, [bookingsByDate, wizardState.formData.date, appDispatch]);
+  }, [wizardState.formData.date, appDispatch]);
 
   const roomAvailabilitiesHaveBeenSet = useRef(false);
   useEffect(() => {
