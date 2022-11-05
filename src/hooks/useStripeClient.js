@@ -15,7 +15,6 @@ export const useStripeClient = () => {
             process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY
           );
           setStripeClient(stripe);
-          console.log({stripekey: process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY})
         } catch (error) {
           console.log(error);
         } finally {
