@@ -269,7 +269,7 @@ const bookingsSlice = createSlice({
     },
     [getFirstBookingPage.fulfilled]: (state, action) => {
       let { bookingsPage } = action.payload;
-      state.loading = "succeeded";
+      state.loading = "idle";
       state.allBookings = state.allBookings.concat(bookingsPage);
       state.bookingsPage = bookingsPage;
       if (bookingsPage.length > 0) {
@@ -277,6 +277,7 @@ const bookingsSlice = createSlice({
           bookingsPage[bookingsPage.length - 1].id
         );
       }
+      state.isLastPage = bookingsPage.length < state.perPage;
     },
     [getFirstBookingPage.rejected]: (state, action) => {
       state.loading = "rejected";
@@ -295,7 +296,7 @@ const bookingsSlice = createSlice({
       state.bookingsPage = state.allBookings.slice(firstIndex, lastIndex);
       state.isLastPage = false;
       state.page = state.page - 1;
-      state.loading = "succeeded";
+      state.loading = "idle";
     },
     [getPrevBookingPage.rejected]: (state, action) => {
       state.loading = "rejected";
@@ -311,15 +312,14 @@ const bookingsSlice = createSlice({
       let { fetchedBookings } = action.payload;
       let { page, perPage } = state;
       let firstIndex = page * perPage;
+      
       if (fetchedBookings?.length > 0) {
         state.allBookings = state.allBookings.concat(fetchedBookings);
         state.pageStartIds = state.pageStartIds.concat(
           fetchedBookings[fetchedBookings.length - 1].id
         );
         state.bookingsPage = fetchedBookings;
-        if (fetchedBookings.length < perPage) {
-          state.isLastPage = true;
-        }
+        state.isLastPage = fetchedBookings.length < perPage;
       } else {
         state.bookingsPage = state.allBookings.slice(
           firstIndex,
@@ -327,7 +327,7 @@ const bookingsSlice = createSlice({
         );
       }
       state.page = state.page + 1;
-      state.loading = "succeeded";
+      state.loading = "idle";
     },
     [getNextBookingPage.rejected]: (state, action) => {
       state.loading = "rejected";
@@ -345,7 +345,7 @@ const bookingsSlice = createSlice({
         ...state.bookingsByDate,
         [date]: bookings,
       };
-      state.loading = "succeeded";
+      state.loading = "idle";
     },
     [getBookingsByDate.rejected]: (state, action) => {
       state.loading = "failed";
@@ -357,7 +357,7 @@ const bookingsSlice = createSlice({
       state.error = null;
     },
     [createBooking.fulfilled]: (state, action) => {
-      state.loading = "succeeded";
+      state.loading = "idle";
       state.bookingInProgress = {
         id: action.payload.bookingId,
       };
@@ -372,7 +372,7 @@ const bookingsSlice = createSlice({
       state.error = null;
     },
     [updateBooking.fulfilled]: (state, action) => {
-      state.loading = "succeeded";
+      state.loading = "idle";
     },
     [updateBooking.rejected]: (state, action) => {
       state.loading = "rejected";
@@ -397,7 +397,7 @@ const bookingsSlice = createSlice({
       state.error = null;
     },
     [getBookingById.fulfilled]: (state, action) => {
-      state.loading = "succeeded";
+      state.loading = "idle";
       state.booking = action.payload.booking;
     },
     [getBookingById.rejected]: (state, action) => {
