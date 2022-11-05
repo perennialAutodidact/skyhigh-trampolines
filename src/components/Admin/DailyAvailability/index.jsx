@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import dayjs from "dayjs";
 import { useSelector, useDispatch } from "react-redux";
 import { getBookingsByDate } from "../../../redux/bookingsSlice";
@@ -37,9 +37,11 @@ const DailyAvailability = () => {
     }
   }, [rooms, roomsLoadingStatus, appDispatch]);
 
+  const bookingsHaveBeenFetched = useRef(false);
   useEffect(() => {
-    if (!bookingsByDate[selectedDate] && bookingsLoadingStatus !== "pending") {
+    if (!bookingsHaveBeenFetched.current) {
       appDispatch(getBookingsByDate(selectedDate));
+      bookingsHaveBeenFetched.current = true;
     }
   }, [bookingsByDate, bookingsLoadingStatus, selectedDate, appDispatch]);
 
