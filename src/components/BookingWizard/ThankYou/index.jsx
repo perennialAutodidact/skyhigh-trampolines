@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { BookingWizardContext } from "../context";
 import styles from "./ThankYou.module.scss";
 import { toMoney, getBookedRooms, getSelectedAddOns } from "../context/utils";
@@ -7,17 +8,21 @@ import { clearPaymentIntent } from "../../../redux/stripeSlice";
 
 const ThankYou = () => {
   const appDispatch = useDispatch();
-  const {paymentIntent} = useSelector(appState=>appState.stripe)
+  const navigate = useNavigate();
+  const { paymentIntent } = useSelector((appState) => appState.stripe);
   const [wizardState] = useContext(BookingWizardContext);
 
   const bookedRooms = getBookedRooms(wizardState.rooms);
   const selectedAddOns = getSelectedAddOns(wizardState.addOns);
 
-  useEffect(()=>{
-    if(paymentIntent.id){
-      appDispatch(clearPaymentIntent())
+  useEffect(() => {
+    if (paymentIntent.id) {
+      appDispatch(clearPaymentIntent());
+    } else {
+      console.log('here')
+      navigate("/");
     }
-  },[paymentIntent, appDispatch])
+  }, [paymentIntent, appDispatch, navigate]);
 
   return (
     <div className="container-fluid pt-3 pb-5">
@@ -46,7 +51,7 @@ const ThankYou = () => {
             <div className="p-0 mb-4">
               Confirmation #{" "}
               <span className="fw-bold">
-                {wizardState.formData.receiptId.split("-")[0]}
+                {wizardState.formData.receiptId ? wizardState.formData.receiptId.split("-")[0] : ""}
               </span>
             </div>
 
