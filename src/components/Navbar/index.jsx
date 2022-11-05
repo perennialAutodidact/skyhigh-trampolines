@@ -46,7 +46,7 @@ const Navbar = (props) => {
           <div className=" d-flex align-items-center gap-2">
             {user && location.pathname.startsWith("/admin") && (
               <div
-                className="d-lg-none"
+                className="d-lg-none mb-1"
                 ref={hamburgerRef}
                 onClick={toggleSidebar}
               >
