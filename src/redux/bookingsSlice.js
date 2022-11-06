@@ -229,9 +229,13 @@ export const cancelBooking = createAsyncThunk(
   async (bookingId, { rejectWithValue }) => {
     try {
       const bookingDoc = doc(bookingsCollection, bookingId);
-      await updateDoc(bookingDoc, {
-        status: "canceled",
-      });
+      const booking = await (await getDoc(bookingDoc)).data();
+
+      if (booking.status !== "complete") {
+        await updateDoc(bookingDoc, {
+          status: "canceled",
+        });
+      }
 
       return { message: "success" };
     } catch (error) {
@@ -312,7 +316,7 @@ const bookingsSlice = createSlice({
       let { fetchedBookings } = action.payload;
       let { page, perPage } = state;
       let firstIndex = page * perPage;
-      
+
       if (fetchedBookings?.length > 0) {
         state.allBookings = state.allBookings.concat(fetchedBookings);
         state.pageStartIds = state.pageStartIds.concat(

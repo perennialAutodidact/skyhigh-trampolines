@@ -19,10 +19,11 @@ const ThankYou = () => {
     if (paymentIntent.id) {
       appDispatch(clearPaymentIntent());
     } else {
-      console.log('here')
-      navigate("/");
+      if(wizardState.currentStep === 1){
+        navigate("/");
+      }
     }
-  }, [paymentIntent, appDispatch, navigate]);
+  }, [paymentIntent, appDispatch, navigate, wizardState.currentStep]);
 
   return (
     <div className="container-fluid pt-3 pb-5">
