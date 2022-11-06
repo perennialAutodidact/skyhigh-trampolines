@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useLayoutEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { cancelPaymentIntent } from "../../redux/stripeSlice";
 import { Link } from "react-router-dom";
@@ -6,6 +6,7 @@ import styles from "./Homepage.module.scss";
 import { cancelBooking } from "../../redux/bookingsSlice";
 import { useOnLoadImages } from "../../hooks/useOnLoadImages";
 import LoadingSpinner from "../LoadingSpinner";
+import gsap from "gsap";
 import AnimatedMask from "components/About/AnimatedMask";
 
 const Homepage = () => {
@@ -23,6 +24,50 @@ const Homepage = () => {
       appDispatch(cancelBooking(bookingInProgress.id));
     }
   }, [paymentIntent, bookingInProgress, appDispatch]);
+
+  let q = gsap.utils.selector(homePageRef);
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline();
+      const lightBlueCircle = q("#light-blue-circle");
+      const darkBlueCircle = q("#dark-blue-circle");
+      const grayCircle = q("#gray-circle");
+      const bookingButton = q("#booking-button");
+
+      tl.set(bookingButton, { opacity: 0, y: 100 })
+        .set(darkBlueCircle, { autoAlpha: 1 })
+        .set(grayCircle, { autoAlpha: 1 })
+        .set(lightBlueCircle, { autoAlpha: 1 })
+        .from(darkBlueCircle, {
+          y: 500,
+          duration: 4,
+          ease: "elastic.out",
+        })
+        .from(grayCircle, {
+          y: 500,
+          duration: 4,
+          ease: "elastic.out",
+          delay: -4,
+        })
+        .from(lightBlueCircle, {
+          y: 500,
+          duration: 4,
+          ease: "elastic.out",
+          delay: -3.8,
+        })
+        .to(bookingButton, {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: "power2.inOut",
+          delay: -3,
+        });
+    }, homePageRef.current);
+
+    return () => {
+      ctx.revert();
+    };
+  }, [q]);
 
   return (
     <div ref={homePageRef}>
@@ -49,11 +94,11 @@ const Homepage = () => {
                   justify-content-md-start
                   position-absolute text-light
                 `}
-                id="large-circle"
+                id="dark-blue-circle"
               ></div>
               <div
                 className={`${styles.lightGrayCircle} bg-white rounded-circle position-absolute`}
-                id="small-circle"
+                id="gray-circle"
               ></div>
               <div
                 className={`${styles.lightBlueCircle}
@@ -63,10 +108,13 @@ const Homepage = () => {
                   justify-content-center
                   position-absolute
                 `}
-                id="medium-circle"
+                id="light-blue-circle"
               >
                 <Link to="/booking">
-                  <button className="btn btn-primary btn-lg fs-1 p-3 mt-5 px-5 px-3 shadow">
+                  <button
+                    id="booking-button"
+                    className="btn btn-primary btn-lg fs-1 p-3 mt-5 px-5 px-3 shadow"
+                  >
                     Book Now
                   </button>
                 </Link>

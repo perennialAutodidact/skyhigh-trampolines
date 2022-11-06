@@ -40,9 +40,13 @@ const AnimatedMask = () => {
       mask.style.maskImage = `url("images/kid${maskImageIndex}.png")`;
       mask.style.WebkitMaskImage = `url("images/kid${maskImageIndex}.png")`;
 
+      let initialDelay = 4;
       const ctx = gsap.context(() => {
         tl.current = gsap.timeline({
           repeat: -1,
+          onComplete: function () {
+            initialDelay = 0;
+          },
           onRepeat,
         });
 
@@ -62,13 +66,14 @@ const AnimatedMask = () => {
             maskPosition: `${xPos}px 0`,
             WebkitMaskPosition: `${xPos}px 0`,
             ease: "sine.out",
-            duration: 2,
+            delay: initialDelay,
+            duration: 1.5,
           })
           .to(mask, {
             maskPosition: `${xPos}px ${bgHeight}px`,
             WebkitMaskPosition: `${xPos}px ${bgHeight}px`,
             ease: "sine.in",
-            duration: 2,
+            duration: 1.5,
           });
       }, maskRef.current);
     }
