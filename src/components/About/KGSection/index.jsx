@@ -105,6 +105,7 @@ const KGSection = () => {
           })
         );
       });
+      return () => ctx.revert()
     }
   }, [ctx, q]);
 

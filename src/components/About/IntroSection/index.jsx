@@ -50,7 +50,7 @@ const IntroSection = () => {
 
   return (
     <div className="container-fluid py-5 vh-100 overflow-hidden" ref={ref}>
-      <div className="row gy-3">
+      <div className="row gy-2">
         <div className="col-12 col-md-8 ps-md-5">
           <p id="p1" className="fs-2">
             This app is a booking and content management system for{" "}
@@ -58,8 +58,8 @@ const IntroSection = () => {
             a hypothetical trampoline park.
           </p>
         </div>
-        <div className="col-12 col-md-8 offset-md-4 mb-3 mb-md-5 pe-md-5">
-          <p id="p2" className="fs-2 text-end">
+        <div className="col-12 col-md-8 offset-md-4 pe-md-5">
+          <p id="p2" className="m-0 fs-2 text-end">
             The original project was the result of a collaboration between four
             international developers over a four-week period, with the goal to
             gain experience working remotely as a team.
