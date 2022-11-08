@@ -5,6 +5,7 @@ export const useOnLoadImages = (ref) => {
 
   useEffect(() => {
     const updateStatus = (images) => {
+      console.log({images})
       setStatus(
         images.map((image) => image.complete).every((item) => item === true)
       );

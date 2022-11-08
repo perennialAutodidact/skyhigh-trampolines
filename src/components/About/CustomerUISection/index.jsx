@@ -9,11 +9,14 @@ const CustomerUISection = () => {
   const tl2 = useRef();
 
   useLayoutEffect(() => {
+    let ctx1;
+    if(ref1.current){
     const selector = gsap.utils.selector(ref1);
     const customerUIHeader = selector("#customer-ui-header");
     const p1 = selector("#p1");
 
-    let ctx1 = gsap.context(() => {
+    ctx1 = gsap.context(() => {
+
       tl1.current = gsap.timeline({
         defaults: {
           ease: "power2.out",
@@ -24,16 +27,16 @@ const CustomerUISection = () => {
           start: "top 70%",
           end: "top 50%",
           // markers: {
-          //   indent: 500,
-          // },
-        },
-      });
-
-      tl1.current
+            //   indent: 500,
+            // },
+          },
+        });
+        
+        tl1.current
         .set(customerUIHeader, { opacity: 0, x: -200 })
         .set(p1, { opacity: 0, x: -200 });
-
-      tl1.current
+        
+        tl1.current
         .to(customerUIHeader, {
           autoAlpha: 1,
           x: 0,
@@ -47,35 +50,36 @@ const CustomerUISection = () => {
             duration: 1,
           },
           "-=0.5"
-        );
-    }, ref1);
-
-    let ctx2 = gsap.context(() => {
-      const selector = gsap.utils.selector(ref2);
-      const bookingWizardHeader = selector("#booking-wizard-header");
-
-      tl2.current = gsap.timeline({
-        scrollTrigger: {
-          trigger: ref2.current,
-          start: "top 50%",
-          end: "+=500",
-          markers: {
-            startColor: "#00FFFF",
-            endColor: "#00FFFF",
-            indent: 400,
-          },
-        },
-      });
-      tl2.current.set(bookingWizardHeader, { opacity: 0, y: -200 });
-      tl2.current.to(bookingWizardHeader, {
-        autoAlpha: 1,
-        y: 0,
-      });
-    }, ref2);
+          );
+        }, ref1);
+      }
+        
+    //     let ctx2 = gsap.context(() => {
+    //   const selector = gsap.utils.selector(ref2);
+    //   const bookingWizardHeader = selector("#booking-wizard-header");
+      
+    //   tl2.current = gsap.timeline({
+    //     scrollTrigger: {
+    //       trigger: ref2.current,
+    //       start: "top 50%",
+    //       end: "+=500",
+    //       markers: {
+    //         startColor: "#00FFFF",
+    //         endColor: "#00FFFF",
+    //         indent: 400,
+    //       },
+    //     },
+    //   });
+    //   tl2.current.set(bookingWizardHeader, { opacity: 0, y: -200 });
+    //   tl2.current.to(bookingWizardHeader, {
+    //     autoAlpha: 1,
+    //     y: 0,
+    //   });
+    // }, ref2);
 
     return () => {
-      ctx1.revert();
-      ctx2.revert();
+       ctx1.revert();
+      // ctx2.revert();
     };
   }, []);
 
@@ -100,7 +104,7 @@ const CustomerUISection = () => {
       </div>
       <div className="row">
         <h2
-          ref={ref2}
+          // ref={ref2}
           id="booking-wizard-header"
           className="display-4 text-center"
           style={{ visibility: "hidden" }}
