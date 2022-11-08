@@ -40,7 +40,7 @@ const Navbar = (props) => {
   }, [setShowSidebar]);
 
   return (
-    <nav className="border-bottom position-fixed  bg-white container-fluid d-flex flex-column justify-content-center">
+    <nav className="border-bottom position-fixed bg-white container-fluid d-flex flex-column justify-content-center">
       <div className="row">
         <div className="col-12 col-lg-6 d-flex justify-content-between justify-content-lg-start align-items-center">
           <div className=" d-flex align-items-center gap-2">

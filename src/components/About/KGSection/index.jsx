@@ -1,119 +1,96 @@
 import React, { useLayoutEffect, useRef } from "react";
 import { VscGithub } from "react-icons/vsc";
 import { BsLinkedin } from "react-icons/bs";
-import { useGSAPContext } from "hooks/useGSAPContext";
-import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
+import gsap from "gsap";
 gsap.registerPlugin(ScrollTrigger);
 
 const KGSection = () => {
   const ref = useRef();
-  const ctx = useGSAPContext(ref);
-  const q = gsap.utils.selector(ref);
+  const tl = useRef();
 
   useLayoutEffect(() => {
-    const container = ref.current;
-    const p1 = q("#p1");
-    const headshot = q("#headshot");
-    const kgGithubIcon = q(".kg-github-icon");
-    const kgLinkedinIcon = q(".kg-linkedin-icon");
-    if (ctx) {
-      ctx.add(() => {
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: container,
-            start: "top 50%",
-            end: "top -100%",
+    const selector = gsap.utils.selector(ref);
+
+    const p1 = selector("#p1");
+    const headshot = selector("#headshot");
+    const kgGithubIcon = selector("#kg-github-icon");
+    const kgLinkedinIcon = selector("#kg-linkedin-icon");
+
+    let ctx = gsap.context(() => {
+      tl.current = gsap.timeline({
+        defaults: {
+          ease: "power2.out",
+        },
+        scrollTrigger: {
+          trigger: ref.current,
+          start: "top 50%",
+          end: "+=500",
+          markers: {
+            startColor: "#0000FF",
+            endColor: "#0000FF",
           },
-        });
-        tl.add(
-          gsap.set(headshot, {
-            visibility: "hidden",
-            opacity: 0,
-            rotate: 15,
-            x: 200,
-          })
-        );
-        tl.add(
-          gsap.set(kgGithubIcon, {
-            opacity: 0,
-            x: -200,
-            rotate: -15,
-          })
-        );
-        tl.add(
-          gsap.set(kgLinkedinIcon, {
-            opacity: 0,
-            x: 200,
-            rotate: -15,
-          })
-        );
-        tl.add(
-          gsap.fromTo(
-            p1,
-            {
-              x: -100,
-              opacity: 0,
-            },
-            {
-              duration: 1,
-              x: 0,
-              opacity: 1,
-              ease: "power2.out",
-            }
-          )
-        );
-        tl.add(
-          gsap.to(headshot, {
-            x: 0,
-            rotate: 0,
-            autoAlpha: 1,
-            duration: 1,
-            ease: "power2.out",
-            delay: -0.5,
-          })
-        );
-        tl.add(
-          gsap.to(kgGithubIcon, {
-            opacity: 1,
-            rotate: 0,
-            duration: 1,
-          })
-        );
-        tl.add(
-          gsap.to(kgGithubIcon, {
-            x: 0,
-            duration: 1.5,
-            ease: "bounce.out",
-            delay: -1,
-          })
-        );
-        tl.add(
-          gsap.to(kgLinkedinIcon, {
-            opacity: 1,
-            rotate: 0,
-            duration: 1,
-            delay: -1.5,
-          })
-        );
-        tl.add(
-          gsap.to(kgLinkedinIcon, {
-            x: 0,
-            duration: 1.5,
-            ease: "bounce.out",
-            delay: -1.5,
-          })
-        );
+        },
       });
-      return () => ctx.revert()
-    }
-  }, [ctx, q]);
+
+      tl.current
+        .set(p1, {
+          x: -100,
+          opacity: 0,
+        })
+        .set(headshot, {
+          opacity: 0,
+          x: 200,
+          rotate: 15,
+        })
+        .set(kgGithubIcon, {
+          opacity: 0,
+          x: -200,
+          rotate: -15,
+        })
+        .set(kgLinkedinIcon, {
+          opacity: 0,
+          x: 200,
+          rotate: -15,
+        });
+
+      tl.current
+        .to(p1, {
+          x: 0,
+          duration: 1,
+          autoAlpha: 1,
+        })
+        .to(headshot, {
+          x: 0,
+          autoAlpha: 1,
+          rotate: 0,
+          duration: 1,
+          delay: -0.5,
+        })
+        .to(kgGithubIcon, {
+          x: 0,
+          autoAlpha: 1,
+          rotate: 0,
+          duration: 0.75,
+          ease: "bounce.out",
+        })
+        .to(kgLinkedinIcon, {
+          x: 0,
+          autoAlpha: 1,
+          rotate: 0,
+          duration: 0.75,
+          ease: "bounce.out",
+          delay: -0.75,
+        });
+    }, ref);
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <div className="container-fluid vh-75 overflow-hidden" ref={ref}>
-      <div className="row mb-5">
+    <div id="kg-section" className="container-fluid overflow-hidden">
+      <div className="row mb-5" ref={ref}>
         <div className="col-12 col-md-8 offset-md-2 text-center">
-          <p id="p1" className="fs-2">
+          <p id="p1" className="fs-2" style={{ visibility: "hidden" }}>
             This is a fork of the original with additional features and polish
             by <span className="text-primary">Keegan Good</span>.
           </p>
@@ -124,6 +101,7 @@ const KGSection = () => {
             <div
               id="headshot"
               className="rounded-circle shadow border-primary border border-5"
+              style={{ visibility: "hidden" }}
             >
               <img
                 src="images/circleHeadshot.png"
@@ -134,14 +112,18 @@ const KGSection = () => {
             </div>
             <div className="d-flex gap-4 align-items-center">
               <a
+                id="kg-github-icon"
                 href="https://github.com/perennialAutodidact"
-                className="kg-github-icon link-secondary d-flex align-items-center display-3 d-flex align-items-center"
+                className="link-secondary d-flex align-items-center display-3 d-flex align-items-center"
+                style={{ visibility: "hidden" }}
               >
                 <VscGithub />
               </a>
               <a
+                id="kg-linkedin-icon"
                 href="https://linkedin.com/in/keegangood"
-                className="kg-linkedin-icon link-secondary display-3 d-flex align-items-center"
+                className="link-secondary display-3 d-flex align-items-center"
+                style={{ visibility: "hidden" }}
               >
                 <BsLinkedin />
               </a>

@@ -1,65 +1,66 @@
 import React, { useLayoutEffect, useRef } from "react";
-import { useGSAPContext } from "hooks/useGSAPContext";
 import GithubDev from "./GithubDev";
 import gsap from "gsap";
 
 const IntroSection = () => {
-  const ref = useRef(null);
-  const ctx = useGSAPContext(ref);
-  const q = gsap.utils.selector(ref);
+  const ref = useRef();
+  const tl = useRef();
 
   useLayoutEffect(() => {
-    const p1 = q("#p1");
-    const p2 = q("#p2");
-    const ghDevContainer = q("#gh-dev-container");
-    const ghDev = q(".gh-dev");
+    tl.current = gsap.timeline();
+    const selector = gsap.utils.selector(ref);
+    const p1 = selector("#p1");
+    const p2 = selector("#p2");
+    const ghDevContainer = selector("#gh-dev-container");
+    const ghDev = selector(".gh-dev");
 
-    if (ctx) {
-      ctx.add(() => {
-        const tl = gsap.timeline();
-        tl.fromTo(
+    let ctx = gsap.context(() => {
+      tl.current
+        .fromTo(
           p1,
           { x: -500, opacity: 0 },
           { x: 0, opacity: 1, duration: 1, ease: "power2.out" }
         )
-          .fromTo(
-            p2,
-            { x: 500, opacity: 0 },
-            { x: 0, opacity: 1, duration: 1, ease: "power2.out" },
-            "-=0.5"
-          )
-          .fromTo(
-            ghDevContainer,
-            { y: 100, opacity: 0 },
-            { y: 0, opacity: 1, ease: "power2.out", duration: 0.5 },
-            "-=0.5"
-          )
-          .from(ghDev, {
-            opacity: 0,
-            y: -50,
-            ease: "power2.out",
-            stagger: {
-              amount: 0.66,
-              each: 0.25,
-            },
-          });
-      });
-      return () => ctx.revert();
-    }
-  }, [ctx, q]);
+        .fromTo(
+          p2,
+          { x: 500, opacity: 0 },
+          { x: 0, opacity: 1, duration: 1, ease: "power2.out" },
+          "-=0.5"
+        )
+        .fromTo(
+          ghDevContainer,
+          { y: 100, opacity: 0 },
+          { y: 0, opacity: 1, ease: "power2.out", duration: 0.5 },
+          "-=0.5"
+        )
+        .from(ghDev, {
+          opacity: 0,
+          y: -50,
+          ease: "bounce.out",
+          stagger: {
+            amount: 0.66,
+            each: 0.25,
+          },
+        });
+    }, ref);
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <div className="container-fluid py-5 vh-100 overflow-hidden" ref={ref}>
-      <div className="row gy-2">
+    <div
+      className="container-fluid py-3 py-lg-5 vh-75 overflow-hidden"
+      ref={ref}
+    >
+      <div className="row gy-2 gy-lg-3 g-xl-2">
         <div className="col-12 col-md-8 ps-md-5">
-          <p id="p1" className="fs-2">
+          <p id="p1" className="fs-3 fs-lg-2">
             This app is a booking and content management system for{" "}
             <span className="fw-bold text-primary">Sky High Trampolines</span>,
             a hypothetical trampoline park.
           </p>
         </div>
-        <div className="col-12 col-md-8 offset-md-4 pe-md-5">
-          <p id="p2" className="m-0 fs-2 text-end">
+        <div className="col-12 col-md-8 offset-md-4 pe-md-5 mb-xxl-0">
+          <p id="p2" className="m-0 fs-2 fs-lg-2 text-end">
             The original project was the result of a collaboration between four
             international developers over a four-week period, with the goal to
             gain experience working remotely as a team.
