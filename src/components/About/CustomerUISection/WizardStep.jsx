@@ -17,7 +17,9 @@ const WizardStep = ({ number, headerText }) => {
         <div className={`order-${number % 2 === 0 ? 2 : 1}`}>
           <NumberCircle number={number} />
         </div>
-        <h3 id="header" className={`m-0 order-${number % 2 === 0 ? 1 : 2}`}>
+        <h3 id="header" className={`m-0 order-${number % 2 === 0 ? 1 : 2}`}
+          style={{visibility: "hidden"}}
+        >
           {headerText}
         </h3>
       </div>
@@ -26,6 +28,8 @@ const WizardStep = ({ number, headerText }) => {
         src={`https://s3.us-west-1.wasabisys.com/skyhigh-trampolines/wizardStep${number}.png`}
         alt={`wizard form step ${number}`}
         width="100%"
+        style={{visibility: "hidden"}}
+        className=""
       />
     </div>
   );
