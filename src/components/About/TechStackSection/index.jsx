@@ -121,54 +121,9 @@ const TechStackSection = () => {
             id="badges"
             className="d-flex flex-wrap justify-content-center gap-3"
           >
-            <img
-              src="https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E"
-              alt="JavaScript badge"
-              className="tech-badge"
-              style={{ visibility: "hidden" }}
-            />
-            <img
-              src="https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB"
-              alt="React badge"
-              className="tech-badge"
-              style={{ visibility: "hidden" }}
-            />
-            <img
-              src="https://img.shields.io/badge/redux-%23593d88.svg?style=for-the-badge&logo=redux&logoColor=white"
-              alt="Redux badge"
-              className="tech-badge"
-              style={{ visibility: "hidden" }}
-            />
-            <img
-              src="https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white"
-              alt="React Router badge"
-              className="tech-badge"
-              style={{ visibility: "hidden" }}
-            />
-            <img
-              src="https://img.shields.io/badge/React%20Hook%20Form-%23EC5990.svg?style=for-the-badge&logo=reacthookform&logoColor=white"
-              alt="React Hook Form badge"
-              className="tech-badge"
-              style={{ visibility: "hidden" }}
-            />
-            <img
-              src="https://img.shields.io/badge/bootstrap-%23563D7C.svg?style=for-the-badge&logo=bootstrap&logoColor=white"
-              alt="Bootstrap badge"
-              className="tech-badge"
-              style={{ visibility: "hidden" }}
-            />
-            <img
-              src="https://img.shields.io/badge/SASS-hotpink.svg?style=for-the-badge&logo=SASS&logoColor=white"
-              alt="Sass badge"
-              className="tech-badge"
-              style={{ visibility: "hidden" }}
-            />
-            <img
-              src="https://img.shields.io/badge/green%20sock-88CE02?style=for-the-badge&logo=greensock&logoColor=white"
-              alt="Greensock badge"
-              className="tech-badge"
-              style={{ visibility: "hidden" }}
-            />
+            {badges.frontend.map(({ src, alt }) => (
+              <img src={src} alt={alt} className="tech-badge" key={src} />
+            ))}
           </div>
         </div>
 
@@ -182,23 +137,60 @@ const TechStackSection = () => {
             id="badges"
             className="d-flex flex-wrap justify-content-center gap-3"
           >
-            <img
-              src="https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase"
-              alt="Firebase badge"
-              className="tech-badge"
-              style={{ visibility: "hidden" }}
-            />
-            <img
-              src="https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white"
-              alt="Github Actions badge"
-              className="tech-badge"
-              style={{ visibility: "hidden" }}
-            />
+            {badges.backend.map(({ src, alt }) => (
+              <img src={src} alt={alt} className="tech-badge" key={src} />
+            ))}
           </div>
         </div>
       </div>
     </div>
   );
+};
+const badges = {
+  frontend: [
+    {
+      src: "https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E",
+      alt: "JavaScript Badge",
+    },
+    {
+      src: "https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB",
+      alt: "React Badge",
+    },
+    {
+      src: "https://img.shields.io/badge/redux-%23593d88.svg?style=for-the-badge&logo=redux&logoColor=white",
+      alt: "Redux Badge",
+    },
+    {
+      src: "https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white",
+      alt: "React Router Badge",
+    },
+    {
+      src: "https://img.shields.io/badge/React%20Hook%20Form-%23EC5990.svg?style=for-the-badge&logo=reacthookform&logoColor=white",
+      alt: "React Hook Form Badge",
+    },
+    {
+      src: "https://img.shields.io/badge/bootstrap-%23563D7C.svg?style=for-the-badge&logo=bootstrap&logoColor=white",
+      alt: "Bootstrap Badge",
+    },
+    {
+      src: "https://img.shields.io/badge/SASS-hotpink.svg?style=for-the-badge&logo=SASS&logoColor=white",
+      alt: "Sass Badge",
+    },
+    {
+      src: "https://img.shields.io/badge/green%20sock-88CE02?style=for-the-badge&logo=greensock&logoColor=white",
+      alt: "Greensock Badge",
+    },
+  ],
+  backend: [
+    {
+      src: "https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase",
+      alt: "Firebase Badge",
+    },
+    {
+      src: "https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white",
+      alt: "Github Actions Badge",
+    },
+  ],
 };
 
 export default TechStackSection;

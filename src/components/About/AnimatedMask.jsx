@@ -80,7 +80,7 @@ const AnimatedMask = () => {
 
   return (
     <div className={`${styles.mask}`} ref={maskRef}>
-      <img src={`images/sky${1}.jpg`} alt="" className={styles.img} />
+      <img src={`https://s3.us-west-1.wasabisys.com/skyhigh-trampolines/sky1.jpg`} alt="skybg" className={styles.img} />
     </div>
   );
 };
