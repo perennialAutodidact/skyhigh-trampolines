@@ -1,86 +1,9 @@
-import React, { useLayoutEffect, useRef } from "react";
+import React from "react";
 import NumberCircle from "./NumberCircle";
-import { useOnLoadImages } from "hooks/useOnLoadImages";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/all";
-gsap.registerPlugin(ScrollTrigger);
 
-const WizardStep = React.forwardRef(({ number, headerText }, xref) => {
-  const tl = useRef();
-  const ref = useRef()
-
-  useLayoutEffect(() => {
-    const selector = gsap.utils.selector(ref);
-    const numberCircle = selector(`#numberCircle-${number}`);
-    const header = selector("#header");
-    const stepImg = selector(`#step-${number}-img`);
-
-
-    if (ref.current) {
-      const justifiedLOrR = parseInt(number) % 2 === 1 ? "L" : "R";
-
-      // let ctx = gsap.context(() => {
-        tl.current = gsap.timeline({
-          defaults: {
-            ease: "power2.out",
-          },
-          scrollTrigger: {
-            trigger: ref.current,
-            start: `top 50%`,
-            end: "+=1000",
-            markers: {
-              indent: 600,
-              startColor: "#0F0F00",
-              endColor: "#0F0F00",
-            },
-          },
-        });
-
-        let startX = justifiedLOrR === "L" ? 200 : -200;
-        tl.current
-          .set(numberCircle, {
-            x: startX,
-            opacity: 0,
-          })
-            .set(header, {
-              x: startX,
-              opacity: 0,
-            })
-            .set(stepImg, {
-              x: -startX,
-              opacity: 0,
-            });
-
-          tl.current
-            .to(numberCircle, {
-              x: 0,
-              autoAlpha: 1,
-              duration: 1,
-            })
-            .to(
-              header,
-              {
-                x: 0,
-                autoAlpha: 1,
-                duration: 1,
-              },
-              "-=0.75"
-            )
-            .to(
-              stepImg,
-              {
-                x: 0,
-                autoAlpha: 1,
-                duration: 1,
-              },
-              "-=0.75"
-            );
-      // }, ref);
-    }
-  }, [number, ref]);
-
+const WizardStep = ({ number, headerText }) => {
   return (
-    <div className="row mb-5" ref={ref}>
+    <div className="row mb-5">
       <div
         className={`
           col-12 col-md-6 
@@ -94,17 +17,12 @@ const WizardStep = React.forwardRef(({ number, headerText }, xref) => {
           <div className={`order-${number % 2 === 0 ? 2 : 1}`}>
             <NumberCircle number={number} />
           </div>
-          <h3
-            id="header"
-            style={{ visibility: "hidden" }}
-            className={`m-0 order-${number % 2 === 0 ? 1 : 2}`}
-          >
+          <h3 id="header" className={`m-0 order-${number % 2 === 0 ? 1 : 2}`}>
             {headerText}
           </h3>
         </div>
         <img
           id={`step-${number}-img`}
-          style={{ visibility: "hidden" }}
           src={`images/wizardStep${number}.png`}
           alt={`wizard form step ${number}`}
           width="100%"
@@ -112,6 +30,6 @@ const WizardStep = React.forwardRef(({ number, headerText }, xref) => {
       </div>
     </div>
   );
-});
+};
 
 export default WizardStep;

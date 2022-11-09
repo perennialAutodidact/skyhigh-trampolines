@@ -5,7 +5,6 @@ const NumberCircle = ({ number }) => {
   return (
     <div
       id={`numberCircle-${number}`}
-      style={{ visibility: "hidden" }}
       className={`
         bg-info text-light rounded-circle 
         d-flex justify-content-center align-items-center 

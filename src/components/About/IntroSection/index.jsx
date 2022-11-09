@@ -1,55 +1,10 @@
-import React, { useLayoutEffect, useRef } from "react";
+import React from "react";
 import GithubDev from "./GithubDev";
-import gsap from "gsap";
 
 const IntroSection = () => {
-  const ref = useRef();
-  const tl = useRef();
-
-  useLayoutEffect(() => {
-    tl.current = gsap.timeline();
-    const selector = gsap.utils.selector(ref);
-    const p1 = selector("#p1");
-    const p2 = selector("#p2");
-    const ghDevContainer = selector("#gh-dev-container");
-    const ghDev = selector(".gh-dev");
-
-    let ctx = gsap.context(() => {
-      tl.current
-        .fromTo(
-          p1,
-          { x: -500, opacity: 0 },
-          { x: 0, opacity: 1, duration: 1, ease: "power2.out" }
-        )
-        .fromTo(
-          p2,
-          { x: 500, opacity: 0 },
-          { x: 0, opacity: 1, duration: 1, ease: "power2.out" },
-          "-=0.5"
-        )
-        .fromTo(
-          ghDevContainer,
-          { y: 100, opacity: 0 },
-          { y: 0, opacity: 1, ease: "power2.out", duration: 0.5 },
-          "-=0.5"
-        )
-        .from(ghDev, {
-          opacity: 0,
-          y: -50,
-          ease: "bounce.out",
-          stagger: {
-            amount: 0.66,
-            each: 0.25,
-          },
-        });
-    }, ref);
-    return () => ctx.revert();
-  }, []);
-
   return (
     <div
       className="container-fluid py-3 py-lg-5 vh-75 overflow-hidden"
-      ref={ref}
     >
       <div className="row gy-2 gy-lg-3 g-xl-2">
         <div className="col-12 col-md-8 ps-md-5">
