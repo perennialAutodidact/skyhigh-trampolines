@@ -26,10 +26,6 @@ const KGSection = () => {
           trigger: ref.current,
           start: "top 50%",
           end: "+=500",
-          markers: {
-            startColor: "#0000FF",
-            endColor: "#0000FF",
-          },
         },
       });
 

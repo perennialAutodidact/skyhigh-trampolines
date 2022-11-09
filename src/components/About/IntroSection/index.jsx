@@ -83,6 +83,7 @@ const IntroSection = () => {
     </div>
   );
 };
+
 const DEVS = [
   {
     name: "Keegan Good",

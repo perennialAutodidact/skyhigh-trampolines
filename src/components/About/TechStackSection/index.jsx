@@ -28,11 +28,6 @@ const TechStackSection = () => {
           trigger: ref.current,
           start: "top 50%",
           end: "+=500",
-          markers: {
-            startColor: "#FF00FF",
-            endColor: "#FF00FF",
-            indent: 200,
-          },
         },
       });
 
@@ -101,7 +96,7 @@ const TechStackSection = () => {
     <div className="container-fluid" ref={ref}>
       <div
         id="tech-stack-container"
-        className="row gy-3 my-5 p-5 bg-secondary shadow"
+        className="row gy-3 mb-5 p-5 bg-secondary shadow"
         style={{ visibility: "hidden" }}
       >
         <h1
