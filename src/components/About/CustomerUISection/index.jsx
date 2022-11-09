@@ -1,14 +1,14 @@
 import React, { useLayoutEffect, useRef, useMemo } from "react";
 import WizardStep from "./WizardStep";
 import gsap from "gsap";
+import { useOnLoadImages } from "hooks/useOnLoadImages";
 
 const CustomerUISection = () => {
-  const ref1 = useRef();
+  const ref = useRef();
   const stepRefs = useRef([]);
   stepRefs.current = [];
-  const tl1 = useRef();
-  const tl2 = useRef();
-  // onst ctx2 = useMemo(() => gsap.context(() => {}, ref2), [ref2]);
+  const tl = useRef();
+  const imagesLoaded = useOnLoadImages(ref);
 
   const addToRefs = (el) => {
     if (el && !stepRefs.current.includes(el)) {
@@ -17,94 +17,100 @@ const CustomerUISection = () => {
   };
 
   useLayoutEffect(() => {
-    const selector = gsap.utils.selector(ref1);
-    const customerUIHeader = selector("#customer-ui-header");
-    const p1 = selector("#p1");
+    if (imagesLoaded) {
+      const selector = gsap.utils.selector(ref);
+      const customerUIHeader = selector("#customer-ui-header");
+      const p1 = selector("#p1");
+      const bookingWizardHeader = selector("#booking-wizard-header");
 
-    let ctx1 = gsap.context(() => {
-      tl1.current = gsap.timeline({
-        defaults: {
-          ease: "power2.out",
-        },
-        scrollTrigger: {
-          trigger: ref1.current,
-          start: "top 70%",
-          end: "+= 200",
-          // markers: {
-          //   indent: 500,
-          // },
-        },
-      });
+      let ctx1 = gsap.context(() => {
+        tl.current = gsap.timeline({
+          defaults: {
+            ease: "power2.out",
+          },
+          scrollTrigger: {
+            trigger: ref.current,
+            start: "top center+=100",
+          },
+        });
 
-      tl1.current
-        .set(customerUIHeader, { autoAlpha: 0, x: -200 })
-        .set(p1, { autoAlpha: 0, x: -200 });
+        tl.current
+          .set(customerUIHeader, { x: -200 })
+          .set(p1, { x: -200 })
+          .set(bookingWizardHeader, { y: -200 });
 
-      tl1.current
-        .to(customerUIHeader, {
-          autoAlpha: 1,
-          x: 0,
-          duration: 1,
-        })
-        .to(
-          p1,
-          {
+        tl.current
+          .to(customerUIHeader, {
             autoAlpha: 1,
             x: 0,
             duration: 1,
-          },
-          "-=0.5"
-        );
-
-      // let ctx2 = gsap.context(() => {
-      // const selector = gsap.utils.selector(ref2);
-      // const bookingWizardHeader = selector("#booking-wizard-header");
-
-      // tl2.current = gsap.timeline({
-      //   scrollTrigger: {
-      //     trigger: ref2.current,
-      //     start: "top 50%",
-      //     end: "+=200",
-      //     markers: {
-      //       startColor: "#00FFFF",
-      //       endColor: "#00FFFF",
-      //       indent: 400,
-      //     },
-      //   },
-      // });
-      // tl2.current.set(bookingWizardHeader, { opacity: 0, y: -200 });
-      // tl2.current.to(bookingWizardHeader, {
-      //   autoAlpha: 1,
-      //   y: 0,
-      // });
-      // }, ref2);
-      stepRefs.current.forEach((el, index) => {
-        gsap.fromTo(
-          el,
-          {
-            autoAlpha: 0,
-          },
-          {
-            autoAlpha: 1,
-            duration: 1,
-            scrollTrigger: {
-              trigger: el,
-              start: "top center+=100",
-              markers: true,
+          })
+          .to(
+            p1,
+            {
+              autoAlpha: 1,
+              x: 0,
+              duration: 1,
             },
-          }
-        );
-      });
-    }, ref1);
-    return () => {
-      ctx1.revert();
-    };
-  }, []);
+            "-=0.5"
+          );
+
+        stepRefs.current.forEach((el, index) => {
+          let numberCircle = el.querySelector(`#number-circle-${index + 1}`);
+          let header = el.querySelector(`#header`);
+          let stepImg = el.querySelector(`#step-${index + 1}-img`);
+
+          let startX = (index + 1) % 2 === 1 ? 200 : -200;
+          gsap
+            .timeline({
+              scrollTrigger: {
+                trigger: el,
+                start: "top center+=200",
+              },
+            })
+            .to(bookingWizardHeader, { autoAlpha: 1, y: 0 })
+            .fromTo(
+              numberCircle,
+              { autoAlpha: 0, x: startX },
+              { x: 0, autoAlpha: 1, duration: 1 }
+            )
+            .fromTo(
+              header,
+              {
+                x: startX,
+                autoAlpha: 0,
+              },
+              {
+                x: 0,
+                autoAlpha: 1,
+                duration: 0.75,
+              },
+              "-=0.75"
+            )
+            .to(
+              stepImg,
+              {
+                autoAlpha: 1,
+                duration: 1,
+              },
+              "-=0.75"
+            );
+        });
+      }, ref);
+      return () => {
+        ctx1.revert();
+      };
+    }
+  }, [imagesLoaded]);
 
   return (
-    <div id="wizard-section" className="container-fluid">
-      <div className="row" ref={ref1}>
-        <h1 id="customer-ui-header" className="display-3 ps-md-5">
+    <div id="wizard-section" className="container-fluid" ref={ref}>
+      <div className="row">
+        <h1
+          id="customer-ui-header"
+          className="display-3 ps-md-5"
+          style={{ visibility: "hidden" }}
+        >
           Customer UI
         </h1>
         <div className="col-12 col-md-8 mb-5">
@@ -118,7 +124,6 @@ const CustomerUISection = () => {
       </div>
       <div className="row">
         <h2
-          // ref={ref2}
           id="booking-wizard-header"
           className="display-4 text-center"
           style={{ visibility: "hidden" }}
@@ -127,7 +132,7 @@ const CustomerUISection = () => {
         </h2>
         <div className="container mt-5">
           {wizardSteps.map(({ number, headerText }) => (
-            <div className="row" ref={addToRefs}>
+            <div className="row" ref={addToRefs} key={number}>
               <WizardStep
                 number={number}
                 headerText={headerText}
