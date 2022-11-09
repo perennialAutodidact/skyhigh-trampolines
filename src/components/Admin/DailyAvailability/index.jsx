@@ -10,7 +10,7 @@ import ColorLegend from "./ColorLegend";
 
 const DailyAvailability = () => {
   const appDispatch = useDispatch();
-  const { bookingsByDate, loading: bookingsLoadingStatus } = useSelector(
+  const { bookingsByDate, loading: bookingsLoadingStatus, error: bookingsError } = useSelector(
     (appState) => appState.bookings
   );
   const { rooms, loading: roomsLoadingStatus } = useSelector(
@@ -37,13 +37,13 @@ const DailyAvailability = () => {
     }
   }, [rooms, roomsLoadingStatus, appDispatch]);
 
-  const bookingsHaveBeenFetched = useRef(false);
   useEffect(() => {
-    if (!bookingsHaveBeenFetched.current) {
-      appDispatch(getBookingsByDate(selectedDate));
-      bookingsHaveBeenFetched.current = true;
+    if (!bookingsByDate[selectedDate] && bookingsLoadingStatus === "idle" && !bookingsError) {
+      appDispatch(getBookingsByDate(selectedDate)).then(() => {
+      });
+
     }
-  }, [bookingsByDate, bookingsLoadingStatus, selectedDate, appDispatch]);
+  }, [bookingsByDate, bookingsLoadingStatus, bookingsError, selectedDate, appDispatch]);
 
   return (
     <div className="container pb-5 mb-5">
