@@ -71,30 +71,11 @@ const IntroSection = () => {
         <div className="col-12 col-md-10 offset-md-1 bg-info p-5">
           <div className="container">
             <div className="row gy-5">
-              <div className="col-6 col-md-3">
-                <GithubDev
-                  name={"Keegan Good"}
-                  url={"https://github.com/perennialautodidact"}
-                />
-              </div>
-              <div className="col-6 col-md-3 d-flex flex-column align-items-center">
-                <GithubDev
-                  name={"Monique"}
-                  url={"https://github.com/m-oniqu3"}
-                />
-              </div>
-              <div className="col-6 col-md-3 d-flex flex-column align-items-center">
-                <GithubDev
-                  name={"Jin Choo"}
-                  url={"https://github.com/jinchoo"}
-                />
-              </div>
-              <div className="col-6 col-md-3 d-flex flex-column align-items-center">
-                <GithubDev
-                  name={"waldothedeveloper"}
-                  url={"https://github.com/waldothedeveloper"}
-                />
-              </div>
+              {DEVS.map(({ name, url }) => (
+                <div className="col-6 col-md-3" key={name}>
+                  <GithubDev name={name} url={url} />
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -102,5 +83,23 @@ const IntroSection = () => {
     </div>
   );
 };
+const DEVS = [
+  {
+    name: "Keegan Good",
+    url: "https://github.com/perennialautodidact",
+  },
+  {
+    name: "Monique",
+    url: "https://github.com/m-oniq3",
+  },
+  {
+    name: "Jin Choo",
+    url: "https://github.com/jinchoo",
+  },
+  {
+    name: "Waldo",
+    url: "https://github.com/waldothedeveloper",
+  },
+];
 
 export default IntroSection;
