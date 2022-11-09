@@ -1,7 +1,8 @@
-import React, { useLayoutEffect, useRef, useMemo } from "react";
-import WizardStep from "./WizardStep";
+import React, { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { useOnLoadImages } from "hooks/useOnLoadImages";
+import ScreenshotList from "../ScreenshotList";
+import { wizardScreenshots } from "./wizardScreenshots";
 
 const CustomerUISection = () => {
   const ref = useRef();
@@ -56,9 +57,9 @@ const CustomerUISection = () => {
           );
 
         stepRefs.current.forEach((el, index) => {
-          let numberCircle = el.querySelector(`#number-circle-${index + 1}`);
+          let numberCircle = el.querySelector(`#number-circle`);
           let header = el.querySelector(`#header`);
-          let stepImg = el.querySelector(`#step-${index + 1}-img`);
+          let stepImg = el.querySelector(`#screenshot`);
 
           let startX = (index + 1) % 2 === 1 ? 200 : -200;
           gsap
@@ -104,7 +105,7 @@ const CustomerUISection = () => {
   }, [imagesLoaded]);
 
   return (
-    <div id="wizard-section" className="container-fluid" ref={ref}>
+    <section id="wizard-section" className="container-fluid" ref={ref}>
       <div className="row">
         <h1
           id="customer-ui-header"
@@ -130,47 +131,11 @@ const CustomerUISection = () => {
         >
           Booking Wizard
         </h2>
-        <div className="container mt-5">
-          {wizardSteps.map(({ number, headerText }) => (
-            <div className="row" ref={addToRefs} key={number}>
-              <WizardStep
-                number={number}
-                headerText={headerText}
-                key={number}
-              />
-            </div>
-          ))}
-        </div>
+
+        <ScreenshotList screenshots={wizardScreenshots} refAdder={addToRefs} />
       </div>
-    </div>
+    </section>
   );
 };
-
-const wizardSteps = [
-  {
-    number: 1,
-    headerText: "Select Date",
-  },
-  {
-    number: 2,
-    headerText: "Select Products",
-  },
-  {
-    number: 3,
-    headerText: "Select Add-Ons",
-  },
-  {
-    number: 4,
-    headerText: "Customer Details",
-  },
-  {
-    number: 5,
-    headerText: "Sign the Waiver",
-  },
-  {
-    number: 6,
-    headerText: "Payment Details",
-  },
-];
 
 export default CustomerUISection;

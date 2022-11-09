@@ -1,7 +1,7 @@
-import React, { useLayoutEffect, useRef } from "react";
-import NumberCircle from "./NumberCircle";
+import React from "react";
+import NumberCircle from "../NumberCircle";
 
-const WizardStep = ({ number, headerText }) => {
+const ScreenshotItem = ({ number, headerText, fileName, alt }) => {
   return (
     <div
       className={`
@@ -17,22 +17,24 @@ const WizardStep = ({ number, headerText }) => {
         <div className={`order-${number % 2 === 0 ? 2 : 1}`}>
           <NumberCircle number={number} />
         </div>
-        <h3 id="header" className={`m-0 order-${number % 2 === 0 ? 1 : 2}`}
-          style={{visibility: "hidden"}}
+        <h3
+          id="header"
+          className={`m-0 order-${number % 2 === 0 ? 1 : 2}`}
+          style={{ visibility: "hidden" }}
         >
           {headerText}
         </h3>
       </div>
       <img
-        id={`step-${number}-img`}
-        src={`https://s3.us-west-1.wasabisys.com/skyhigh-trampolines/wizardStep${number}.png`}
-        alt={`wizard form step ${number}`}
+        id={`screenshot`}
+        src={`https://s3.us-west-1.wasabisys.com/skyhigh-trampolines/${fileName}`}
+        alt={alt}
         width="100%"
-        style={{visibility: "hidden"}}
-        className=""
+        style={{ visibility: "hidden" }}
+        className="shadow"
       />
     </div>
   );
 };
 
-export default WizardStep;
+export default ScreenshotItem;
