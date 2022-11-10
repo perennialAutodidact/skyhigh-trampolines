@@ -21,16 +21,16 @@ export const adminScreenshots = {
     {
       headerText: "Products List",
       fileName: {
-        mobile: "dailyAvailabilityMobile.png",
-        desktop: "dailyAvailabilityDesktop.png",
+        mobile: "productsList.png",
+        desktop: "productsList.png",
       },
       alt: "Screenshot of Admin List of All Products",
     },
     {
       headerText: "Product Form",
       fileName: {
-        mobile: "dailyAvailabilityMobile.png",
-        desktop: "dailyAvailabilityDesktop.png",
+        mobile: "productsForm.png",
+        desktop: "productsForm.png",
       },
       alt: "Screenshot of Admin Form to Add a Product",
     },
@@ -39,16 +39,16 @@ export const adminScreenshots = {
     {
       headerText: "Rooms List",
       fileName: {
-        mobile: "dailyAvailabilityMobile.png",
-        desktop: "dailyAvailabilityDesktop.png",
+        mobile: "roomsList.png",
+        desktop: "roomsList.png",
       },
       alt: "Screenshot of Admin List of All Rooms",
     },
     {
       headerText: "Room Form",
       fileName: {
-        mobile: "dailyAvailabilityMobile.png",
-        desktop: "dailyAvailabilityDesktop.png",
+        mobile: "roomsForm.png",
+        desktop: "roomsForm.png",
       },
       alt: "Screenshot of Admin Form To Add A Room",
     },
@@ -58,8 +58,8 @@ export const adminScreenshots = {
       number: 1,
       headerText: "Add-Ons List",
       fileName: {
-        mobile: "dailyAvailabilityMobile.png",
-        desktop: "dailyAvailabilityDesktop.png",
+        mobile: "addOnsList.png",
+        desktop: "addOnsList.png",
       },
       alt: "Screenshot of Admin List of All Add-Ons",
     },
@@ -67,8 +67,8 @@ export const adminScreenshots = {
       number: 2,
       headerText: "Add-On Form",
       fileName: {
-        mobile: "dailyAvailabilityMobile.png",
-        desktop: "dailyAvailabilityDesktop.png",
+        mobile: "addOnsForm.png",
+        desktop: "addOnsForm.png",
       },
       alt: "Screenshot of Admin Form to Add an Add-On",
     },

@@ -4,6 +4,7 @@ import { ScrollTrigger } from "gsap/all";
 import ScreenshotList from "../ScreenshotList";
 import { useOnLoadImages } from "../../../hooks/useOnLoadImages";
 import { adminScreenshots } from "./adminScreenshots";
+import { fadeInFromSide } from "../ScreenshotList/animations";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -11,6 +12,7 @@ const AdminUISection = () => {
   const ref = useRef();
   const tl = useRef();
   const bookingScreenshotRefs = useRef([]);
+  const productScreenshotRefs = useRef([]);
 
   const imagesLoaded = useOnLoadImages(ref);
 
@@ -37,27 +39,11 @@ const AdminUISection = () => {
             start: "top 80%",
           },
         });
-
+        
         tl.current
-          .set(adminUIHeader, { x: -200 })
-          .set(p1, { x: -200 })
-          .set(bookingsHeader, { y: -200 });
-
-        tl.current
-          .to(adminUIHeader, {
-            autoAlpha: 1,
-            x: 0,
-            duration: 1,
-          })
-          .to(
-            p1,
-            {
-              autoAlpha: 1,
-              x: 0,
-              duration: 1,
-            },
-            "-=0.5"
-          );
+          .add(fadeInFromSide(adminUIHeader, -100, 0.5))
+          .add(fadeInFromSide(p1, -100, 0.5), "-=0.3")
+          .add(fadeInFromSide(bookingsHeader, -100, 0.75));
 
         bookingScreenshotRefs.current.forEach((el, index) => {
           let numberCircle = el.querySelector(`#number-circle`);
@@ -65,6 +51,8 @@ const AdminUISection = () => {
           let stepImg = el.querySelector(`#screenshot`);
 
           let startX = (index + 1) % 2 === 1 ? 200 : -200;
+          let duration = 0.75;
+          let delay = duration * 0.6;
           gsap
             .timeline({
               scrollTrigger: {
@@ -72,8 +60,9 @@ const AdminUISection = () => {
                 start: `top 80%`,
               },
             })
-            .to(bookingsHeader, { autoAlpha: 1, y: 0 })
+            
             .fromTo(
+
               numberCircle,
               { autoAlpha: 0, x: startX },
               { x: 0, autoAlpha: 1, duration: 1 }
@@ -152,7 +141,7 @@ const AdminUISection = () => {
             Products
           </h2>
         </div>
-        {/* <ScreenshotList screenshots={adminProductsScreenshots} refAdder={refAdder}/> */}
+        <ScreenshotList screenshots={adminScreenshots.products} refAdder={refAdder} refList={productScreenshotRefs}/>
       </div>
     </section>
   );
