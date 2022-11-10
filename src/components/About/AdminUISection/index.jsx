@@ -34,7 +34,7 @@ const AdminUISection = () => {
           },
           scrollTrigger: {
             trigger: ref.current,
-            start: "top center+=100",
+            start: "top 80%",
           },
         });
 
