@@ -1,17 +1,16 @@
 import React from "react";
 import ScreenshotItem from "./ScreenshotItem";
 
-const ScreenshotList = ({ screenshots, refAdder }) => {
+const ScreenshotList = ({ screenshots, refAdder, refList }) => {
   return (
-    <div className="container mt-5">
-      {screenshots.map(({ number, headerText, fileName, alt }) => (
-        <div className="row" ref={refAdder} key={number}>
+    <div className="container-fluid mt-5">
+      {screenshots.map(({ headerText, fileName, alt }, index) => (
+        <div className="row" ref={el=>refAdder(el, refList)} key={index}>
           <ScreenshotItem
-            number={number}
+            index={index}
             headerText={headerText}
             fileName={fileName}
             alt={alt}
-            key={number}
           />
         </div>
       ))}

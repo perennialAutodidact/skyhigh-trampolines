@@ -7,7 +7,6 @@ import { wizardScreenshots } from "./wizardScreenshots";
 const CustomerUISection = () => {
   const ref = useRef();
   const stepRefs = useRef([]);
-  stepRefs.current = [];
   const tl = useRef();
   const imagesLoaded = useOnLoadImages(ref);
 
@@ -66,7 +65,7 @@ const CustomerUISection = () => {
             .timeline({
               scrollTrigger: {
                 trigger: el,
-                start: "top center+=200",
+                start: `top 80%`,
               },
             })
             .to(bookingWizardHeader, { autoAlpha: 1, y: 0 })
@@ -114,7 +113,7 @@ const CustomerUISection = () => {
         >
           Customer UI
         </h1>
-        <div className="col-12 col-md-8 mb-5">
+        <div className="col-12 col-md-8 mb-5 p-0">
           <p id="p1" className="fs-2 ps-md-5" style={{ visibility: "hidden" }}>
             The customer UI consists of a{" "}
             <span className="fw-bold text-primary">home page</span> and a{" "}
@@ -132,7 +131,7 @@ const CustomerUISection = () => {
           Booking Wizard
         </h2>
 
-        <ScreenshotList screenshots={wizardScreenshots} refAdder={addToRefs} />
+        <ScreenshotList screenshots={wizardScreenshots} refAdder={addToRefs} refList={stepRefs} />
       </div>
     </section>
   );
