@@ -53,7 +53,7 @@ export const adminScreenshots = {
       alt: "Screenshot of Admin Form To Add A Room",
     },
   ],
-  addons: [
+  addOns: [
     {
       number: 1,
       headerText: "Add-Ons List",

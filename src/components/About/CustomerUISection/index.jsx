@@ -3,7 +3,7 @@ import gsap from "gsap";
 import { useOnLoadImages } from "hooks/useOnLoadImages";
 import ScreenshotList from "../ScreenshotList";
 import { wizardScreenshots } from "./wizardScreenshots";
-import { fadeInFromSide } from "../ScreenshotList/animations";
+import { animateRefList, fadeInFromSide } from "../ScreenshotList/animations";
 
 const CustomerUISection = () => {
   const ref = useRef();
@@ -36,29 +36,33 @@ const CustomerUISection = () => {
         });
 
         tl.current
-          .add(fadeInFromSide(customerUIHeader, -100, 0.5))
-          .add(fadeInFromSide(p1, -100, 0.5), "-=0.3")
-          .add(fadeInFromSide(bookingWizardHeader, -100, 0.75));
+          .add(
+            fadeInFromSide(customerUIHeader, { startX: -100, duration: 0.5 })
+          )
+          .add(fadeInFromSide(p1, { startX: -100, duration: 0.5 }), "-=0.3")
+          .add(
+            fadeInFromSide(bookingWizardHeader, {
+              startX: -100,
+              duration: 0.75,
+            })
+          );
 
-        stepRefs.current.forEach((el, index) => {
-          let numberCircle = el.querySelector(`#number-circle`);
-          let header = el.querySelector(`#header`);
-          let stepImg = el.querySelector(`#screenshot`);
-          let elements = [numberCircle, header, stepImg];
+        let subElementIds = ["#number-circle", "#header", "#screenshot"];
+        let duration = 0.75;
+        let staggerDelay = `-=${duration * 0.6}`;
 
-          let startX = (index + 1) % 2 === 1 ? 100 : -100;
-          let duration = 0.75;
-          let delay = duration * 0.6;
-          let _tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: el,
-              start: `top center+=100`,
-            },
-          });
-          elements.forEach((el) => {
-            _tl.add(fadeInFromSide(el, startX, duration), `-=${delay}`);
-          });
-        });
+        // build an options object  for each sub-element in the ref list
+        let animationOptions = stepRefs.current.map((el, i) => ({
+          duration,
+          startX: i % 2 === 0 ? 200 : -200,
+        }));
+        animateRefList(
+          stepRefs,
+          subElementIds,
+          fadeInFromSide,
+          animationOptions,
+          staggerDelay
+        );
       }, ref);
       return () => {
         ctx1.revert();
@@ -68,7 +72,7 @@ const CustomerUISection = () => {
 
   return (
     <section id="wizard-section" className="container-fluid" ref={ref}>
-      <div className="row">
+      <div className="row bg-disabled py-4">
         <h1
           id="customer-ui-header"
           className="display-3 ps-md-5"
@@ -76,8 +80,8 @@ const CustomerUISection = () => {
         >
           Customer UI
         </h1>
-        <div className="col-12 col-md-8 mb-5 p-0">
-          <p id="p1" className="fs-2 ps-md-5" style={{ visibility: "hidden" }}>
+        <div className="col-12 col-md-8 p-0">
+          <p id="p1" className="fs-2 ps-3 ps-md-5" style={{ visibility: "hidden" }}>
             The customer UI consists of a{" "}
             <span className="fw-bold text-primary">home page</span> and a{" "}
             <span className="fw-bold text-primary">six-part wizard form</span>{" "}
@@ -86,13 +90,15 @@ const CustomerUISection = () => {
         </div>
       </div>
       <div className="row">
-        <h2
-          id="booking-wizard-header"
-          className="display-4 text-center"
-          style={{ visibility: "hidden" }}
-        >
-          Booking Wizard
-        </h2>
+        <div className="col-12 col-md-8 offset-md-2 mt-3">
+          <h2
+            id="booking-wizard-header"
+            className="display-4 m-0"
+            style={{ visibility: "hidden" }}
+          >
+            Booking Wizard
+          </h2>
+        </div>
 
         <ScreenshotList
           screenshots={wizardScreenshots}

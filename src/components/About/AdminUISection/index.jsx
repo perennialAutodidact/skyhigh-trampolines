@@ -4,7 +4,7 @@ import { ScrollTrigger } from "gsap/all";
 import ScreenshotList from "../ScreenshotList";
 import { useOnLoadImages } from "../../../hooks/useOnLoadImages";
 import { adminScreenshots } from "./adminScreenshots";
-import { fadeInFromSide } from "../ScreenshotList/animations";
+import { animateRefList, fadeInFromSide } from "../ScreenshotList/animations";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -13,6 +13,8 @@ const AdminUISection = () => {
   const tl = useRef();
   const bookingScreenshotRefs = useRef([]);
   const productScreenshotRefs = useRef([]);
+  const roomScreenshotRefs = useRef([]);
+  const addOnScreenshotRefs = useRef([]);
 
   const imagesLoaded = useOnLoadImages(ref);
 
@@ -26,7 +28,10 @@ const AdminUISection = () => {
     const selector = gsap.utils.selector(ref);
     const adminUIHeader = selector("#admin-ui-header");
     const p1 = selector("#p1");
-    const bookingsHeader = selector("#admin-bookings-header");
+    const headerNames = ["bookings", "rooms", "products", "addons"];
+    const sectionHeaders = headerNames.map((headerName) =>
+      selector(`#admin-${headerName}-header`)
+    );
 
     if (imagesLoaded) {
       let ctx = gsap.context(() => {
@@ -39,76 +44,70 @@ const AdminUISection = () => {
             start: "top 80%",
           },
         });
-        
+
         tl.current
-          .add(fadeInFromSide(adminUIHeader, -100, 0.5))
-          .add(fadeInFromSide(p1, -100, 0.5), "-=0.3")
-          .add(fadeInFromSide(bookingsHeader, -100, 0.75));
+          .add(fadeInFromSide(adminUIHeader, { startX: -100, duration: 0.5 }))
+          .add(fadeInFromSide(p1, { startX: -100, duration: 0.5 }), "-=0.3");
 
-        bookingScreenshotRefs.current.forEach((el, index) => {
-          let numberCircle = el.querySelector(`#number-circle`);
-          let header = el.querySelector(`#header`);
-          let stepImg = el.querySelector(`#screenshot`);
+        let refLists = [
+          bookingScreenshotRefs,
+          roomScreenshotRefs,
+          productScreenshotRefs,
+          addOnScreenshotRefs,
+        ];
 
-          let startX = (index + 1) % 2 === 1 ? 200 : -200;
+        refLists.forEach((refList, index) => {
+          let sectionHeader = sectionHeaders[index];
+          let subElementIds = ["#number-circle", "#header", "#screenshot"];
           let duration = 0.75;
-          let delay = duration * 0.6;
+          let staggerDelay = `-=${duration * 0.6}`;
+
+          // build an options object  for each sub-element in the ref list
+          let animationOptions = refList.current.map((el, i) => ({
+            duration,
+            startX: i % 2 === 0 ? 200 : -200,
+          }));
+
+          // animate section header
+          let startX = animationOptions[0].startX;
           gsap
             .timeline({
               scrollTrigger: {
-                trigger: el,
-                start: `top 80%`,
+                trigger: sectionHeader,
+                start: "top 90%",
               },
             })
-            
-            .fromTo(
+            .add(fadeInFromSide(sectionHeader, { startX, duration }));
 
-              numberCircle,
-              { autoAlpha: 0, x: startX },
-              { x: 0, autoAlpha: 1, duration: 1 }
-            )
-            .fromTo(
-              header,
-              {
-                x: startX,
-                autoAlpha: 0,
-              },
-              {
-                x: 0,
-                autoAlpha: 1,
-                duration: 0.75,
-              },
-              "-=0.75"
-            )
-            .to(
-              stepImg,
-              {
-                autoAlpha: 1,
-                duration: 1,
-              },
-              "-=0.75"
-            );
+          // animate the numberCircle, header, and screenshot
+          animateRefList(
+            refList,
+            subElementIds,
+            fadeInFromSide,
+            animationOptions,
+            staggerDelay
+          );
         });
-      }, []);
+      }, ref);
       return () => ctx.revert();
     }
   }, [imagesLoaded]);
 
   return (
     <section id="admin-ui-section" className="container-fluid" ref={ref}>
-      <div className="row py-5">
+      <div className="row bg-disabled py-5">
         <h1
           id="admin-ui-header"
-          className="display-3 ps-md-5"
+          className="display-3 ps-md-5 m-0"
           style={{ visibility: "hidden" }}
         >
           Admin UI
         </h1>
         <div className="col-12 col-md-10 offset-md-1"></div>{" "}
-        <div className="col-12 col-md-8 mb-5 p-0">
+        <div className="col-12 col-md-8 p-0">
           <p
             id="p1"
-            className="fs-2 p-0 ps-md-5"
+            className="fs-2 p-0 ps-3 ps-md-5"
             style={{ visibility: "hidden" }}
           >
             Admin users can view a{" "}
@@ -119,7 +118,7 @@ const AdminUISection = () => {
         </div>
       </div>
       <div className="row">
-        <div className="col-12 col-md-8 offset-md-2">
+        <div className="col-12 col-md-8 offset-md-2 mt-3">
           <h2
             id="admin-bookings-header"
             className="display-4"
@@ -137,11 +136,53 @@ const AdminUISection = () => {
 
       <div className="row mt-5">
         <div className="col-12 col-md-8 offset-md-2">
-          <h2 id="admin-products-header" className="display-4">
+          <h2
+            id="admin-rooms-header"
+            className="display-4"
+            style={{ visibility: "hidden" }}
+          >
+            Rooms
+          </h2>
+        </div>
+        <ScreenshotList
+          screenshots={adminScreenshots.rooms}
+          refAdder={refAdder}
+          refList={roomScreenshotRefs}
+        />
+      </div>
+
+      <div className="row mt-5">
+        <div className="col-12 col-md-8 offset-md-2">
+          <h2
+            id="admin-products-header"
+            className="display-4"
+            style={{ visibility: "hidden" }}
+          >
             Products
           </h2>
         </div>
-        <ScreenshotList screenshots={adminScreenshots.products} refAdder={refAdder} refList={productScreenshotRefs}/>
+        <ScreenshotList
+          screenshots={adminScreenshots.products}
+          refAdder={refAdder}
+          refList={productScreenshotRefs}
+        />
+      </div>
+
+      <div className="row mt-5">
+        <div className="col-12 col-md-8 offset-md-2">
+          <h2
+            id="admin-addons-header"
+            className="display-4"
+            style={{ visibility: "hidden" }}
+          >
+            Add-Ons
+          </h2>
+        </div>
+        <ScreenshotList
+          screenshots={adminScreenshots.addOns}
+          refAdder={refAdder}
+          refList={addOnScreenshotRefs}
+        />
       </div>
     </section>
   );
