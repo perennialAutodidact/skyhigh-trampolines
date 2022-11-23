@@ -13,7 +13,8 @@ const IntroSection = () => {
     const p2 = selector("#p2");
     const ghDevContainer = selector("#gh-dev-container");
     const ghDev = selector(".gh-dev");
-
+    
+    // setup animations
     let ctx = gsap.context(() => {
       tl.current
         .fromTo(
