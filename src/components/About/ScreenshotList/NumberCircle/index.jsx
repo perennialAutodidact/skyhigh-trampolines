@@ -4,7 +4,7 @@ import styles from "./NumberCircle.module.scss";
 const NumberCircle = ({ number }) => {
   return (
     <div
-      id={`numberCircle-${number}`}
+      id={`number-circle`}
       className={`
         bg-info text-light rounded-circle 
         d-flex justify-content-center align-items-center 

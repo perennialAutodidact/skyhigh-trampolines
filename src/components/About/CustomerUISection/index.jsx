@@ -1,4 +1,3 @@
-
 import React, { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { useOnLoadImages } from "hooks/useOnLoadImages";
@@ -17,14 +16,14 @@ const CustomerUISection = () => {
       stepRefs.current.push(el);
     }
   };
-  
+
   useLayoutEffect(() => {
     if (imagesLoaded) {
       const selector = gsap.utils.selector(ref);
       const customerUIHeader = selector("#customer-ui-header");
       const p1 = selector("#p1");
       const bookingWizardHeader = selector("#booking-wizard-header");
-      
+
       let duration = 0.75;
       let ctx1 = gsap.context(() => {
         tl.current = gsap.timeline({
@@ -38,9 +37,7 @@ const CustomerUISection = () => {
         });
 
         tl.current
-          .add(
-            fadeInFromSide(customerUIHeader, { startX: -100, duration })
-          )
+          .add(fadeInFromSide(customerUIHeader, { startX: -100, duration }))
           .add(fadeInFromSide(p1, { startX: -100, duration }), "-=0.3")
           .add(
             fadeInFromSide(bookingWizardHeader, {
@@ -57,7 +54,7 @@ const CustomerUISection = () => {
           duration,
           startX: i % 2 === 0 ? 200 : -200,
         }));
-        
+
         animateRefList(
           stepRefs,
           subElementIds,
@@ -83,7 +80,11 @@ const CustomerUISection = () => {
           Customer UI
         </h1>
         <div className="col-12 col-md-8 p-0">
-          <p id="p1" className="fs-2 ps-3 ps-md-5" style={{ visibility: "hidden" }}>
+          <p
+            id="p1"
+            className="fs-2 ps-3 ps-md-5"
+            style={{ visibility: "hidden" }}
+          >
             The customer UI consists of a{" "}
             <span className="fw-bold text-primary">home page</span> and a{" "}
             <span className="fw-bold text-primary">six-part wizard form</span>{" "}

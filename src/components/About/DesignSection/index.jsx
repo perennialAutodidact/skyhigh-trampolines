@@ -66,13 +66,7 @@ const DesignSection = () => {
             fadeInFromSide(wireframesHeader, { startX: -200, duration }),
             "-=0.5"
           )
-          .add(
-            fadeInFromSide(
-              wireframeCarousel,
-              { startX: 200, duration },
-              
-            )
-          );
+          .add(fadeInFromSide(wireframeCarousel, { startX: 200, duration }));
       }, ref);
 
       return () => ctx.revert();
@@ -146,10 +140,14 @@ const DesignSection = () => {
           </div>
         </div>
       </div>
-        <h2 id="wireframes-header" className="text-center">
-          Wireframes
-        </h2>
-      <div id="wireframe-carousel" className="container">
+      <h2 id="wireframes-header" className="text-center">
+        Wireframes
+      </h2>
+      <div
+        id="wireframe-carousel"
+        className="container"
+        style={{ visibility: "hidden" }}
+      >
         <div className="row mb-5">
           <div className="col-12 col-md-8 offset-md-2">
             <div
@@ -164,8 +162,10 @@ const DesignSection = () => {
                     type="button"
                     data-bs-target="#carouselExampleCaptions"
                     data-bs-slide-to={`${index}`}
-                    className={activeCarouselItem === index ? "active": ""}
-                    aria-current={activeCarouselItem === index ? "true":"false"}
+                    className={activeCarouselItem === index ? "active" : ""}
+                    aria-current={
+                      activeCarouselItem === index ? "true" : "false"
+                    }
                     aria-label={`Slide ${index + 1}`}
                   ></button>
                 ))}

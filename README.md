@@ -37,8 +37,49 @@ This repository is a fork of [the original](https://github.com/Scott-Coates-Org/
 The app has a customer-facing UI for booking reservations in two different rooms and an admin UI for viewing existing bookings, visualizing ticket availablity for each room and viewing/creating additional rooms, products and add-ons.
 
 ## Customer UI
+<table>
+    <tr>
+        <th colspan="3">Booking Wizard</th>
+    </tr>
+    <tr>
+        <td>
+            <img src="https://s3.us-west-1.wasabisys.com/skyhigh-trampolines/bookingStep1Desktop.png" alt="booking step 1">
+        </td>
+        <td>
+            <img src="https://s3.us-west-1.wasabisys.com/skyhigh-trampolines/bookingStep2Desktop.png" alt="booking step 1">
+        </td><td>
+            <img src="https://s3.us-west-1.wasabisys.com/skyhigh-trampolines/bookingStep3Desktop.png" alt="booking step 1">
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <img src="https://s3.us-west-1.wasabisys.com/skyhigh-trampolines/bookingStep4Desktop.png" alt="booking step 1">
+        </td>
+        <td>
+            <img src="https://s3.us-west-1.wasabisys.com/skyhigh-trampolines/bookingStep5Desktop.png" alt="booking step 1">
+        </td>
+        <td>
+            <img src="https://s3.us-west-1.wasabisys.com/skyhigh-trampolines/bookingStep6Desktop.png" alt="booking step 1">
+        </td>
+    </tr>
+</table>
 
 ## Admin UI
+
+<table>
+    <tr>
+        <th>Bookings List</th>
+        <th>Daily Availability</th>
+    </tr>
+    <tr>
+        <td>
+            <img src="https://s3.us-west-1.wasabisys.com/skyhigh-trampolines/bookingsList.png" alt="bookings list">
+        </td>
+        <td>
+            <img src="https://s3.us-west-1.wasabisys.com/skyhigh-trampolines/dailyAvailabilityDesktop.png" alt="bookings list">
+        </td>
+    </tr>
+</table>
 
 ## Running Locally
 
