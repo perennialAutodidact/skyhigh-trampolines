@@ -1,21 +1,116 @@
-import React from "react";
+
+import React, { useLayoutEffect, useRef } from "react";
+import gsap from "gsap";
 
 const TechStackSection = () => {
+  const ref = useRef();
+  const tl = useRef();
+
+  useLayoutEffect(() => {
+    const selector = gsap.utils.selector(ref);
+
+    const techStackContainer = selector("#tech-stack-container");
+    const techStackHeader = selector("#tech-stack-header");
+    const frontendTechStack = selector("#frontend-tech-stack");
+    const backendTechStack = selector("#backend-tech-stack");
+    const frontendBadges = selector(
+      "#frontend-tech-stack > #badges > .tech-badge"
+    );
+    const backendBadges = selector(
+      "#backend-tech-stack > #badges > .tech-badge"
+    );
+      let duration = 0.75;
+    let ctx = gsap.context(() => {
+      tl.current = gsap.timeline({
+        defaults: {
+          ease: "power2.out",
+        },
+        scrollTrigger: {
+          trigger: ref.current,
+          start: "top center+=200",
+          end: "+=500",
+        },
+      });
+
+      tl.current
+        .set(techStackContainer, { opacity: 0, y: 500 })
+        .set(techStackHeader, { opacity: 0, y: -200 })
+        .set(frontendTechStack, { opacity: 0, x: -200 })
+        .set(backendTechStack, { opacity: 0, x: 200 })
+        .set(frontendBadges, { opacity: 0, y: -50 })
+        .set(backendBadges, { opacity: 0, y: -50 });
+
+      tl.current
+        .to(techStackContainer, {
+          autoAlpha: 1,
+          y: 0,
+          duration,
+        })
+        .to(techStackHeader, {
+          autoAlpha: 1,
+          y: 0,
+          duration,
+        })
+        .to(
+          frontendTechStack,
+          {
+            autoAlpha: 1,
+            x: 0,
+            duration,
+          },
+          "-=0.5"
+        )
+        .to(
+          frontendBadges,
+          {
+            autoAlpha: 1,
+            y: 0,
+            stagger: 0.075,
+            duration,
+          },
+          "-=0.25"
+        )
+        .to(
+          backendTechStack,
+          {
+            autoAlpha: 1,
+            x: 0,
+            duration,
+          },
+          "-=1.5"
+        )
+        .to(
+          backendBadges,
+          {
+            autoAlpha: 1,
+            y: 0,
+            stagger: 0.075,
+            duration,
+          },
+          "-=0.3"
+        );
+      return () => ctx.revert();
+    }, ref);
+  }, []);
+
   return (
-    <div className="container-fluid">
+    <div className="container-fluid" ref={ref}>
       <div
         id="tech-stack-container"
-        className="row gy-3 my-5 p-5 bg-secondary shadow"
+        className="row gy-3 mb-5 p-5 bg-secondary shadow"
+        style={{ visibility: "hidden" }}
       >
         <h1
           id="tech-stack-header"
           className="display-3 m-0 text-light text-center"
+          style={{ visibility: "hidden" }}
         >
           Tech Stack
         </h1>
         <div
           id="frontend-tech-stack"
           className="col-12 col-md-6 offset-md-3 bg-light rounded p-3 shadow"
+          style={{ visibility: "hidden" }}
         >
           <h3 className="text-center mb-3">Frontend</h3>
           <div
@@ -23,7 +118,7 @@ const TechStackSection = () => {
             className="d-flex flex-wrap justify-content-center gap-3"
           >
             {badges.frontend.map(({ src, alt }) => (
-              <img src={src} alt={alt} className="tech-badge" key={alt} />
+              <img src={src} alt={alt} className="tech-badge" key={src} />
             ))}
           </div>
         </div>
@@ -31,6 +126,7 @@ const TechStackSection = () => {
         <div
           id="backend-tech-stack"
           className="col-12 col-md-6 offset-md-3 bg-light p-3 rounded shadow"
+          style={{ visibility: "hidden" }}
         >
           <h3 className="text-center mb-3">Backend</h3>
           <div
@@ -38,7 +134,7 @@ const TechStackSection = () => {
             className="d-flex flex-wrap justify-content-center gap-3"
           >
             {badges.backend.map(({ src, alt }) => (
-              <img src={src} alt={alt} className="tech-badge" key={alt} />
+              <img src={src} alt={alt} className="tech-badge" key={src} />
             ))}
           </div>
         </div>
@@ -46,7 +142,6 @@ const TechStackSection = () => {
     </div>
   );
 };
-
 const badges = {
   frontend: [
     {

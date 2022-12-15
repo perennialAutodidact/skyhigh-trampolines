@@ -4,7 +4,9 @@ import LoadingSpinner from "components/LoadingSpinner";
 import IntroSection from "./IntroSection";
 import KGSection from "./KGSection";
 import TechStackSection from "./TechStackSection";
+import DesignSection from "./DesignSection";
 import CustomerUISection from "./CustomerUISection";
+import AdminUISection from "./AdminUISection";
 
 const AboutPage = () => {
   const ref = useRef();
@@ -19,7 +21,9 @@ const AboutPage = () => {
           <IntroSection />
           <KGSection />
           <TechStackSection />
+          <DesignSection />
           <CustomerUISection />
+          <AdminUISection />
         </>
       )}
     </div>

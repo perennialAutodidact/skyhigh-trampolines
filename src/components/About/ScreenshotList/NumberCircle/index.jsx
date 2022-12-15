@@ -11,6 +11,7 @@ const NumberCircle = ({ number }) => {
         fs-2 fw-bold pb-1 shadow
         ${styles.numberCircle}
       `}
+      style={{ visibility: "hidden" }}
     >
       {number}
     </div>
