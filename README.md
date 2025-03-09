@@ -30,14 +30,29 @@ This repository is a fork of [the original](https://github.com/Scott-Coates-Org/
 
 ### Backend
 
-![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase)
+![Firebase](https://img.shields.io/badge/firebase-a08021?style=for-the-badge&logo=firebase&logoColor=ffcd34)
 ![Stripe](https://img.shields.io/badge/Stripe-5469d4?style=for-the-badge&logo=stripe&logoColor=ffffff)
+
+### CI / CD
+![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
 
 ## Features
 
-The app has a customer-facing UI for booking reservations in two different rooms and an admin UI for viewing existing bookings, visualizing ticket availablity for each room and viewing/creating additional rooms, products and add-ons.
+### Booking UI
+The app has a customer-facing UI for booking reservations in two different rooms. Customers can choose between multiple rooms and book dates and times for each. If a room is at maximum capacity for a particular time range, those times will be unavailable for selection by other customers.Customers must sign a waiver and the image of their signature is stored in the database with their purchase data.
 
-## Customer UI
+### Stripe
+ Purchases are sent to Stripe using Firebase serverless functions. Stripe stores a record of the purchase, generates a receipt and sends it back to Firebase using Stripe's webhooks. The receipt is then is emailed to the customer using Firebase serverless functions. 
+
+> **Note:** When testing the purchase, use the fake data provided by Stripe.
+>       The **credit card number should be `4111 1111 1111 1111`**. This indicates to Stripe that is a fake purchase for testing purposes. only
+>       The rest of the billing information can receive arbitrary values.
+
+### Admin UI
+The admin UI allows administrators to view existing bookings, quickly visual ticket availablity for each room and to view, edit, create or delete rooms, products and add-ons which will then appear in the Booking UI.
+
+## Screenshots
+### Customer UI
 <table>
     <tr>
         <th colspan="3">Booking Wizard</th>
@@ -65,19 +80,23 @@ The app has a customer-facing UI for booking reservations in two different rooms
     </tr>
 </table>
 
-## Admin UI
+### Admin UI
 
 <table>
     <tr>
         <th>Bookings List</th>
-        <th>Daily Availability</th>
+        <th>Daily Availability (Cloud Jumper Room)</th>
+        <th>Daily Availability (Cosmic Leap Room)</th>
     </tr>
     <tr>
         <td>
-            <img src="./public/images/adminBookingList.png" alt="bookings list">
+            <img src="./public/images/bookingsList.png" alt="bookings list">
         </td>
         <td>
-            <img src="./public/images/adminDailyAvailability.png" alt="bookings list">
+            <img src="./public/images/cloudJumperAvailability.png" alt="bookings list">
+        </td>
+         <td>
+            <img src="./public/images/cosmicLeapAvailability.png" alt="bookings list">
         </td>
     </tr>
 </table>
