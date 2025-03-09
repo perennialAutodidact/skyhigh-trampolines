@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { cancelPaymentIntent } from "../../redux/stripeSlice";
 import { Link } from "react-router-dom";
 import styles from "./Homepage.module.scss";
+import { fetchHomepageBgImageUrl } from "redux/authSlice";
 import { cancelBooking } from "../../redux/bookingsSlice";
 import { useOnLoadImages } from "../../hooks/useOnLoadImages";
 import LoadingSpinner from "../LoadingSpinner";
@@ -16,6 +17,8 @@ const Homepage = () => {
   const homePageRef = useRef();
   const tl = useRef();
   const imagesLoaded = useOnLoadImages(homePageRef);
+  const homepageBgImageUrl = useSelector(appState => appState.auth.homepageBgImageUrl);
+
 
   useEffect(() => {
     if (paymentIntent.id) {
@@ -27,6 +30,10 @@ const Homepage = () => {
   }, [paymentIntent, bookingInProgress, appDispatch]);
 
   useLayoutEffect(() => {
+    if (!homepageBgImageUrl) {
+      appDispatch(fetchHomepageBgImageUrl());
+    }
+
     if (imagesLoaded) {
       let selector = gsap.utils.selector(homePageRef);
 
@@ -77,7 +84,7 @@ const Homepage = () => {
 
       return () => ctx.revert();
     }
-  }, [homePageRef, imagesLoaded]);
+  }, [homePageRef, imagesLoaded, homepageBgImageUrl, appDispatch]);
 
   return (
     <div ref={homePageRef}>
@@ -92,7 +99,7 @@ const Homepage = () => {
           <div className="row">
             <div className="col-12 px-0">
               <h1 className="my-3 text-center">Sky High Trampoline Park</h1>
-              <AnimatedMask />
+              <AnimatedMask bgImageUrl={homepageBgImageUrl} />
             </div>
             <div className={`col-12 p-0 position-relative ${styles.content}`}>
               <div
@@ -105,7 +112,7 @@ const Homepage = () => {
                 justify-content-md-start
                 position-absolute text-light
                 `}
-                // styles={{ visibility: "hidden" }}
+              // styles={{ visibility: "hidden" }}
               ></div>
               <div
                 id="gray-circle"

@@ -13,9 +13,9 @@ const AdminUISection = () => {
   const ref = useRef();
   const tl = useRef();
   const bookingScreenshotRefs = useRef([]);
-  const productScreenshotRefs = useRef([]);
-  const roomScreenshotRefs = useRef([]);
-  const addOnScreenshotRefs = useRef([]);
+  // const productScreenshotRefs = useRef([]);
+  // const roomScreenshotRefs = useRef([]);
+  // const addOnScreenshotRefs = useRef([]);
 
   const imagesLoaded = useOnLoadImages(ref);
 
@@ -29,7 +29,7 @@ const AdminUISection = () => {
     const selector = gsap.utils.selector(ref);
     const adminUIHeader = selector("#admin-ui-header");
     const p1 = selector("#p1");
-    const headerNames = ["bookings", "rooms", "products", "addons"];
+    const headerNames = ["bookings"];
     const sectionHeaders = headerNames.map((headerName) =>
       selector(`#admin-${headerName}-header`)
     );
@@ -52,9 +52,9 @@ const AdminUISection = () => {
 
         let refLists = [
           bookingScreenshotRefs,
-          roomScreenshotRefs,
-          productScreenshotRefs,
-          addOnScreenshotRefs,
+          // roomScreenshotRefs,
+          // productScreenshotRefs,
+          // addOnScreenshotRefs,
         ];
 
         refLists.forEach((refList, index) => {
@@ -119,7 +119,7 @@ const AdminUISection = () => {
         </div>
       </div>
       <div className="row">
-        <div className="col-12 col-md-8 offset-md-2 mt-3">
+        <div className="col-12 col-md-8 offset-md-3 mt-3">
           <h2
             id="admin-bookings-header"
             className="display-4"
@@ -132,57 +132,6 @@ const AdminUISection = () => {
           screenshots={adminScreenshots.bookings}
           refAdder={refAdder}
           refList={bookingScreenshotRefs}
-        />
-      </div>
-
-      <div className="row mt-5">
-        <div className="col-12 col-md-8 offset-md-2">
-          <h2
-            id="admin-rooms-header"
-            className="display-4"
-            style={{ visibility: "hidden" }}
-          >
-            Rooms
-          </h2>
-        </div>
-        <ScreenshotList
-          screenshots={adminScreenshots.rooms}
-          refAdder={refAdder}
-          refList={roomScreenshotRefs}
-        />
-      </div>
-
-      <div className="row mt-5">
-        <div className="col-12 col-md-8 offset-md-2">
-          <h2
-            id="admin-products-header"
-            className="display-4"
-            style={{ visibility: "hidden" }}
-          >
-            Products
-          </h2>
-        </div>
-        <ScreenshotList
-          screenshots={adminScreenshots.products}
-          refAdder={refAdder}
-          refList={productScreenshotRefs}
-        />
-      </div>
-
-      <div className="row mt-5">
-        <div className="col-12 col-md-8 offset-md-2">
-          <h2
-            id="admin-addons-header"
-            className="display-4"
-            style={{ visibility: "hidden" }}
-          >
-            Add-Ons
-          </h2>
-        </div>
-        <ScreenshotList
-          screenshots={adminScreenshots.addOns}
-          refAdder={refAdder}
-          refList={addOnScreenshotRefs}
         />
       </div>
     </section>

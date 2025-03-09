@@ -21,8 +21,9 @@ const DesignSection = () => {
     const colors = selector(".color-swatch");
     const fontsHeader = selector("#fonts-header");
     const fontSampleContainers = selector(".font-sample-container");
-    const wireframesHeader = selector("#wireframes-header");
-    const wireframeCarousel = selector("#wireframe-carousel");
+    // the wireframe screenshots were lost in transition from Wasabi S3 to Firebase Storage :( 
+    // const wireframesHeader = selector("#wireframes-header");
+    // const wireframeCarousel = selector("#wireframe-carousel");
 
     if (imagesLoaded && !tl.current && ref.current) {
       const ctx = gsap.context(() => {
@@ -62,11 +63,11 @@ const DesignSection = () => {
             { x: 0, autoAlpha: 1, duration, stagger: 0.075 },
             "-=0.5"
           )
-          .add(
-            fadeInFromSide(wireframesHeader, { startX: -200, duration }),
-            "-=0.5"
-          )
-          .add(fadeInFromSide(wireframeCarousel, { startX: 200, duration }));
+          // .add(
+          //   fadeInFromSide(wireframesHeader, { startX: -200, duration }),
+          //   "-=0.5"
+          // )
+          // .add(fadeInFromSide(wireframeCarousel, { startX: 200, duration }));
       }, ref);
 
       return () => ctx.revert();
@@ -140,7 +141,8 @@ const DesignSection = () => {
           </div>
         </div>
       </div>
-      <h2 id="wireframes-header" className="text-center">
+      {/* The wireframes screenshots were lost in the transition from Wasabi S3 to Firebase Storage :( */}
+      {/* <h2 id="wireframes-header" className="text-center">
         Wireframes
       </h2>
       <div
@@ -216,7 +218,7 @@ const DesignSection = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </section>
   );
 };

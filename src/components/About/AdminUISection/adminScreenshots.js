@@ -11,8 +11,8 @@ export const adminScreenshots = {
     {
       headerText: "Room Availabilities",
       fileName: {
-        mobile: "dailyAvailabilityMobile.png",
-        desktop: "dailyAvailabilityDesktop.png",
+        mobile: "cloudJumperAvailability.jpg",
+        desktop: "cloudJumperAvailability.jpg",
       },
       alt: "Screenshot of Admin Room Availabilities",
     },

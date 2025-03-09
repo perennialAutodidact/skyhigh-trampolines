@@ -14,8 +14,8 @@ const ScreenshotItem = ({ index, headerText, fileName, alt }) => {
     <div
       className={`
           mb-5
-          col-12 col-md-6 
-          offset-md-${index % 2 === 1 ? 4 : 2} 
+          col-12 col-md-4 
+          offset-md-${index % 2 === 1 ? 5 : 3} 
           d-flex flex-column gap-3
           justify-content-end
           ${index % 2 === 1 ? "align-items-end" : ""}
@@ -35,7 +35,7 @@ const ScreenshotItem = ({ index, headerText, fileName, alt }) => {
       </div>
       <img
         id={`screenshot`}
-        src={`https://s3.us-west-1.wasabisys.com/skyhigh-trampolines/${screenshot}`}
+        src={`images/${screenshot}`}
         alt={alt}
         width="100%"
         style={{ visibility: "hidden" }}

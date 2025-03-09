@@ -54,14 +54,14 @@ const IntroSection = () => {
       ref={ref}
     >
       <div className="row gy-2 gy-lg-3 g-xl-2">
-        <div className="col-12 col-md-8 ps-md-5">
+        <div className="col-12 col-md-6 offset-md-2 ps-md-5">
           <p id="p1" className="fs-3 fs-lg-2">
             This app is a booking and content management system for{" "}
             <span className="fw-bold text-primary">Sky High Trampolines</span>,
             a hypothetical trampoline park.
           </p>
         </div>
-        <div className="col-12 col-md-8 offset-md-4 pe-md-5 mb-xxl-0">
+        <div className="col-12 col-md-6 offset-md-4 pe-md-5 mb-xxl-0">
           <p id="p2" className="m-0 fs-2 fs-lg-2 text-end">
             The original project was the result of a collaboration between four
             international developers over a four-week period, with the goal to

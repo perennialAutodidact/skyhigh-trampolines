@@ -93,7 +93,7 @@ const CustomerUISection = () => {
         </div>
       </div>
       <div className="row">
-        <div className="col-12 col-md-8 offset-md-2 mt-3">
+        <div className="col-12 col-md-8 offset-md-3 mt-3">
           <h2
             id="booking-wizard-header"
             className="display-4 m-0"

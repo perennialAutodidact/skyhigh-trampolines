@@ -36,6 +36,7 @@ if (window.location.hostname === "localhost") {
 const productsCollection = collection(db, "products");
 const roomsCollection = collection(db, "rooms");
 const addOnsCollection = collection(db, "addOns");
+const assetsCollection = collection(db, "assets");
 const bookingsCollection = collection(db, "bookings");
 const receiptsCollection = collection(db, "reciepts");
 const waiversCollection = collection(db, "waivers");
@@ -48,6 +49,7 @@ export {
   productsCollection,
   roomsCollection,
   addOnsCollection,
+  assetsCollection,
   bookingsCollection,
   receiptsCollection,
   waiversCollection,

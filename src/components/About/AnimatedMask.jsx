@@ -10,16 +10,18 @@ import styles from "./AnimatedMask.module.scss";
 import { useWindowSize } from "../../hooks/useWindowSize";
 import { useBreakpoint } from "hooks/useBreakpoint";
 
-const AnimatedMask = () => {
+const AnimatedMask = ({ bgImageUrl }) => {
   const windowSize = useWindowSize();
   const breakpoint = useBreakpoint();
   const maskRef = useRef();
+  const maskBgRef = useRef();
   const [maskImageIndex, setMaskImageIndex] = useState(0);
 
   const onRepeat = useCallback(() => {
     setMaskImageIndex((maskImageIndex) => (maskImageIndex + 1) % 3);
   }, []);
 
+  console.log('animated mask component', { bgImageUrl })
   const shrinkFactor = useMemo(() => {
     return {
       sm: 1.5,
@@ -30,6 +32,10 @@ const AnimatedMask = () => {
 
   const tl = useRef();
   useLayoutEffect(() => {
+    // if (maskBgRef.current){
+    //   maskBgRef.style.backgroundImage = 'url(images/sky1.png)';
+    // }
+
     const mask = maskRef.current;
     const maskImageSize = windowSize.width / shrinkFactor;
 
@@ -80,7 +86,7 @@ const AnimatedMask = () => {
 
   return (
     <div className={`${styles.mask}`} ref={maskRef}>
-      <div className={styles.img}/>
+      <img src={bgImageUrl} className={styles.img} alt="" ref={maskBgRef} />
     </div>
   );
 };
