@@ -21,14 +21,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:   
       - uses: actions/checkout@v2
-      - run: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
-      - run: source ~/.bashrc
-      - run: nvm install 18.17.0
-      - run: nvm use 18.17.0
       - run: yarn install && yarn build
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
+          node-version: 18.x
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_SKYHIGH_TRAMPOLINES }}'
           projectId: skyhigh-trampolines
