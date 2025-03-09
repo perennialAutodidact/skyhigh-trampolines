@@ -31,6 +31,7 @@ This repository is a fork of [the original](https://github.com/Scott-Coates-Org/
 ### Backend
 
 ![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase)
+![Stripe](https://img.shields.io/badge/Stripe-5469d4?style=for-the-badge&logo=stripe&logoColor=ffffff)
 
 ## Features
 
