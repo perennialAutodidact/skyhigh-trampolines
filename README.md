@@ -43,23 +43,23 @@ The app has a customer-facing UI for booking reservations in two different rooms
     </tr>
     <tr>
         <td>
-            <img src="https://s3.us-west-1.wasabisys.com/skyhigh-trampolines/bookingStep1Desktop.png" alt="booking step 1">
+            <img src="./public/images/wizardStep1.png" alt="booking step 1">
         </td>
         <td>
-            <img src="https://s3.us-west-1.wasabisys.com/skyhigh-trampolines/bookingStep2Desktop.png" alt="booking step 1">
+            <img src="./public/images/wizardStep2.png" alt="booking step 2">
         </td><td>
-            <img src="https://s3.us-west-1.wasabisys.com/skyhigh-trampolines/bookingStep3Desktop.png" alt="booking step 1">
+            <img src="./public/images/wizardStep3.png" alt="booking step 3">
         </td>
     </tr>
     <tr>
         <td>
-            <img src="https://s3.us-west-1.wasabisys.com/skyhigh-trampolines/bookingStep4Desktop.png" alt="booking step 1">
+            <img src="./public/images/wizardStep4.png" alt="booking step 4">
         </td>
         <td>
-            <img src="https://s3.us-west-1.wasabisys.com/skyhigh-trampolines/bookingStep5Desktop.png" alt="booking step 1">
+            <img src="./public/images/wizardStep5.png" alt="booking step 5">
         </td>
         <td>
-            <img src="https://s3.us-west-1.wasabisys.com/skyhigh-trampolines/bookingStep6Desktop.png" alt="booking step 1">
+            <img src="./public/images/wizardStep6.png" alt="booking step 6">
         </td>
     </tr>
 </table>
@@ -73,10 +73,10 @@ The app has a customer-facing UI for booking reservations in two different rooms
     </tr>
     <tr>
         <td>
-            <img src="https://s3.us-west-1.wasabisys.com/skyhigh-trampolines/bookingsList.png" alt="bookings list">
+            <img src="./public/images/adminBookingList.png" alt="bookings list">
         </td>
         <td>
-            <img src="https://s3.us-west-1.wasabisys.com/skyhigh-trampolines/dailyAvailabilityDesktop.png" alt="bookings list">
+            <img src="./public/images/adminDailyAvailability.png" alt="bookings list">
         </td>
     </tr>
 </table>

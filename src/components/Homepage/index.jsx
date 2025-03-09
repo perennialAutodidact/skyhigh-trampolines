@@ -28,7 +28,6 @@ const Homepage = () => {
 
   useLayoutEffect(() => {
     if (imagesLoaded) {
-      console.log(homePageRef.current);
       let selector = gsap.utils.selector(homePageRef);
 
       const lightBlueCircle = selector("#light-blue-circle");
