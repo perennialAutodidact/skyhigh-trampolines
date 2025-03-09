@@ -19,7 +19,10 @@ env:
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
-    steps:   
+    steps:
+      - uses: dcodeIO/setup-node-nvm@master
+        with:
+          node-version: lts/*   
       - uses: actions/checkout@v2
       - run: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
       - run: source ~/.bashrc
