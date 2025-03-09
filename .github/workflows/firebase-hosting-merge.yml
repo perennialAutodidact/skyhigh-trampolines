@@ -22,15 +22,9 @@ jobs:
     steps:
       - uses: dcodeIO/setup-node-nvm@master
         with:
-          node-version: lts/*   
-      - run: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
-      - run: source ~/.bashrc
-      - run: which nvm
-      - run: nvm install 18.17.0
-      - run: nvm use 18.17.0
+          node-version: 18.17.0   
       - run: yarn install && yarn build
       - uses: actions/checkout@v2
-
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
