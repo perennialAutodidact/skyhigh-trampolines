@@ -96,23 +96,23 @@ The admin UI allows administrators to view existing bookings, quickly visual tic
     </tr>
     <tr>
         <td>
-            <img src="./public/images/wizardStep1.png" alt="booking step 1">
+            <img src="./public/images/wizardStep1.jpg" alt="booking step 1">
         </td>
         <td>
-            <img src="./public/images/wizardStep2.png" alt="booking step 2">
+            <img src="./public/images/wizardStep2.jpg" alt="booking step 2">
         </td><td>
-            <img src="./public/images/wizardStep3.png" alt="booking step 3">
+            <img src="./public/images/wizardStep3.jpg" alt="booking step 3">
         </td>
     </tr>
     <tr>
         <td>
-            <img src="./public/images/wizardStep4.png" alt="booking step 4">
+            <img src="./public/images/wizardStep4.jpg" alt="booking step 4">
         </td>
         <td>
-            <img src="./public/images/wizardStep5.png" alt="booking step 5">
+            <img src="./public/images/wizardStep5.jpg" alt="booking step 5">
         </td>
         <td>
-            <img src="./public/images/wizardStep6.png" alt="booking step 6">
+            <img src="./public/images/wizardStep6.jpg" alt="booking step 6">
         </td>
     </tr>
 </table>
