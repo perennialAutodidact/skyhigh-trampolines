@@ -18,6 +18,7 @@ This repository is a fork of [the original](https://github.com/Scott-Coates-Org/
 <details>
 <summary>Table of contents (click to expand)</summary>
 <!-- vscode-markdown-toc -->
+	
 * [Tech Stack](#TechStack)
 	* [Frontend](#Frontend)
 	* [Backend](#Backend)
